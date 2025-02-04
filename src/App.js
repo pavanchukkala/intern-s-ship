@@ -1,91 +1,45 @@
-import { useState } from "react"
-import "./App.css"
+import { useState } from "react";
 
 const FILTERS = [
-  "Paid",
-  "Free",
-  "Stipend-based",
-  "Hourly Pay",
-  "Project-based",
-  "Short-term",
-  "Long-term",
-  "Remote",
-  "On-site",
-  "Hybrid",
-  "Part-time",
-  "Full-time",
-  "Technical",
-  "Non-Technical",
-  "Internship Duration",
-  "Company Size",
-  "Industry Sector",
-  "Experience Level",
-  "Startup",
-  "MNC",
-]
+  "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term",
+  "Long-term", "Remote", "On-site", "Hybrid", "Part-time", "Full-time",
+  "Technical", "Non-Technical", "Internship Duration", "Company Size", "Industry Sector",
+  "Experience Level", "Startup", "MNC"
+];
 
 const internships = [
-  {
-    id: 1,
-    company: "TechCorp",
-    role: "Software Engineer",
-    location: "Remote",
-    stipend: "$1000/month",
-    duration: "6 months",
-    skills: "React, Node.js, Python",
-  },
-  {
-    id: 2,
-    company: "InnovateX",
-    role: "Data Analyst",
-    location: "On-site",
-    stipend: "$800/month",
-    duration: "3 months",
-    skills: "SQL, Tableau, Python",
-  },
-  {
-    id: 3,
-    company: "DevSolutions",
-    role: "Frontend Developer",
-    location: "Hybrid",
-    stipend: "$1200/month",
-    duration: "5 months",
-    skills: "HTML, CSS, JavaScript, React",
-  },
-  {
-    id: 4,
-    company: "FinTech Ltd.",
-    role: "Backend Developer",
-    location: "Remote",
-    stipend: "$900/month",
-    duration: "4 months",
-    skills: "Node.js, Express, MongoDB",
-  },
-  {
-    id: 5,
-    company: "CyberSec Inc.",
-    role: "Cybersecurity Analyst",
-    location: "On-site",
-    stipend: "$1100/month",
-    duration: "6 months",
-    skills: "Kali Linux, Pen Testing, Python",
-  },
-]
+  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python" },
+  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python" },
+  { id: 3, company: "DevSolutions", role: "Frontend Developer", location: "Hybrid", stipend: "$1200/month", duration: "5 months", skills: "HTML, CSS, JavaScript, React" },
+  { id: 4, company: "FinTech Ltd.", role: "Backend Developer", location: "Remote", stipend: "$900/month", duration: "4 months", skills: "Node.js, Express, MongoDB" },
+  { id: 5, company: "CyberSec Inc.", role: "Cybersecurity Analyst", location: "On-site", stipend: "$1100/month", duration: "6 months", skills: "Kali Linux, Pen Testing, Python" }
+];
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedFilters, setSelectedFilters] = useState([])
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
-  const filteredInternships = internships.filter(
-    (internship) =>
+  const filteredInternships = internships.filter((internship) => {
+    const matchesSearch =
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.skills.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      internship.skills.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesFilters =
+      selectedFilters.length === 0 ||
+      selectedFilters.some(filter =>
+        internship.role.includes(filter) ||
+        internship.location.includes(filter)
+      );
+    
+    return matchesSearch && matchesFilters;
+  });
 
   const toggleFilter = (filter) => {
-    setSelectedFilters((prev) => (prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]))
-  }
+    setSelectedFilters((prev) =>
+      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+    );
+  };
 
   return (
     <div className="app">
@@ -104,10 +58,6 @@ function App() {
       <main className="main-content">
         <div className="header">
           <h2>Find Your Perfect Internship</h2>
-          <button className="filter-button">
-            <span className="filter-icon">⚙️</span>
-            Filters
-          </button>
         </div>
 
         <div className="search-bar">
@@ -117,7 +67,6 @@ function App() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <span className="search-icon">🔍</span>
         </div>
 
         <div className="filters">
@@ -148,8 +97,7 @@ function App() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
-export default App
-
+export default App;
