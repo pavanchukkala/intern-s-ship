@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const FILTERS = {
-  Type: ["Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based"],
+  Type: ["Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based","pavan"],
   Duration: ["Short-term", "Long-term"],
   WorkMode: ["Remote", "On-site", "Hybrid"],
   EmploymentType: ["Part-time", "Full-time"],
