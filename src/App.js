@@ -1,45 +1,48 @@
 import { useState } from "react";
 
-const FILTERS = [
-  "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term",
-  "Long-term", "Remote", "On-site", "Hybrid", "Part-time", "Full-time",
-  "Technical", "Non-Technical", "Internship Duration", "Company Size", "Industry Sector",
-  "Experience Level", "Startup", "MNC"
-];
+const FILTERS = {
+  Type: ["Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based"],
+  Duration: ["Short-term", "Long-term"],
+  WorkMode: ["Remote", "On-site", "Hybrid"],
+  EmploymentType: ["Part-time", "Full-time"],
+  Category: ["Technical", "Non-Technical"],
+  CompanyType: ["Startup", "MNC"],
+};
 
 const internships = [
-  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python" },
-  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python" },
-  { id: 3, company: "DevSolutions", role: "Frontend Developer", location: "Hybrid", stipend: "$1200/month", duration: "5 months", skills: "HTML, CSS, JavaScript, React" },
-  { id: 4, company: "FinTech Ltd.", role: "Backend Developer", location: "Remote", stipend: "$900/month", duration: "4 months", skills: "Node.js, Express, MongoDB" },
-  { id: 5, company: "CyberSec Inc.", role: "Cybersecurity Analyst", location: "On-site", stipend: "$1100/month", duration: "6 months", skills: "Kali Linux, Pen Testing, Python" }
+  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", category: "Technical" },
+  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", category: "Technical" },
+  { id: 3, company: "DevSolutions", role: "Frontend Developer", location: "Hybrid", stipend: "$1200/month", duration: "5 months", category: "Technical" },
+  { id: 4, company: "FinTech Ltd.", role: "Backend Developer", location: "Remote", stipend: "$900/month", duration: "4 months", category: "Technical" },
+  { id: 5, company: "CyberSec Inc.", role: "Cybersecurity Analyst", location: "On-site", stipend: "$1100/month", duration: "6 months", category: "Technical" }
 ];
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
+
+  const toggleFilter = (category, filter) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [category]: prev[category]?.includes(filter)
+        ? prev[category].filter((item) => item !== filter)
+        : [...(prev[category] || []), filter],
+    }));
+  };
+
+  const clearFilters = () => setSelectedFilters({});
 
   const filteredInternships = internships.filter((internship) => {
     const matchesSearch =
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.skills.toLowerCase().includes(searchQuery.toLowerCase());
+      internship.role.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesFilters =
-      selectedFilters.length === 0 ||
-      selectedFilters.some(filter =>
-        internship.role.includes(filter) ||
-        internship.location.includes(filter)
-      );
-    
+    const matchesFilters = Object.entries(selectedFilters).every(([category, selectedValues]) =>
+      selectedValues.length === 0 || selectedValues.includes(internship[category.toLowerCase()])
+    );
+
     return matchesSearch && matchesFilters;
   });
-
-  const toggleFilter = (filter) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
-    );
-  };
 
   return (
     <div className="app">
@@ -69,31 +72,44 @@ function App() {
           />
         </div>
 
+        {/* Filters */}
         <div className="filters">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter}
-              className={`filter-tag ${selectedFilters.includes(filter) ? "active" : ""}`}
-              onClick={() => toggleFilter(filter)}
-            >
-              {filter}
-            </button>
+          {Object.entries(FILTERS).map(([category, options]) => (
+            <div key={category} className="filter-category">
+              <h4>{category}</h4>
+              <div className="filter-options">
+                {options.map((option) => (
+                  <label key={option} className="filter-option">
+                    <input
+                      type="checkbox"
+                      checked={selectedFilters[category]?.includes(option) || false}
+                      onChange={() => toggleFilter(category, option)}
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </div>
           ))}
+          <button className="clear-filters" onClick={clearFilters}>Clear Filters</button>
         </div>
 
         <div className="internship-grid">
-          {filteredInternships.map((internship) => (
-            <div key={internship.id} className="internship-card">
-              <h3>{internship.role}</h3>
-              <p className="company">{internship.company}</p>
-              <div className="internship-details">
-                <span>📍 {internship.location}</span>
-                <span>⏱️ {internship.duration}</span>
+          {filteredInternships.length > 0 ? (
+            filteredInternships.map((internship) => (
+              <div key={internship.id} className="internship-card">
+                <h3>{internship.role}</h3>
+                <p className="company">{internship.company}</p>
+                <div className="internship-details">
+                  <span>📍 {internship.location}</span>
+                  <span>⏱️ {internship.duration}</span>
+                </div>
+                <p className="stipend">{internship.stipend}</p>
               </div>
-              <p className="stipend">{internship.stipend}</p>
-              <p className="skills">Skills: {internship.skills}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="no-results">No internships found.</p>
+          )}
         </div>
       </main>
     </div>
