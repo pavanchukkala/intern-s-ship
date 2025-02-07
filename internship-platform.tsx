@@ -7,6 +7,7 @@ import { Filter, Search, Building, Globe, Users } from "lucide-react"
 const FILTERS = [
   "Paid",
   "Free",
+  "pavan gaadi rulu",
   "Stipend-based",
   "Hourly Pay",
   "Project-based",
