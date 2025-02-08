@@ -1,7 +1,12 @@
+"use client";
+
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+// Your component code here
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { Filter, Search, Building, Globe, Users } from "lucide-react";
 
