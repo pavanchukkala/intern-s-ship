@@ -10,7 +10,7 @@ const FILTERS = {
 };
 
 const internships = [
-  { id: 1, company: "pavan kingorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", category: "Technical" },
+  { id: 1, company: "new tech", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", category: "Technical" },
   { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", category: "Technical" },
   { id: 3, company: "DevSolutions", role: "Frontend Developer", location: "Hybrid", stipend: "$1200/month", duration: "5 months", category: "Technical" },
   { id: 4, company: "FinTech Ltd.", role: "Backend Developer", location: "Remote", stipend: "$900/month", duration: "4 months", category: "Technical" },
