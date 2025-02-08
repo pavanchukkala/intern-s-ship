@@ -133,20 +133,17 @@ export default function InternshipPlatform() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
         </div>
 
-        <div className="mb-6 flex flex-wrap gap-2">
-          {FILTERS.map((filter) => (
-            <Button
-              key={filter}
-              variant={selectedFilters.includes(filter) ? "default" : "outline"}
-              size="sm"
-              onClick={() => toggleFilter(filter)}
-              className="text-sm"
-            >
+          {/* Filters */}
+      <div className="flex justify-center mt-4 gap-4 flex-wrap bg-white p-4 shadow-md rounded-lg">
+        {FILTERS.map((filter) => (
+          <div key={filter} className="flex items-center bg-gray-200 px-3 py-2 rounded-lg shadow-sm hover:bg-gray-300 transition-all">
+            <Checkbox id={filter} />
+            <label htmlFor={filter} className="text-gray-700 ml-2 text-sm font-medium">
               {filter}
-            </Button>
-          ))}
-        </div>
-
+            </label>
+          </div>
+        ))}
+      </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredInternships.map((internship) => (
             <Card key={internship.id} className="hover:shadow-lg transition-shadow">
