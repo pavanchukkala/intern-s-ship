@@ -8,10 +8,27 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Filter, Search, Building, Globe, Users } from "lucide-react"
 
 const FILTERS = [
-  "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term", 
-  "Remote", "On-site", "Hybrid", "Part-time", "Full-time", "Technical", "Non-Technical", 
-  "Internship Duration", "Company Size", "Industry Sector", "Experience Level", "Startup", "MNC"
-];
+  "Paid",
+  "Free",
+  "Stipend-based",
+  "Hourly Pay",
+  "Project-based",
+  "Short-term",
+  "Long-term",
+  "Remote",
+  "On-site",
+  "Hybrid",
+  "Part-time",
+  "Full-time",
+  "Technical",
+  "Non-Technical",
+  "Internship Duration",
+  "Company Size",
+  "Industry Sector",
+  "Experience Level",
+  "Startup",
+  "MNC",
+]
 
 const internships = [
   {
@@ -119,8 +136,8 @@ export default function InternshipPlatform() {
         <div className="mb-6 flex flex-wrap gap-2">
           {FILTERS.map((filter) => (
             <div key={filter} className="flex items-center gap-2">
-              <Checkbox id={filter} checked={selectedFilters.includes(filter)} onCheckedChange={() => toggleFilter(filter)} />
-              <label htmlFor={filter} className="text-sm cursor-pointer">
+              <Checkbox id={filter} onCheckedChange={() => toggleFilter(filter)} />
+              <label htmlFor={filter} className="text-sm font-medium text-gray-700">
                 {filter}
               </label>
             </div>
