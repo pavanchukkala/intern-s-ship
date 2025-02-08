@@ -19,10 +19,6 @@ const internships = [
   { id: 5, company: "CyberSec Inc.", role: "Cybersecurity Analyst", location: "On-site", stipend: "$1100/month", duration: "6 months", skills: "Kali Linux, Pen Testing, Python", logo: "/logos/cybersec.png" },
 ];
 
-export default function InternshipPlatform() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [darkMode, setDarkMode] = useState(false);
 
   // Load dark mode preference from localStorage
   useEffect(() => {
