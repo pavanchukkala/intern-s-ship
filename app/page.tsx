@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Filter, Search, Building, Globe, Users, CheckCircle } from "lucide-react"
+import { Filter, Search, Building, Globe, Users, CheckCircle, Sun, Moon } from "lucide-react"
 
 const FILTERS = [
   "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
@@ -13,16 +13,17 @@ const FILTERS = [
 ]
 
 const internships = [
-  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python" },
-  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python" },
-  { id: 3, company: "DevSolutions", role: "Frontend Developer", location: "Hybrid", stipend: "$1200/month", duration: "5 months", skills: "HTML, CSS, JavaScript, React" },
-  { id: 4, company: "FinTech Ltd.", role: "Backend Developer", location: "Remote", stipend: "$900/month", duration: "4 months", skills: "Node.js, Express, MongoDB" },
-  { id: 5, company: "CyberSec Inc.", role: "Cybersecurity Analyst", location: "On-site", stipend: "$1100/month", duration: "6 months", skills: "Kali Linux, Pen Testing, Python" },
+  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "https://via.placeholder.com/50" },
+  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "https://via.placeholder.com/50" },
+  { id: 3, company: "DevSolutions", role: "Frontend Developer", location: "Hybrid", stipend: "$1200/month", duration: "5 months", skills: "HTML, CSS, JavaScript, React", logo: "https://via.placeholder.com/50" },
+  { id: 4, company: "FinTech Ltd.", role: "Backend Developer", location: "Remote", stipend: "$900/month", duration: "4 months", skills: "Node.js, Express, MongoDB", logo: "https://via.placeholder.com/50" },
+  { id: 5, company: "CyberSec Inc.", role: "Cybersecurity Analyst", location: "On-site", stipend: "$1100/month", duration: "6 months", skills: "Kali Linux, Pen Testing, Python", logo: "https://via.placeholder.com/50" },
 ]
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
+  const [darkMode, setDarkMode] = useState(false)
 
   const filteredInternships = internships.filter(
     (internship) =>
@@ -36,25 +37,25 @@ export default function InternshipPlatform() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'} flex flex-col`}>
       <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 flex justify-between items-center shadow-lg">
         <div className="flex items-center space-x-3">
           <Globe className="text-yellow-400" size={32} />
           <h1 className="text-3xl font-extrabold tracking-wide">Interns' Journey: From Learning to Earning</h1>
         </div>
-        <div className="space-x-6 text-lg font-medium">
+        <div className="flex items-center space-x-6 text-lg font-medium">
           <a href="#" className="hover:text-yellow-400 transition-colors duration-300">Home</a>
           <a href="#" className="hover:text-yellow-400 transition-colors duration-300">About</a>
           <a href="#" className="hover:text-yellow-400 transition-colors duration-300">Contact</a>
+          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full bg-white text-black hover:bg-gray-300 transition">
+            {darkMode ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
         </div>
       </nav>
 
       <main className="container mx-auto p-8 flex-1">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-800">Find Your Perfect Internship</h2>
-          <Button variant="outline" className="flex items-center gap-2 text-lg px-4 py-2 shadow-md hover:shadow-lg">
-            <Filter size={24} /> Filters
-          </Button>
+          <h2 className="text-4xl font-bold">Find Your Perfect Internship</h2>
         </div>
 
         <div className="relative mb-8">
@@ -68,25 +69,14 @@ export default function InternshipPlatform() {
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={24} />
         </div>
 
-        <div className="mb-8 flex flex-wrap gap-3">
-          {FILTERS.map((filter) => (
-            <Button
-              key={filter}
-              variant={selectedFilters.includes(filter) ? "default" : "outline"}
-              size="lg"
-              onClick={() => toggleFilter(filter)}
-              className="text-md px-5 py-3 transition-all transform hover:scale-110 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md font-medium"
-            >
-              {filter}
-            </Button>
-          ))}
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredInternships.map((internship) => (
             <Card key={internship.id} className="hover:shadow-2xl transition-shadow border border-gray-200 rounded-xl overflow-hidden">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-3 text-indigo-700">{internship.role}</h3>
+                <div className="flex items-center gap-4 mb-3">
+                  <img src={internship.logo} alt={internship.company} className="w-10 h-10 rounded-full" />
+                  <h3 className="text-2xl font-bold text-indigo-700">{internship.role}</h3>
+                </div>
                 <p className="text-gray-700 mb-3 flex items-center gap-2"><Building size={18} className="text-gray-500" /> {internship.company}</p>
                 <p className="text-gray-700 mb-3 flex items-center gap-2"><Globe size={18} className="text-gray-500" /> {internship.location}</p>
                 <p className="text-gray-700 mb-3 flex items-center gap-2"><Users size={18} className="text-gray-500" /> {internship.duration}</p>
@@ -97,11 +87,6 @@ export default function InternshipPlatform() {
           ))}
         </div>
       </main>
-
-      <footer className="bg-gray-900 text-white text-center p-6 mt-8">
-        <p className="text-lg">&copy; {new Date().getFullYear()} Interns' Journey. All Rights Reserved.</p>
-        <p className="text-gray-400 text-md mt-2">Privacy Policy | Terms of Service | Contact Us</p>
-      </footer>
     </div>
   )
 }
