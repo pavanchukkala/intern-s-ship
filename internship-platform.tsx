@@ -3,6 +3,17 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Filter, Search, Building, Globe, Users } from "lucide-react"
+import { useEffect } from "react";
+
+const MyComponent = () => {
+  useEffect(() => {
+    document.title = "My Custom App";
+  }, []);
+
+  return <h1>Welcome to My Custom App!</h1>;
+};
+
+export default MyComponent;
 
 const FILTERS = [
   "Paid",
