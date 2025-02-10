@@ -61,7 +61,7 @@ export default function InternshipPlatform() {
         <main className="container mx-auto p-8 flex-1">
           <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
             <h2 className="text-4xl font-bold">Find Your Perfect Internship</h2>
-            <Button variant="outline" onClick={() => router.push("/register")} className="px-6 py-3 shadow-lg">
+            <Button variant="outline" onClick={() => router.push("/register.tsx")} className="px-6 py-3 shadow-lg">
               Register Internship
             </Button>
           </div>
