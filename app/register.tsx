@@ -22,7 +22,7 @@ export default function RegisterInternship() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert("Since user privacy is our priority, please allow us to verify your details.");
-    router.push("/");
+    router.push("/register");
   };
 
   return (
