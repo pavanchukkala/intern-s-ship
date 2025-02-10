@@ -40,9 +40,6 @@ export default function RegisterInternship() {
             <a href="#" className="hover:text-yellow-400">Home</a>
             <a href="#" className="hover:text-yellow-400">About</a>
             <a href="#" className="hover:text-yellow-400">Contact</a>
-            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-              {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
-            </Button>
           </div>
         </nav>
 
