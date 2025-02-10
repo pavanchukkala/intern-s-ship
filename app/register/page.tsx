@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Globe } from "lucide-react";
 
 export default function RegisterInternship() {
   const [formData, setFormData] = useState({
