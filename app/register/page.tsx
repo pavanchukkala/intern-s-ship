@@ -26,22 +26,21 @@ export default function RegisterInternship() {
     setTimeout(() => router.push("/"), 3000);
   };
 
-  return (
-     {/* Navbar */}
-        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex justify-between items-center shadow-lg">
-          <div className="flex items-center space-x-3">
-            <Globe className="text-yellow-400" size={32} />
-            <h1 className="text-3xl font-extrabold">Interns' Journey</h1>
-          </div>
-          <div className="flex items-center space-x-6">
-            <a href="#" className="hover:text-yellow-400">Home</a>
-            <a href="#" className="hover:text-yellow-400">About</a>
-            <a href="#" className="hover:text-yellow-400">Contact</a>
-            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-              {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
-            </Button>
-          </div>
-        </nav>
+ return (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8 w-full">
+    
+    {/* Navbar */}
+    <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex justify-between items-center shadow-lg">
+      <div className="flex items-center space-x-3">
+        <h1 className="text-3xl font-extrabold">Interns' Journey</h1>
+      </div>
+      <div className="flex items-center space-x-6">
+        <a href="/" className="hover:text-yellow-400">Home</a>
+        <a href="/about" className="hover:text-yellow-400">About</a>
+        <a href="/contact" className="hover:text-yellow-400">Contact</a>
+      </div>
+    </nav>
+
         
       
       <div className="bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg w-full max-w-lg text-center mt-6">
