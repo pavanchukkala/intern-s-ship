@@ -27,11 +27,20 @@ export default function RegisterInternship() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8">
-      <div className="bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg w-full max-w-lg text-center">
-        <h1 className="text-4xl font-extrabold text-indigo-600 dark:text-yellow-400 mb-4">Interns' Journey</h1>
-        <p className="text-lg italic text-gray-600 dark:text-gray-400 mb-6">"Your gateway to a successful career!"</p>
-        <h2 className="text-2xl font-bold mb-6">Register an Internship</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8 w-full">
+      {/* Top Navigation */}
+      <nav className="w-full bg-indigo-600 dark:bg-gray-800 text-white p-4 shadow-md flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Interns' Journey</h1>
+         <p className="text-lg italic text-gray-600 dark:text-gray-400 mb-6">"Your gateway to a successful and impactful collaboration!"</p>
+        <div className="space-x-4">
+          <a href="/" className="hover:text-yellow-400">Home</a>
+          <a href="/about" className="hover:text-yellow-400">About</a>
+          <a href="/contact" className="hover:text-yellow-400">Contact</a>
+        </div>
+      </nav>
+      
+      <div className="bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg w-full max-w-lg text-center mt-6">
+        <h2 className="text-2xl font-bold mb-6 text-indigo-600 dark:text-yellow-400">Register an Internship</h2>
         {submitted ? (
           <p className="text-lg font-medium text-green-600 dark:text-green-400">
             Thank you! We have received your response. Our team will contact you soon.
@@ -54,6 +63,11 @@ export default function RegisterInternship() {
           </>
         )}
       </div>
+      
+      {/* Bottom Footer */}
+      <footer className="w-full bg-indigo-600 dark:bg-gray-800 text-white p-4 text-center mt-6 shadow-md">
+        <p>&copy; 2024 Interns' Journey. All Rights Reserved.</p>
+      </footer>
     </div>
   );
 }
