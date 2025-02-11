@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { connectToDatabase } from "@/lib/mongodb";
-import Internship from "@/models/Internship";
 
 export default function RegisterInternship() {
   const [formData, setFormData] = useState({
@@ -24,23 +22,14 @@ export default function RegisterInternship() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await connectToDatabase();
-      const newInternship = new Internship(formData);
-      await newInternship.save();
-
-      setSubmitted(true);
-      setTimeout(() => router.push("/"), 3000);
-    } catch (error) {
-      console.error("❌ MongoDB Save Error:", error);
-      alert("Error saving data. Try again.");
-    }
+    setSubmitted(true);
+    setTimeout(() => router.push("/"), 3000);
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""} min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8 w-full`}> 
+    <div className={${darkMode ? "dark" : ""} min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8 w-full}> 
       {/* Navbar */}
       <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex justify-between items-center shadow-lg w-full">
         <div className="flex items-center space-x-3">
