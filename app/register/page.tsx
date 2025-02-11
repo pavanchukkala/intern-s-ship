@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { connectToDatabase } from "@/lib/mongodb";
-import Internship from "@/models/Internship";
 
 export default function RegisterInternship() {
   const [formData, setFormData] = useState({
@@ -24,19 +22,10 @@ export default function RegisterInternship() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await connectToDatabase();
-      const newInternship = new Internship(formData);
-      await newInternship.save();
-
-      setSubmitted(true);
-      setTimeout(() => router.push("/"), 3000);
-    } catch (error) {
-      console.error("❌ MongoDB Save Error:", error);
-      alert("Error saving data. Try again.");
-    }
+    setSubmitted(true);
+    setTimeout(() => router.push("/"), 3000);
   };
 
   return (
