@@ -2,20 +2,18 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe, Sun, Moon, Search, Heart, Clock, Briefcase } from "lucide-react";
+import { Globe, Sun, Moon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 
 const internships = [
-  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "/logos/techcorp.png", hot: true },
-  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "/logos/innovatex.png", closingSoon: true }
+  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "/logos/techcorp.png" },
+  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "/logos/innovatex.png" }
 ];
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-  const [wishlist, setWishlist] = useState<number[]>([]);
   const router = useRouter();
 
   const filteredInternships = internships.filter(
@@ -23,10 +21,6 @@ export default function InternshipPlatform() {
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       internship.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const toggleWishlist = (id: number) => {
-    setWishlist((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
-  };
 
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
@@ -61,31 +55,20 @@ export default function InternshipPlatform() {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2" size={24} />
           </div>
 
-          {/* Internship Listings */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {/* Internship Listings as Interactive List */}
+          <div className="space-y-6">
             {filteredInternships.map((internship) => (
-              <Card key={internship.id} className="p-6 rounded-xl shadow-md hover:shadow-2xl transition-all relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg">
-                <img src={internship.logo} alt={internship.company} className="h-12 w-12 mb-4" />
-                <h3 className="text-xl font-semibold">{internship.role}</h3>
-                <p className="text-gray-600 dark:text-gray-400">{internship.company}</p>
-                <div className="flex items-center text-sm gap-2 mt-2">
-                  <Briefcase size={16} /> <span>{internship.location}</span>
+              <div key={internship.id} className="flex items-center justify-between p-6 border rounded-lg shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-all cursor-pointer">
+                <div className="flex items-center space-x-4">
+                  <img src={internship.logo} alt={internship.company} className="w-16 h-16 object-contain rounded-full border" />
+                  <div>
+                    <h3 className="text-xl font-semibold">{internship.role}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{internship.company}</p>
+                    <p className="text-sm">{internship.location} • {internship.duration}</p>
+                  </div>
                 </div>
-                <div className="flex items-center text-sm gap-2 mt-1">
-                  <Clock size={16} /> <span>{internship.duration}</span>
-                </div>
-                <p className="text-sm font-medium mt-2">{internship.stipend}</p>
-                
-                {/* Wishlist & Tags */}
-                <button
-                  className={`absolute top-4 right-4 ${wishlist.includes(internship.id) ? "text-red-500" : "text-gray-400"}`}
-                  onClick={() => toggleWishlist(internship.id)}
-                >
-                  <Heart size={20} />
-                </button>
-                {internship.hot && <span className="absolute top-4 left-4 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Hot</span>}
-                {internship.closingSoon && <span className="absolute bottom-4 right-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Closing Soon</span>}
-              </Card>
+                <p className="font-semibold text-blue-600 dark:text-blue-400">{internship.stipend}</p>
+              </div>
             ))}
           </div>
         </main>
