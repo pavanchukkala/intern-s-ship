@@ -2,39 +2,30 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe, Sun, Moon, Filter, Search } from "lucide-react";
+import { Globe, Sun, Moon, Search, Heart, Clock, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 
-const FILTERS = [
-  "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
-  "Remote", "On-site", "Hybrid", "Part-time", "Full-time", "Technical", "Non-Technical",
-  "Internship Duration", "Company Size", "Industry Sector", "Experience Level", "Startup", "MNC"
-];
-
 const internships = [
-  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "/logos/techcorp.png" },
-  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "/logos/innovatex.png" }
+  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "/logos/techcorp.png", hot: true },
+  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "/logos/innovatex.png", closingSoon: true }
 ];
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [darkMode, setDarkMode] = useState(false);
+  const [wishlist, setWishlist] = useState<number[]>([]);
   const router = useRouter();
 
   const filteredInternships = internships.filter(
     (internship) =>
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
+      internship.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const toggleFilter = (filter: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
-    );
+  const toggleWishlist = (id: number) => {
+    setWishlist((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
 
   return (
@@ -47,23 +38,15 @@ export default function InternshipPlatform() {
             <Globe className="text-yellow-400" size={32} />
             <h1 className="text-3xl font-extrabold">Interns' Journey</h1>
           </div>
-          <div className="flex items-center space-x-6">
-            <a href="#" className="hover:text-yellow-400">Home</a>
-            <a href="#" className="hover:text-yellow-400">About</a>
-            <a href="#" className="hover:text-yellow-400">Contact</a>
-            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-              {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
-            </Button>
-          </div>
+          <Button variant="outline" onClick={() => setDarkMode(!darkMode)}>
+            {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
+          </Button>
         </nav>
 
         {/* Main Content */}
         <main className="container mx-auto p-8 flex-1">
-          <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
+          <div className="mb-8">
             <h2 className="text-4xl font-bold">Find Your Perfect Internship</h2>
-            <Button variant="outline" onClick={() => router.push("/register")} className="px-6 py-3 shadow-lg">
-              Register Internship
-            </Button>
           </div>
 
           {/* Search Bar */}
@@ -78,30 +61,30 @@ export default function InternshipPlatform() {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2" size={24} />
           </div>
 
-          {/* Filter Buttons */}
-          <div className="mb-8 flex flex-wrap gap-3">
-            {FILTERS.map((filter) => (
-              <Button
-                key={filter}
-                variant={selectedFilters.includes(filter) ? "default" : "outline"}
-                size="lg"
-                onClick={() => toggleFilter(filter)}
-                className="text-md px-5 py-3 transition-all transform hover:scale-110 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md font-medium"
-              >
-                {filter}
-              </Button>
-            ))}
-          </div>
-
           {/* Internship Listings */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {filteredInternships.map((internship) => (
-              <Card key={internship.id} className="p-6 rounded-lg shadow-md hover:shadow-xl transition-all">
+              <Card key={internship.id} className="p-6 rounded-xl shadow-md hover:shadow-2xl transition-all relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg">
                 <img src={internship.logo} alt={internship.company} className="h-12 w-12 mb-4" />
                 <h3 className="text-xl font-semibold">{internship.role}</h3>
-                <p>{internship.company}</p>
-                <p className="text-sm">{internship.location} - {internship.duration}</p>
-                <p className="text-sm">{internship.stipend}</p>
+                <p className="text-gray-600 dark:text-gray-400">{internship.company}</p>
+                <div className="flex items-center text-sm gap-2 mt-2">
+                  <Briefcase size={16} /> <span>{internship.location}</span>
+                </div>
+                <div className="flex items-center text-sm gap-2 mt-1">
+                  <Clock size={16} /> <span>{internship.duration}</span>
+                </div>
+                <p className="text-sm font-medium mt-2">{internship.stipend}</p>
+                
+                {/* Wishlist & Tags */}
+                <button
+                  className={`absolute top-4 right-4 ${wishlist.includes(internship.id) ? "text-red-500" : "text-gray-400"}`}
+                  onClick={() => toggleWishlist(internship.id)}
+                >
+                  <Heart size={20} />
+                </button>
+                {internship.hot && <span className="absolute top-4 left-4 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Hot</span>}
+                {internship.closingSoon && <span className="absolute bottom-4 right-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Closing Soon</span>}
               </Card>
             ))}
           </div>
