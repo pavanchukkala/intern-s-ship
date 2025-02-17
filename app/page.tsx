@@ -110,4 +110,4 @@ export default function InternshipPlatform() {
     </div>
   );
 }
-this is our page.tsx right after a bit research i found the platform interface(internship cards) look similar to internshala
+
