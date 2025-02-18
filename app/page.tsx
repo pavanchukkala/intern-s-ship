@@ -6,6 +6,7 @@ import { Globe, Sun, Moon, Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
 
 const FILTERS = [
   "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
@@ -17,6 +18,79 @@ const internships = [
   { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "/logos/techcorp.png" },
   { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "/logos/innovatex.png" }
 ];
+
+function InternshipCard({ internship }) {
+  const [isClicked, setIsClicked] = useState(false);
+
+  return (
+    <div className="flex justify-center items-center">
+      <div className="relative w-80 h-80">
+        {/* Outer tilted rectangle with animated glow */}
+        <motion.div
+          className="absolute w-56 h-40 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-lg flex justify-center items-center shadow-2xl"
+          initial={{ rotate: 45, filter: "blur(0px)" }}
+          animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+        >
+          {/* Inner internship card (counter-rotated) with animated border */}
+          <motion.div
+            className="w-56 h-40 bg-gradient-to-br from-white to-gray-100 text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+            initial={{ rotate: -45, borderWidth: "0px" }}
+            animate={
+              isClicked
+                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255, 0, 150, 0.8)" }
+                : { rotate: -45, borderWidth: "0px" }
+            }
+            transition={{ duration: 0.7, ease: "easeInOut" }}
+            whileHover={!isClicked ? { scale: 1.08, boxShadow: "0px 0px 20px rgba(255, 0, 150, 0.6)" } : {}}
+          >
+            {/* Animated colored border after merging */}
+            {isClicked && (
+              <motion.div
+                className="absolute inset-0 rounded-lg"
+                initial={{ opacity: 0, borderWidth: "0px" }}
+                animate={{ opacity: 1, borderWidth: "4px" }}
+                transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+                style={{
+                  borderStyle: "solid",
+                  borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
+                }}
+              />
+            )}
+
+            {/* Internship Details */}
+            <div className="text-center">
+              <img src={internship.logo} alt={internship.company} className="h-8 w-8 mb-2 inline-block" />
+              <h2 className="text-lg font-bold text-gray-900">{internship.role}</h2>
+              <p className="text-sm text-gray-600">{internship.company} | {internship.location}</p>
+              <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <motion.button
+                whileHover={{ scale: 1.1, backgroundColor: "#ff007f" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsClicked(true)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition-all"
+              >
+                Know More
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1, backgroundColor: "#00ff7f" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsClicked(true)}
+                className="bg-green-500 text-white px-4 py-2 rounded-md font-bold transition-all"
+              >
+                Apply Now
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -96,13 +170,7 @@ export default function InternshipPlatform() {
           {/* Internship Listings */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {filteredInternships.map((internship) => (
-              <Card key={internship.id} className="p-6 rounded-lg shadow-md hover:shadow-xl transition-all">
-                <img src={internship.logo} alt={internship.company} className="h-12 w-12 mb-4" />
-                <h3 className="text-xl font-semibold">{internship.role}</h3>
-                <p>{internship.company}</p>
-                <p className="text-sm">{internship.location} - {internship.duration}</p>
-                <p className="text-sm">{internship.stipend}</p>
-              </Card>
+              <InternshipCard internship={internship} key={internship.id} />
             ))}
           </div>
         </main>
@@ -110,4 +178,3 @@ export default function InternshipPlatform() {
     </div>
   );
 }
-
