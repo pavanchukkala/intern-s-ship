@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Globe, Sun, Moon, Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
 const FILTERS = [
@@ -15,77 +14,106 @@ const FILTERS = [
 ];
 
 const internships = [
-  { id: 1, company: "TechCorp", role: "Software Engineer", location: "Remote", stipend: "$1000/month", duration: "6 months", skills: "React, Node.js, Python", logo: "/logos/techcorp.png" },
-  { id: 2, company: "InnovateX", role: "Data Analyst", location: "On-site", stipend: "$800/month", duration: "3 months", skills: "SQL, Tableau, Python", logo: "/logos/innovatex.png" }
+  {
+    id: 1,
+    company: "TechCorp",
+    role: "Software Engineer",
+    location: "Remote",
+    stipend: "$1000/month",
+    duration: "6 months",
+    skills: "React, Node.js, Python",
+    logo: "/logos/techcorp.png"
+  },
+  {
+    id: 2,
+    company: "InnovateX",
+    role: "Data Analyst",
+    location: "On-site",
+    stipend: "$800/month",
+    duration: "3 months",
+    skills: "SQL, Tableau, Python",
+    logo: "/logos/innovatex.png"
+  }
 ];
 
 function InternshipCard({ internship }) {
   const [isClicked, setIsClicked] = useState(false);
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="relative w-80 h-80">
+    <div className="w-full flex justify-center items-center">
+      {/* Container limits the card's width for responsiveness */}
+      <div className="relative w-full max-w-xs">
         {/* Outer tilted rectangle with animated glow */}
         <motion.div
-          className="absolute w-56 h-40 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-lg flex justify-center items-center shadow-2xl"
+          className="absolute inset-0 flex justify-center items-center"
           initial={{ rotate: 45, filter: "blur(0px)" }}
           animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
-          {/* Inner internship card (counter-rotated) with animated border */}
-          <motion.div
-            className="w-56 h-40 bg-gradient-to-br from-white to-gray-100 text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
-            initial={{ rotate: -45, borderWidth: "0px" }}
-            animate={
-              isClicked
-                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255, 0, 150, 0.8)" }
-                : { rotate: -45, borderWidth: "0px" }
-            }
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-            whileHover={!isClicked ? { scale: 1.08, boxShadow: "0px 0px 20px rgba(255, 0, 150, 0.6)" } : {}}
-          >
-            {/* Animated colored border after merging */}
-            {isClicked && (
-              <motion.div
-                className="absolute inset-0 rounded-lg"
-                initial={{ opacity: 0, borderWidth: "0px" }}
-                animate={{ opacity: 1, borderWidth: "4px" }}
-                transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
-                style={{
-                  borderStyle: "solid",
-                  borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
-                }}
-              />
-            )}
-
-            {/* Internship Details */}
-            <div className="text-center">
-              <img src={internship.logo} alt={internship.company} className="h-8 w-8 mb-2 inline-block" />
-              <h2 className="text-lg font-bold text-gray-900">{internship.role}</h2>
-              <p className="text-sm text-gray-600">{internship.company} | {internship.location}</p>
-              <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <motion.button
-                whileHover={{ scale: 1.1, backgroundColor: "#ff007f" }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition-all"
-              >
-                Know More
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1, backgroundColor: "#00ff7f" }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded-md font-bold transition-all"
-              >
-                Apply Now
-              </motion.button>
-            </div>
-          </motion.div>
+          <div className="w-full h-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-lg shadow-2xl" />
+        </motion.div>
+        {/* Inner internship card (counter-rotated) with animated border */}
+        <motion.div
+          className="relative bg-gradient-to-br from-white to-gray-100 text-black p-4 rounded-lg shadow-xl flex flex-col justify-between items-center"
+          initial={{ rotate: -45, borderWidth: "0px" }}
+          animate={
+            isClicked
+              ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255, 0, 150, 0.8)" }
+              : { rotate: -45, borderWidth: "0px" }
+          }
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+          whileHover={
+            !isClicked
+              ? { scale: 1.05, boxShadow: "0px 0px 20px rgba(255, 0, 150, 0.6)" }
+              : {}
+          }
+        >
+          {/* Animated colored border after merging */}
+          {isClicked && (
+            <motion.div
+              className="absolute inset-0 rounded-lg"
+              initial={{ opacity: 0, borderWidth: "0px" }}
+              animate={{ opacity: 1, borderWidth: "4px" }}
+              transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+              style={{
+                borderStyle: "solid",
+                borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
+              }}
+            />
+          )}
+          {/* Internship Details */}
+          <div className="w-full flex flex-col items-center space-y-2">
+            <img src={internship.logo} alt={internship.company} className="h-12 w-12" />
+            <h2 className="text-xl font-bold text-gray-900 text-center">{internship.role}</h2>
+            <p className="text-sm text-gray-600 text-center">
+              {internship.company} &bull; {internship.location}
+            </p>
+            <p className="text-xs text-gray-500 text-center">
+              {internship.duration} &bull; {internship.stipend}
+            </p>
+            <p className="text-xs text-gray-500 text-center">
+              <span className="font-semibold">Skills:</span> {internship.skills}
+            </p>
+          </div>
+          {/* Action Buttons */}
+          <div className="w-full flex justify-around mt-4">
+            <motion.button
+              whileHover={{ scale: 1.1, backgroundColor: "#ff007f" }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsClicked(true)}
+              className="bg-blue-500 text-white px-3 py-1 rounded-md font-bold transition-all"
+            >
+              Know More
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1, backgroundColor: "#00ff7f" }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsClicked(true)}
+              className="bg-green-500 text-white px-3 py-1 rounded-md font-bold transition-all"
+            >
+              Apply Now
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </div>
@@ -114,7 +142,6 @@ export default function InternshipPlatform() {
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
-        
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3">
@@ -122,11 +149,25 @@ export default function InternshipPlatform() {
             <h1 className="text-3xl font-extrabold">Interns' Journey</h1>
           </div>
           <div className="flex items-center space-x-6">
-            <a href="#" className="hover:text-yellow-400">Home</a>
-            <a href="#" className="hover:text-yellow-400">About</a>
-            <a href="#" className="hover:text-yellow-400">Contact</a>
-            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-              {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
+            <a href="#" className="hover:text-yellow-400">
+              Home
+            </a>
+            <a href="#" className="hover:text-yellow-400">
+              About
+            </a>
+            <a href="#" className="hover:text-yellow-400">
+              Contact
+            </a>
+            <Button
+              variant="outline"
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2"
+            >
+              {darkMode ? (
+                <Sun size={24} className="text-yellow-400" />
+              ) : (
+                <Moon size={24} className="text-gray-200" />
+              )}
             </Button>
           </div>
         </nav>
@@ -135,7 +176,11 @@ export default function InternshipPlatform() {
         <main className="container mx-auto p-8 flex-1">
           <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
             <h2 className="text-4xl font-bold">Find Your Perfect Internship</h2>
-            <Button variant="outline" onClick={() => router.push("/register")} className="px-6 py-3 shadow-lg">
+            <Button
+              variant="outline"
+              onClick={() => router.push("/register")}
+              className="px-6 py-3 shadow-lg"
+            >
               Register Internship
             </Button>
           </div>
@@ -149,7 +194,10 @@ export default function InternshipPlatform() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 pr-4 py-3 w-full border rounded-xl"
             />
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2" size={24} />
+            <Search
+              className="absolute left-4 top-1/2 transform -translate-y-1/2"
+              size={24}
+            />
           </div>
 
           {/* Filter Buttons */}
