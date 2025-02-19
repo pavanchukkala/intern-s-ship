@@ -163,8 +163,11 @@ export default function InternshipPlatform() {
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3 mb-4 sm:mb-0">
             <Globe className="text-yellow-400" size={32} />
-            <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
-            <h2 className="text-2xl sm:text-3xl font-extrabold">Interns' Journey</h2>
+            <div className="flex flex-col">
+  <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
+  <h4 className="text-2xl sm:text-3xl font-extrabold">Interns' Journey</h4>
+</div>
+
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
             <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
