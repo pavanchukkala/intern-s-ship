@@ -186,10 +186,10 @@ export default function InternshipPlatform() {
             <div className="flex gap-4">
               <Button 
                 variant="outline" 
-                onClick={() => router.push("/post")} 
+                onClick={() => router.push("/register")} 
                 className="px-4 py-2 shadow-lg text-sm"
               >
-                Post Internship
+                Register/publish Internship
               </Button>
               <Button 
                 variant="outline" 
