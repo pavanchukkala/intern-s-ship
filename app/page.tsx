@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe, Sun, Moon, Filter, Search } from "lucide-react";
+import { Globe, Sun, Moon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
@@ -40,19 +40,19 @@ function InternshipCard({ internship }) {
   const [isClicked, setIsClicked] = useState(false);
 
   return (
-    // Outer container: responsive full width with max width for larger screens
+    // Outer container: responsive full width with increased card size
     <div className="flex justify-center items-center p-4">
-      <div className="relative w-full max-w-lg aspect-square flex justify-center items-center">
+      <div className="relative w-full aspect-square flex justify-center items-center">
         {/* Outer tilted rectangle with blur effect on merge */}
         <motion.div
-          className="absolute w-3/4 h-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
+          className="absolute w-11/12 h-11/12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
           animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
           {/* Inner internship card (counter-rotated) with animated colored border */}
           <motion.div
-            className="w-3/4 h-1/2 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+            className="w-11/12 h-11/12 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
             animate={
               isClicked
@@ -86,12 +86,12 @@ function InternshipCard({ internship }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsClicked(true)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
+                className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium"
               >
                 Know More
               </motion.button>
@@ -99,7 +99,7 @@ function InternshipCard({ internship }) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsClicked(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded-md font-bold"
+                className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium"
               >
                 Apply Now
               </motion.button>
@@ -187,7 +187,7 @@ export default function InternshipPlatform() {
           </div>
 
           {/* Internship Listings */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {filteredInternships.map((internship) => (
               <InternshipCard internship={internship} key={internship.id} />
             ))}
