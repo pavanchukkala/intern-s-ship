@@ -40,20 +40,19 @@ function InternshipCard({ internship }) {
   const [isClicked, setIsClicked] = useState(false);
 
   return (
-    // Use p-4 so that on mobile the card takes the full width of its grid cell
     <div className="flex justify-center items-center p-4">
-      {/* Responsive container: on mobile full width; on larger screens, max width increases */}
-      <div className="relative w-full max-w-sm md:max-w-lg aspect-square flex justify-center items-center">
-        {/* Outer tilted rectangle with cool blur effect on merge */}
+      {/* Card container: fixed size on mobile, larger on md and above */}
+      <div className="relative w-80 md:w-96 h-80 md:h-96 flex justify-center items-center">
+        {/* Outer tilted rectangle with blur effect on merge */}
         <motion.div
-          className="absolute w-4/5 h-2/3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
+          className="absolute w-56 md:w-72 h-40 md:h-48 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
           animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
         />
         {/* Inner internship card (counter-rotated) with animated colored border */}
         <motion.div
-          className="w-4/5 h-2/3 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+          className="absolute w-56 md:w-72 h-40 md:h-48 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
           initial={{ rotate: -45, borderWidth: "0px" }}
           animate={
             isClicked
@@ -79,8 +78,8 @@ function InternshipCard({ internship }) {
 
           {/* Internship Details */}
           <div className="text-center">
-            <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
-            <h2 className="text-xl font-bold">{internship.role}</h2>
+            <img src={internship.logo} alt={internship.company} className="h-8 w-8 mb-2 inline-block" />
+            <h2 className="text-lg font-bold">{internship.role}</h2>
             <p className="text-sm">{internship.company} | {internship.location}</p>
             <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
             <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
@@ -133,7 +132,6 @@ export default function InternshipPlatform() {
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
-        
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3">
