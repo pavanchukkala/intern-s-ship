@@ -40,71 +40,71 @@ function InternshipCard({ internship }) {
   const [isClicked, setIsClicked] = useState(false);
 
   return (
-    <div className="flex justify-center items-center p-10">
-      <div className="relative w-80 h-80 flex justify-center items-center">
-        {/* Outer tilted rectangle */}
+    // Use p-4 so that on mobile the card takes the full width of its grid cell
+    <div className="flex justify-center items-center p-4">
+      {/* Responsive container: on mobile full width; on larger screens, max width increases */}
+      <div className="relative w-full max-w-sm md:max-w-lg aspect-square flex justify-center items-center">
+        {/* Outer tilted rectangle with cool blur effect on merge */}
         <motion.div
-          className="absolute w-56 h-40 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
-          initial={{ rotate: 45 }}
-          animate={isClicked ? { rotate: 0 } : { rotate: 45 }}
+          className="absolute w-4/5 h-2/3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
+          initial={{ rotate: 45, filter: "blur(0px)" }}
+          animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
+        />
+        {/* Inner internship card (counter-rotated) with animated colored border */}
+        <motion.div
+          className="w-4/5 h-2/3 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+          initial={{ rotate: -45, borderWidth: "0px" }}
+          animate={
+            isClicked
+              ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
+              : { rotate: -45, borderWidth: "0px" }
+          }
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+          whileHover={!isClicked ? { scale: 1.05 } : {}}
         >
-          {/* Inner internship card (counter-rotated) with animated border */}
-          <motion.div
-            className="w-56 h-40 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
-            initial={{ rotate: -45, borderWidth: "0px" }}
-            animate={
-              isClicked
-                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
-                : { rotate: -45, borderWidth: "0px" }
-            }
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-            whileHover={!isClicked ? { scale: 1.05 } : {}}
-          >
-            {/* Animated colored border after merging */}
-            {isClicked && (
-              <motion.div
-                className="absolute inset-0 rounded-lg"
-                initial={{ opacity: 0, borderWidth: "0px" }}
-                animate={{ opacity: 1, borderWidth: "4px" }}
-                transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
-                style={{
-                  borderStyle: "solid",
-                  borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
-                }}
-              />
-            )}
+          {/* Animated colored border after merging */}
+          {isClicked && (
+            <motion.div
+              className="absolute inset-0 rounded-lg"
+              initial={{ opacity: 0, borderWidth: "0px" }}
+              animate={{ opacity: 1, borderWidth: "4px" }}
+              transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+              style={{
+                borderStyle: "solid",
+                borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
+              }}
+            />
+          )}
 
-            {/* Internship Details */}
-            <div className="text-center">
-              <img src={internship.logo} alt={internship.company} className="h-8 w-8 mb-2 inline-block" />
-              <h2 className="text-lg font-bold">{internship.role}</h2>
-              <p className="text-sm">{internship.company} | {internship.location}</p>
-              {/* Extra Details */}
-              <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
-              <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
-            </div>
+          {/* Internship Details */}
+          <div className="text-center">
+            <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
+            <h2 className="text-xl font-bold">{internship.role}</h2>
+            <p className="text-sm">{internship.company} | {internship.location}</p>
+            <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
+            <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
-              >
-                Know More
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded-md font-bold"
-              >
-                Apply Now
-              </motion.button>
-            </div>
-          </motion.div>
+          {/* Action Buttons */}
+          <div className="flex gap-4">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsClicked(true)}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
+            >
+              Know More
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsClicked(true)}
+              className="bg-green-500 text-white px-4 py-2 rounded-md font-bold"
+            >
+              Apply Now
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </div>
@@ -187,7 +187,7 @@ export default function InternshipPlatform() {
           </div>
 
           {/* Internship Listings */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {filteredInternships.map((internship) => (
               <InternshipCard internship={internship} key={internship.id} />
             ))}
