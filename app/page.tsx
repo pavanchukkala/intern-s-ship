@@ -41,18 +41,18 @@ function InternshipCard({ internship }) {
 
   return (
     <div className="flex justify-center items-center p-4">
-      {/* Card container: fixed size on mobile, larger on md and above */}
-      <div className="relative w-80 md:w-96 h-80 md:h-96 flex justify-center items-center">
+      {/* Card container: original idea preserved but with responsive size */}
+      <div className="relative w-80 h-80 md:w-96 md:h-96 flex justify-center items-center">
         {/* Outer tilted rectangle with blur effect on merge */}
         <motion.div
-          className="absolute w-56 md:w-72 h-40 md:h-48 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
+          className="absolute w-56 h-40 md:w-72 md:h-48 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
           animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
         />
-        {/* Inner internship card (counter-rotated) with animated colored border */}
+        {/* Inner internship card (counter-rotated) with animated border */}
         <motion.div
-          className="absolute w-56 md:w-72 h-40 md:h-48 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+          className="absolute w-56 h-40 md:w-72 md:h-48 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center"
           initial={{ rotate: -45, borderWidth: "0px" }}
           animate={
             isClicked
@@ -62,20 +62,6 @@ function InternshipCard({ internship }) {
           transition={{ duration: 0.7, ease: "easeInOut" }}
           whileHover={!isClicked ? { scale: 1.05 } : {}}
         >
-          {/* Animated colored border after merging */}
-          {isClicked && (
-            <motion.div
-              className="absolute inset-0 rounded-lg"
-              initial={{ opacity: 0, borderWidth: "0px" }}
-              animate={{ opacity: 1, borderWidth: "4px" }}
-              transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
-              style={{
-                borderStyle: "solid",
-                borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
-              }}
-            />
-          )}
-
           {/* Internship Details */}
           <div className="text-center">
             <img src={internship.logo} alt={internship.company} className="h-8 w-8 mb-2 inline-block" />
@@ -84,7 +70,6 @@ function InternshipCard({ internship }) {
             <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
             <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
           </div>
-
           {/* Action Buttons */}
           <div className="flex gap-4">
             <motion.button
@@ -184,7 +169,7 @@ export default function InternshipPlatform() {
             ))}
           </div>
 
-          {/* Internship Listings */}
+          {/* Internship Listings: one card per row on mobile; three per row on md and up */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {filteredInternships.map((internship) => (
               <InternshipCard internship={internship} key={internship.id} />
