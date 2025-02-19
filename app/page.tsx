@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe, Sun, Moon, Filter, Search } from "lucide-react";
+import { Globe, Sun, Moon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 
+// Define the filters and sample internship data
 const FILTERS = [
   "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
   "Remote", "On-site", "Hybrid", "Part-time", "Full-time", "Technical", "Non-Technical",
@@ -39,72 +40,77 @@ const internships = [
 function InternshipCard({ internship }) {
   const [isClicked, setIsClicked] = useState(false);
 
+  // The outer container (80x80) holds the entire tilted design.
+  // The inner elements use fixed dimensions to ensure content fits.
   return (
-    // Outer container: responsive full width with max width for larger screens
-    <div className="flex justify-center items-center p-4">
-      <div className="relative w-full max-w-lg aspect-square flex justify-center items-center">
-        {/* Outer tilted rectangle with blur effect on merge */}
+    <div className="flex justify-center items-center p-10">
+      <div className="relative w-80 h-80 flex justify-center items-center">
+        {/* Outer tilted rectangle – maintains the original tilt */}
         <motion.div
-          className="absolute w-3/4 h-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
+          className="absolute w-60 h-48 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
-          animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
+          animate={ isClicked 
+            ? { rotate: 0, filter: "blur(8px)" } 
+            : { rotate: 45, filter: "blur(0px)" } }
           transition={{ duration: 0.7, ease: "easeInOut" }}
+        />
+
+        {/* Inner internship card (counter-rotated) */}
+        <motion.div
+          className="relative w-60 h-48 bg-white text-black p-4 rounded-lg shadow-xl flex flex-col justify-between items-center overflow-hidden"
+          initial={{ rotate: -45, borderWidth: "0px" }}
+          animate={ isClicked 
+            ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" } 
+            : { rotate: -45, borderWidth: "0px" } }
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+          whileHover={ !isClicked ? { scale: 1.05 } : {} }
         >
-          {/* Inner internship card (counter-rotated) with animated colored border */}
-          <motion.div
-            className="w-3/4 h-1/2 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
-            initial={{ rotate: -45, borderWidth: "0px" }}
-            animate={
-              isClicked
-                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
-                : { rotate: -45, borderWidth: "0px" }
-            }
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-            whileHover={!isClicked ? { scale: 1.05 } : {}}
-          >
-            {/* Animated colored border after merging */}
-            {isClicked && (
-              <motion.div
-                className="absolute inset-0 rounded-lg"
-                initial={{ opacity: 0, borderWidth: "0px" }}
-                animate={{ opacity: 1, borderWidth: "4px" }}
-                transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
-                style={{
-                  borderStyle: "solid",
-                  borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
-                }}
-              />
-            )}
+          {/* Animated colored border appears when merged */}
+          {isClicked && (
+            <motion.div
+              className="absolute inset-0 rounded-lg"
+              initial={{ opacity: 0, borderWidth: "0px" }}
+              animate={{ opacity: 1, borderWidth: "4px" }}
+              transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+              style={{
+                borderStyle: "solid",
+                borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
+              }}
+            />
+          )}
 
-            {/* Internship Details */}
-            <div className="text-center">
-              <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
-              <h2 className="text-xl font-bold">{internship.role}</h2>
-              <p className="text-sm">{internship.company} | {internship.location}</p>
-              <p className="text-xs text-gray-500">{internship.duration} | {internship.stipend}</p>
-              <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
-            </div>
+          {/* Internship Details – text is kept inside the card */}
+          <div className="text-center">
+            <img 
+              src={internship.logo} 
+              alt={internship.company} 
+              className="h-8 w-8 mx-auto mb-1" 
+            />
+            <h2 className="text-base font-bold">{internship.role}</h2>
+            <p className="text-xs">{internship.company} | {internship.location}</p>
+            <p className="text-[10px] text-gray-500">{internship.duration} | {internship.stipend}</p>
+            <p className="text-[10px] text-gray-500">Skills: {internship.skills}</p>
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
-              >
-                Know More
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded-md font-bold"
-              >
-                Apply Now
-              </motion.button>
-            </div>
-          </motion.div>
+          {/* Action Buttons – smaller size to ensure everything fits */}
+          <div className="flex gap-1 mt-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsClicked(true)}
+              className="bg-blue-500 text-white px-2 py-1 rounded-md font-bold text-[10px]"
+            >
+              Know More
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsClicked(true)}
+              className="bg-green-500 text-white px-2 py-1 rounded-md font-bold text-[10px]"
+            >
+              Apply Now
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </div>
@@ -113,25 +119,28 @@ function InternshipCard({ internship }) {
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
 
-  const filteredInternships = internships.filter(
-    (internship) =>
-      internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter internships based on the search query
+  const filteredInternships = internships.filter(internship =>
+    internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const toggleFilter = (filter: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+  // Toggle a filter on or off
+  const toggleFilter = filter => {
+    setSelectedFilters(prev =>
+      prev.includes(filter)
+        ? prev.filter(f => f !== filter)
+        : [...prev, filter]
     );
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
+    <div className={darkMode ? "dark" : ""}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         
         {/* Navbar */}
@@ -145,7 +154,9 @@ export default function InternshipPlatform() {
             <a href="#" className="hover:text-yellow-400">About</a>
             <a href="#" className="hover:text-yellow-400">Contact</a>
             <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-              {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
+              {darkMode 
+                ? <Sun size={24} className="text-yellow-400" /> 
+                : <Moon size={24} className="text-gray-200" />}
             </Button>
           </div>
         </nav>
@@ -173,7 +184,7 @@ export default function InternshipPlatform() {
 
           {/* Filter Buttons */}
           <div className="mb-8 flex flex-wrap gap-3">
-            {FILTERS.map((filter) => (
+            {FILTERS.map(filter => (
               <Button
                 key={filter}
                 variant={selectedFilters.includes(filter) ? "default" : "outline"}
@@ -187,8 +198,8 @@ export default function InternshipPlatform() {
           </div>
 
           {/* Internship Listings */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {filteredInternships.map((internship) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {filteredInternships.map(internship => (
               <InternshipCard internship={internship} key={internship.id} />
             ))}
           </div>
