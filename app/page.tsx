@@ -165,7 +165,9 @@ export default function InternshipPlatform() {
             <Globe className="text-yellow-400" size={32} />
             <div className="flex flex-col">
   <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
-  <h4 className="text-2xl sm:text-3xl font-extrabold">Interns' Journey</h4>
+  <p className="text-2xl sm:text-3xl font-extrabold">TO</p>
+              <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
+              
 </div>
 
           </div>
