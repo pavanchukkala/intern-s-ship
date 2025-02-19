@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe, Sun, Moon, Filter, Search } from "lucide-react";
+import { Globe, Sun, Moon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
@@ -41,18 +41,22 @@ function InternshipCard({ internship }) {
 
   return (
     <div className="flex justify-center items-center p-4">
-      {/* Card container: original idea preserved but with responsive size */}
-      <div className="relative w-80 h-80 md:w-96 md:h-96 flex justify-center items-center">
-        {/* Outer tilted rectangle with blur effect on merge */}
+      {/* Card container retains original rectangular shape */}
+      <div className="relative w-56 h-40 md:w-72 md:h-48 flex justify-center items-center">
+        {/* Outer tilted rectangle – remains rectangular and is rotated */}
         <motion.div
-          className="absolute w-56 h-40 md:w-72 md:h-48 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
+          className="absolute w-full h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
-          animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
+          animate={
+            isClicked
+              ? { rotate: 0, filter: "blur(8px)" }
+              : { rotate: 45, filter: "blur(0px)" }
+          }
           transition={{ duration: 0.7, ease: "easeInOut" }}
         />
-        {/* Inner internship card (counter-rotated) with animated border */}
+        {/* Inner internship card, counter-rotated to appear straight */}
         <motion.div
-          className="absolute w-56 h-40 md:w-72 md:h-48 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center"
+          className="absolute w-full h-full bg-white text-black p-4 rounded-lg shadow-xl flex flex-col justify-between items-center"
           initial={{ rotate: -45, borderWidth: "0px" }}
           animate={
             isClicked
@@ -169,7 +173,7 @@ export default function InternshipPlatform() {
             ))}
           </div>
 
-          {/* Internship Listings: one card per row on mobile; three per row on md and up */}
+          {/* Internship Listings: one per row on mobile; three per row on md+ */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {filteredInternships.map((internship) => (
               <InternshipCard internship={internship} key={internship.id} />
