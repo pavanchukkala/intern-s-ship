@@ -25,6 +25,16 @@ const internships = [
     logo: "/logos/techcorp.png" 
   },
   { 
+    id: 1, 
+    company: "TechCorp", 
+    role: "Software Engineer", 
+    location: "Remote", 
+    stipend: "$1000/month", 
+    duration: "6 months", 
+    skills: "React, Node.js, Python", 
+    logo: "/logos/techcorp.png" 
+  },
+  { 
     id: 2, 
     company: "InnovateX", 
     role: "Data Analyst", 
