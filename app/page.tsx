@@ -129,19 +129,19 @@ export default function InternshipPlatform() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         
         {/* Navbar */}
-        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex flex-wrap justify-between items-center shadow-lg">
-          <div className="flex items-center space-x-3">
+        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
+          <div className="flex items-center space-x-3 mb-4 sm:mb-0">
             <Globe className="text-yellow-400" size={32} />
-            <h1 className="text-3xl font-extrabold">Interns' Journey</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold">Interns' Journey</h1>
           </div>
-          <div className="flex items-center space-x-3 md:space-x-6 flex-wrap">
-            <a href="#" className="hover:text-yellow-400">Home</a>
-            <a href="#" className="hover:text-yellow-400">About</a>
-            <a href="#" className="hover:text-yellow-400">Contact</a>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">Contact</a>
             <Button
               variant="outline"
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 mt-2 md:mt-0"
+              className="p-2"
             >
               {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
             </Button>
@@ -149,35 +149,39 @@ export default function InternshipPlatform() {
         </nav>
 
         {/* Main Content */}
-        <main className="container mx-auto p-8 flex-1">
-          <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
-            <h2 className="text-4xl font-bold">Find Your Perfect Internship</h2>
-            <Button variant="outline" onClick={() => router.push("/register")} className="px-6 py-3 shadow-lg">
+        <main className="container mx-auto px-4 py-6 flex-1">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="text-3xl sm:text-4xl font-bold">Find Your Perfect Internship</h2>
+            <Button 
+              variant="outline" 
+              onClick={() => router.push("/register")} 
+              className="px-4 py-2 shadow-lg text-sm"
+            >
               Register Internship
             </Button>
           </div>
 
           {/* Search Bar */}
-          <div className="relative mb-8">
+          <div className="relative mb-6">
             <Input
               type="text"
               placeholder="Search for internships..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 pr-4 py-3 w-full border rounded-xl"
+              className="pl-10 pr-4 py-2 w-full border rounded-xl text-sm"
             />
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2" size={24} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" size={20} />
           </div>
 
           {/* Filter Buttons */}
-          <div className="mb-8 flex flex-wrap gap-3">
+          <div className="mb-6 flex flex-wrap gap-3">
             {FILTERS.map((filter) => (
               <Button
                 key={filter}
                 variant={selectedFilters.includes(filter) ? "default" : "outline"}
-                size="lg"
+                size="sm"
                 onClick={() => toggleFilter(filter)}
-                className="text-md px-5 py-3 transition-all transform hover:scale-110 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md font-medium"
+                className="px-3 py-2 transition-all transform hover:scale-105 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md text-xs"
               >
                 {filter}
               </Button>
