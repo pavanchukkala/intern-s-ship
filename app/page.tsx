@@ -25,16 +25,6 @@ const internships = [
     logo: "/logos/techcorp.png" 
   },
   { 
-    id: 1, 
-    company: "TechCorp", 
-    role: "Software Engineer", 
-    location: "Remote", 
-    stipend: "$1000/month", 
-    duration: "6 months", 
-    skills: "React, Node.js, Python", 
-    logo: "/logos/techcorp.png" 
-  },
-  { 
     id: 2, 
     company: "InnovateX", 
     role: "Data Analyst", 
@@ -50,17 +40,14 @@ function InternshipCard({ internship }) {
   const [isClicked, setIsClicked] = useState(false);
 
   return (
-    // Outer container: responsive full width with increased card size
     <div className="flex justify-center items-center p-4">
       <div className="relative w-full aspect-square flex justify-center items-center">
-        {/* Outer tilted rectangle with blur effect on merge */}
         <motion.div
           className="absolute w-11/12 h-11/12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
           animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
-          {/* Inner internship card (counter-rotated) with animated colored border */}
           <motion.div
             className="w-11/12 h-11/12 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
@@ -72,7 +59,6 @@ function InternshipCard({ internship }) {
             transition={{ duration: 0.7, ease: "easeInOut" }}
             whileHover={!isClicked ? { scale: 1.05 } : {}}
           >
-            {/* Animated colored border after merging */}
             {isClicked && (
               <motion.div
                 className="absolute inset-0 rounded-lg"
@@ -86,7 +72,6 @@ function InternshipCard({ internship }) {
               />
             )}
 
-            {/* Internship Details */}
             <div className="text-center">
               <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
               <h2 className="text-xl font-bold">{internship.role}</h2>
@@ -95,13 +80,12 @@ function InternshipCard({ internship }) {
               <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex gap-2">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsClicked(true)}
-                className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium"
+                className="bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-medium"
               >
                 Know More
               </motion.button>
@@ -109,7 +93,7 @@ function InternshipCard({ internship }) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsClicked(true)}
-                className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium"
+                className="bg-green-500 text-white px-2 py-1 rounded-md text-xs font-medium"
               >
                 Apply Now
               </motion.button>
@@ -145,16 +129,20 @@ export default function InternshipPlatform() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         
         {/* Navbar */}
-        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex justify-between items-center shadow-lg">
+        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-6 flex flex-wrap justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3">
             <Globe className="text-yellow-400" size={32} />
             <h1 className="text-3xl font-extrabold">Interns' Journey</h1>
           </div>
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-3 md:space-x-6 flex-wrap">
             <a href="#" className="hover:text-yellow-400">Home</a>
             <a href="#" className="hover:text-yellow-400">About</a>
             <a href="#" className="hover:text-yellow-400">Contact</a>
-            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
+            <Button
+              variant="outline"
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 mt-2 md:mt-0"
+            >
               {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
             </Button>
           </div>
