@@ -25,6 +25,36 @@ const internships = [
     logo: "/logos/techcorp.png" 
   },
   { 
+    id: 1, 
+    company: "TechCorp", 
+    role: "Software Engineer", 
+    location: "Remote", 
+    stipend: "$1000/month", 
+    duration: "6 months", 
+    skills: "React, Node.js, Python", 
+    logo: "/logos/techcorp.png" 
+  },
+  { 
+    id: 1, 
+    company: "TechCorp", 
+    role: "Software Engineer", 
+    location: "Remote", 
+    stipend: "$1000/month", 
+    duration: "6 months", 
+    skills: "React, Node.js, Python", 
+    logo: "/logos/techcorp.png" 
+  },
+  { 
+    id: 1, 
+    company: "TechCorp", 
+    role: "Software Engineer", 
+    location: "Remote", 
+    stipend: "$1000/month", 
+    duration: "6 months", 
+    skills: "React, Node.js, Python", 
+    logo: "/logos/techcorp.png" 
+  },
+  { 
     id: 2, 
     company: "InnovateX", 
     role: "Data Analyst", 
@@ -108,6 +138,7 @@ function InternshipCard({ internship }) {
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
 
@@ -149,20 +180,29 @@ export default function InternshipPlatform() {
         </nav>
 
         {/* Main Content */}
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
             <h2 className="text-3xl sm:text-4xl font-bold">Find Your Perfect Internship</h2>
-            <Button 
-              variant="outline" 
-              onClick={() => router.push("/register")} 
-              className="px-4 py-2 shadow-lg text-sm"
-            >
-              Register Internship
-            </Button>
+            <div className="flex gap-4">
+              <Button 
+                variant="outline" 
+                onClick={() => router.push("/post")} 
+                className="px-4 py-2 shadow-lg text-sm"
+              >
+                Post Internship
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => router.push("/talk-to-expert")} 
+                className="px-4 py-2 shadow-lg text-sm"
+              >
+                Talk to Expert
+              </Button>
+            </div>
           </div>
 
           {/* Search Bar */}
-          <div className="relative mb-6">
+          <div className="relative mb-4">
             <Input
               type="text"
               placeholder="Search for internships..."
@@ -173,20 +213,29 @@ export default function InternshipPlatform() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" size={20} />
           </div>
 
-          {/* Filter Buttons */}
-          <div className="mb-6 flex flex-wrap gap-3">
-            {FILTERS.map((filter) => (
-              <Button
-                key={filter}
-                variant={selectedFilters.includes(filter) ? "default" : "outline"}
-                size="sm"
-                onClick={() => toggleFilter(filter)}
-                className="px-3 py-2 transition-all transform hover:scale-105 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md text-xs"
-              >
-                {filter}
-              </Button>
-            ))}
+          {/* Filter Toggle */}
+          <div className="flex justify-end mb-2">
+            <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="text-xs">
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </Button>
           </div>
+
+          {/* Filter Buttons */}
+          {showFilters && (
+            <div className="mb-4 flex flex-wrap gap-3">
+              {FILTERS.map((filter) => (
+                <Button
+                  key={filter}
+                  variant={selectedFilters.includes(filter) ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => toggleFilter(filter)}
+                  className="px-3 py-2 transition-all transform hover:scale-105 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md text-xs"
+                >
+                  {filter}
+                </Button>
+              ))}
+            </div>
+          )}
 
           {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
