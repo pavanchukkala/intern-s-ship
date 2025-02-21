@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "lib/infirebase.js"; // Firebase setup from lib/infirebase.js
 import { Globe, Sun, Moon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,59 +13,6 @@ const FILTERS = [
   "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
   "Remote", "On-site", "Hybrid", "Part-time", "Full-time", "Technical", "Non-Technical",
   "Internship Duration", "Company Size", "Industry Sector", "Experience Level", "Startup", "MNC"
-];
-
-const internships = [
-  { 
-    id: 1, 
-    company: "TechCorp", 
-    role: "Software Engineer", 
-    location: "Remote", 
-    stipend: "$1000/month", 
-    duration: "6 months", 
-    skills: "React, Node.js, Python", 
-    logo: "/logos/techcorp.png" 
-  },
-  { 
-    id: 1, 
-    company: "TechCorp", 
-    role: "Software Engineer", 
-    location: "Remote", 
-    stipend: "$1000/month", 
-    duration: "6 months", 
-    skills: "React, Node.js, Python", 
-    logo: "/logos/techcorp.png" 
-  },
-  { 
-    id: 1, 
-    company: "TechCorp", 
-    role: "Software Engineer", 
-    location: "Remote", 
-    stipend: "$1000/month", 
-    duration: "6 months", 
-    skills: "React, Node.js, Python", 
-    logo: "/logos/techcorp.png" 
-  },
-  { 
-    id: 1, 
-    company: "TechCorp", 
-    role: "Software Engineer", 
-    location: "Remote", 
-    stipend: "$1000/month", 
-    duration: "6 months", 
-    skills: "React, Node.js, Python", 
-    logo: "/logos/techcorp.png" 
-  },
-  { 
-    id: 2, 
-    company: "InnovateX", 
-    role: "Data Analyst", 
-    location: "On-site", 
-    stipend: "$800/month", 
-    duration: "3 months", 
-    skills: "SQL, Tableau, Python", 
-    logo: "/logos/innovatex.png" 
-  }
 ];
 
 function InternshipCard({ internship }) {
@@ -137,10 +86,28 @@ function InternshipCard({ internship }) {
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [internships, setInternships] = useState([]);
   const router = useRouter();
+
+  // Fetch internship data from Firestore on component mount
+  useEffect(() => {
+    async function fetchInternships() {
+      try {
+        const internshipsSnapshot = await getDocs(collection(db, "internships"));
+        const internshipsData = internshipsSnapshot.docs.map((doc) => ({
+          id: doc.id, // Firestore document id; can be encrypted later if needed
+          ...doc.data(),
+        }));
+        setInternships(internshipsData);
+      } catch (error) {
+        console.error("Error fetching internships:", error);
+      }
+    }
+    fetchInternships();
+  }, []);
 
   const filteredInternships = internships.filter(
     (internship) =>
@@ -149,7 +116,7 @@ export default function InternshipPlatform() {
       internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const toggleFilter = (filter: string) => {
+  const toggleFilter = (filter) => {
     setSelectedFilters((prev) =>
       prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
     );
@@ -158,18 +125,15 @@ export default function InternshipPlatform() {
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
-        
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3 mb-4 sm:mb-0">
             <Globe className="text-yellow-400" size={32} />
             <div className="flex flex-col items-center text-center">
-  <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
-  <p className="text-lg sm:text-xl font-extrabold">TO</p>
-  <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
-</div>
-
-
+              <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
+              <p className="text-lg sm:text-xl font-extrabold">TO</p>
+              <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
             <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
