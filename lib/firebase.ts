@@ -1,7 +1,8 @@
-// lib/firebase.ts
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
 
+// Firebase configuration using environment variables
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -12,16 +13,9 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
+// Initialize Firebase only on the client side
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-// Dynamically import analytics only in the browser
-let analytics = null;
-if (typeof window !== "undefined") {
-  import("firebase/analytics").then(({ getAnalytics }) => {
-    analytics = getAnalytics(app);
-  });
-}
+const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
 
 export { db, analytics };
