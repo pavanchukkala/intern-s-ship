@@ -59,7 +59,10 @@ function InternshipCard({ internship }: any) {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
+             onClick={() =>
+  router.push(`/internship/${encodeURIComponent(internship.company)}`)
+}
+
                 className="bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-medium"
               >
                 Know More
