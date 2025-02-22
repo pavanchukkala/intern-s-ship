@@ -2,17 +2,23 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
+// Provided Cardload Firebase configuration details
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_CARDLOAD_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_CARDLOAD_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_CARDLOAD_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_CARDLOAD_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_CARDLOAD_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_CARDLOAD_APP_ID,
+  apiKey: "AIzaSyBsNPTc-45FEkOBAsUp-T1TP_El5W5VH_Y",
+  authDomain: "cardload-760fb.firebaseapp.com",
+  projectId: "cardload-760fb",
+  storageBucket: "cardload-760fb.firebasestorage.app",
+  messagingSenderId: "652478851510",
+  appId: "1:652478851510:web:3b1f5cf80c8043708c7917",
+  measurementId: "G-52MMX4PSKE",
 };
 
+// Initialize Firebase app only once under the name "cardload"
 const app =
-  getApps().length ? getApp("cardload") : initializeApp(firebaseConfig, "cardload");
+  getApps().find((a) => a.name === "cardload") ||
+  initializeApp(firebaseConfig, "cardload");
+
+// Get Firestore instance from the app
 const db = getFirestore(app);
 
 export { db };
