@@ -2,19 +2,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
-
-import { Globe, Sun, Moon, Search } from "lucide-react";
+import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
+import SearchBar from "@/components/SearchBar";
+import FilterPanel from "@/components/FilterPanel";
+import { db } from "@/lib/firebase"; // ensure your firebase config is exported here
 
-const FILTERS = [
-  "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
-  "Remote", "On-site", "Hybrid", "Part-time", "Full-time", "Technical", "Non-Technical",
-  "Internship Duration", "Company Size", "Industry Sector", "Experience Level", "Startup", "MNC"
-];
-
-function InternshipCard({ internship }) {
+// InternshipCard component (remains unchanged)
+function InternshipCard({ internship }: any) {
   const [isClicked, setIsClicked] = useState(false);
 
   return (
@@ -85,10 +81,10 @@ function InternshipCard({ internship }) {
 
 export default function InternshipPlatform() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  const [internships, setInternships] = useState([]);
+  const [internships, setInternships] = useState<any[]>([]);
   const router = useRouter();
 
   // Fetch internship data from Firestore on component mount
@@ -97,7 +93,7 @@ export default function InternshipPlatform() {
       try {
         const internshipsSnapshot = await getDocs(collection(db, "internships"));
         const internshipsData = internshipsSnapshot.docs.map((doc) => ({
-          id: doc.id, // Firestore document id; can be encrypted later if needed
+          id: doc.id,
           ...doc.data(),
         }));
         setInternships(internshipsData);
@@ -115,16 +111,14 @@ export default function InternshipPlatform() {
       internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const toggleFilter = (filter) => {
+  const toggleFilter = (filter: string) => {
     setSelectedFilters((prev) =>
       prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
     );
   };
 
   return (
-  <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
-
-
+    <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
@@ -137,14 +131,16 @@ export default function InternshipPlatform() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
-            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
-            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">Contact</a>
-            <Button
-              variant="outline"
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2"
-            >
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
+              Home
+            </a>
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
+              About
+            </a>
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
+              Contact
+            </a>
+            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
               {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
             </Button>
           </div>
@@ -155,16 +151,16 @@ export default function InternshipPlatform() {
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
             <h2 className="text-3xl sm:text-4xl font-bold">Find Your Perfect Internship</h2>
             <div className="flex gap-4">
-              <Button 
-                variant="outline" 
-                onClick={() => router.push("/register")} 
+              <Button
+                variant="outline"
+                onClick={() => router.push("/register")}
                 className="px-4 py-2 shadow-lg text-sm"
               >
                 Register/publish Internship
               </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => router.push("/talk-to-expert")} 
+              <Button
+                variant="outline"
+                onClick={() => router.push("/talk-to-expert")}
                 className="px-4 py-2 shadow-lg text-sm"
               >
                 Talk to Expert
@@ -172,41 +168,14 @@ export default function InternshipPlatform() {
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative mb-4">
-            <Input
-              type="text"
-              placeholder="Search for internships..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 w-full border rounded-xl text-sm"
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" size={20} />
-          </div>
-
-          {/* Filter Toggle */}
-          <div className="flex justify-end mb-2">
-            <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="text-xs">
-              {showFilters ? "Hide Filters" : "Show Filters"}
-            </Button>
-          </div>
-
-          {/* Filter Buttons */}
-          {showFilters && (
-            <div className="mb-4 flex flex-wrap gap-3">
-              {FILTERS.map((filter) => (
-                <Button
-                  key={filter}
-                  variant={selectedFilters.includes(filter) ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => toggleFilter(filter)}
-                  className="px-3 py-2 transition-all transform hover:scale-105 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md text-xs"
-                >
-                  {filter}
-                </Button>
-              ))}
-            </div>
-          )}
+          {/* Search & Filter Components */}
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <FilterPanel
+            selectedFilters={selectedFilters}
+            toggleFilter={toggleFilter}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+          />
 
           {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
