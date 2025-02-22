@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 import FilterPanel from "@/components/FilterPanel";
-import { db } from "@/lib/infirebase";
+import { db } from "@/lib/firebase-cardload";
 import { recommendInternships } from "@/lib/recommendation";
 
 // InternshipCard component
