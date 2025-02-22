@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -29,6 +30,13 @@ export default function RegisterInternship() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    // Make sure Firebase has been initialized
+    if (!db) {
+      setError("Firebase is not initialized. Please refresh the page.");
+      return;
+    }
+    
     try {
       await addDoc(collection(db, "internships"), formData);
       setSubmitted(true);
