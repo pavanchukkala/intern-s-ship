@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 import FilterPanel from "@/components/FilterPanel";
-import { db } from "@/lib/firebase"; // ensure your firebase config is exported here
+import { db } from "@/lib/infirebase";
+import { recommendInternships } from "@/lib/recommendation";
 
-// InternshipCard component (remains unchanged)
+// InternshipCard component
 function InternshipCard({ internship }: any) {
   const [isClicked, setIsClicked] = useState(false);
 
@@ -104,12 +105,16 @@ export default function InternshipPlatform() {
     fetchInternships();
   }, []);
 
+  // Filter by search query (company, role, or skills)
   const filteredInternships = internships.filter(
     (internship) =>
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
       internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Apply the recommendation algorithm (currently random)
+  const recommendedInternships = recommendInternships(filteredInternships);
 
   const toggleFilter = (filter: string) => {
     setSelectedFilters((prev) =>
@@ -177,9 +182,9 @@ export default function InternshipPlatform() {
             setShowFilters={setShowFilters}
           />
 
-          {/* Internship Listings */}
+          {/* Internship Listings (displaying recommended internships) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {filteredInternships.map((internship) => (
+            {recommendedInternships.map((internship) => (
               <InternshipCard internship={internship} key={internship.id} />
             ))}
           </div>
