@@ -1,4 +1,5 @@
-import { initializeApp } from "firebase/app";
+// /lib/firebase.ts
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
@@ -13,9 +14,11 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase only on the client side
-const app = initializeApp(firebaseConfig);
+// Use existing app if already initialized
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// Initialize Analytics only on the client side
 const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
 
 export { db, analytics };
