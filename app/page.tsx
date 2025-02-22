@@ -114,7 +114,7 @@ export default function InternshipPlatform() {
   );
 
   // Apply the recommendation algorithm (currently random)
-  const recommendedInternships = recommendInternships(filteredInternships);
+ const recommendedInternships = filteredInternships;
 
   const toggleFilter = (filter: string) => {
     setSelectedFilters((prev) =>
