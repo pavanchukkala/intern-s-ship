@@ -1,3 +1,4 @@
+// app/page.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -7,29 +8,27 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 import FilterPanel from "@/components/FilterPanel";
-import { db } from "@/lib/firebase-cardload";
-import { recommendInternships } from "@/lib/recommendation";
+import { db } from "@/lib/firebase-bigdata"; // Updated to load from comdata
 
 // InternshipCard component
 function InternshipCard({ internship, activeCardId, setActiveCardId }: { internship: any, activeCardId: string | null, setActiveCardId: (id: string | null) => void }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
 
-  // Only allow clicks if no other card is active or this card is already active.
+  // Only allow clicks if another card is active and it’s not this one
   const isDisabled = activeCardId && activeCardId !== internship.id;
 
- // Inside your InternshipCard component in app/page.tsx
-const handleKnowMore = () => {
-  if (isDisabled) return;
-  if (!activeCardId) {
-    setActiveCardId(internship.id);
-  }
-  setIsClicked(true);
-  // After animation, navigate using document ID
-  setTimeout(() => {
-    router.push(`/internship/${internship.id}`);
-  }, 700);
-};
+  const handleKnowMore = () => {
+    if (isDisabled) return;
+    if (!activeCardId) {
+      setActiveCardId(internship.id);
+    }
+    setIsClicked(true);
+    // Navigate using the document ID after animation
+    setTimeout(() => {
+      router.push(`/internship/${internship.id}`);
+    }, 700);
+  };
 
   const handleApplyNow = () => {
     if (isDisabled) return;
@@ -37,7 +36,7 @@ const handleKnowMore = () => {
       setActiveCardId(internship.id);
     }
     setIsClicked(true);
-    // For Apply Now, you might trigger additional logic here.
+    // Add additional logic for Apply Now here if needed
   };
 
   return (
@@ -50,13 +49,9 @@ const handleKnowMore = () => {
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
           <motion.div
-            className="w-11/12 h-11/12 bg-white text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+            className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
-            animate={
-              isClicked
-                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
-                : { rotate: -45, borderWidth: "0px" }
-            }
+            animate={isClicked ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" } : { rotate: -45, borderWidth: "0px" }}
             transition={{ duration: 0.7, ease: "easeInOut" }}
             whileHover={!isClicked ? { scale: 1.05 } : {}}
           >
@@ -114,7 +109,6 @@ export default function InternshipPlatform() {
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [internships, setInternships] = useState<any[]>([]);
-  // Global state to lock card interactions
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const router = useRouter();
 
@@ -135,7 +129,7 @@ export default function InternshipPlatform() {
     fetchInternships();
   }, []);
 
-  // Filter by search query (company, role, or skills)
+  // Filter internships by company, role, or skills based on the search query
   const filteredInternships = internships.filter(
     (internship) =>
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -143,7 +137,7 @@ export default function InternshipPlatform() {
       internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Apply the recommendation algorithm (currently random)
+  // Currently, recommendations are just the filtered list
   const recommendedInternships = filteredInternships;
 
   const toggleFilter = (filter: string) => {
@@ -186,18 +180,10 @@ export default function InternshipPlatform() {
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
             <h2 className="text-3xl sm:text-4xl font-bold">Find Your Perfect Internship</h2>
             <div className="flex gap-4">
-              <Button
-                variant="outline"
-                onClick={() => router.push("/register")}
-                className="px-4 py-2 shadow-lg text-sm"
-              >
+              <Button variant="outline" onClick={() => router.push("/register")} className="px-4 py-2 shadow-lg text-sm">
                 Register/publish Internship
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.push("/talk-to-expert")}
-                className="px-4 py-2 shadow-lg text-sm"
-              >
+              <Button variant="outline" onClick={() => router.push("/talk-to-expert")} className="px-4 py-2 shadow-lg text-sm">
                 Talk to Expert
               </Button>
             </div>
@@ -212,7 +198,7 @@ export default function InternshipPlatform() {
             setShowFilters={setShowFilters}
           />
 
-          {/* Internship Listings (displaying recommended internships) */}
+          {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {recommendedInternships.map((internship) => (
               <InternshipCard
