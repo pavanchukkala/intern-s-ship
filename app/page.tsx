@@ -18,17 +18,18 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: { interns
   // Only allow clicks if no other card is active or this card is already active.
   const isDisabled = activeCardId && activeCardId !== internship.id;
 
-  const handleKnowMore = () => {
-    if (isDisabled) return;
-    if (!activeCardId) {
-      setActiveCardId(internship.id);
-    }
-    setIsClicked(true);
-    // After animation, navigate
-    setTimeout(() => {
-      router.push(`/internship/${encodeURIComponent(internship.company)}`);
-    }, 700);
-  };
+ // Inside your InternshipCard component in app/page.tsx
+const handleKnowMore = () => {
+  if (isDisabled) return;
+  if (!activeCardId) {
+    setActiveCardId(internship.id);
+  }
+  setIsClicked(true);
+  // After animation, navigate using document ID
+  setTimeout(() => {
+    router.push(`/internship/${internship.id}`);
+  }, 700);
+};
 
   const handleApplyNow = () => {
     if (isDisabled) return;
