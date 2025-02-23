@@ -13,6 +13,7 @@ import { recommendInternships } from "@/lib/recommendation";
 // InternshipCard component
 function InternshipCard({ internship }: any) {
   const [isClicked, setIsClicked] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="flex justify-center items-center p-4">
@@ -59,10 +60,12 @@ function InternshipCard({ internship }: any) {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-             onClick={() =>
-  router.push(`/internship/${encodeURIComponent(internship.company)}`)
-}
-
+                onClick={() => {
+                  setIsClicked(true);
+                  setTimeout(() => {
+                    router.push(`/internship/${encodeURIComponent(internship.company)}`);
+                  }, 700);
+                }}
                 className="bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-medium"
               >
                 Know More
@@ -117,7 +120,7 @@ export default function InternshipPlatform() {
   );
 
   // Apply the recommendation algorithm (currently random)
- const recommendedInternships = filteredInternships;
+  const recommendedInternships = filteredInternships;
 
   const toggleFilter = (filter: string) => {
     setSelectedFilters((prev) =>
