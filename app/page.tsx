@@ -11,9 +11,33 @@ import { db } from "@/lib/firebase-cardload";
 import { recommendInternships } from "@/lib/recommendation";
 
 // InternshipCard component
-function InternshipCard({ internship }: any) {
+function InternshipCard({ internship, activeCardId, setActiveCardId }: { internship: any, activeCardId: string | null, setActiveCardId: (id: string | null) => void }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
+
+  // Only allow clicks if no other card is active or this card is already active.
+  const isDisabled = activeCardId && activeCardId !== internship.id;
+
+  const handleKnowMore = () => {
+    if (isDisabled) return;
+    if (!activeCardId) {
+      setActiveCardId(internship.id);
+    }
+    setIsClicked(true);
+    // After animation, navigate
+    setTimeout(() => {
+      router.push(`/internship/${encodeURIComponent(internship.company)}`);
+    }, 700);
+  };
+
+  const handleApplyNow = () => {
+    if (isDisabled) return;
+    if (!activeCardId) {
+      setActiveCardId(internship.id);
+    }
+    setIsClicked(true);
+    // For Apply Now, you might trigger additional logic here.
+  };
 
   return (
     <div className="flex justify-center items-center p-4">
@@ -60,12 +84,8 @@ function InternshipCard({ internship }: any) {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setIsClicked(true);
-                  setTimeout(() => {
-                    router.push(`/internship/${encodeURIComponent(internship.company)}`);
-                  }, 700);
-                }}
+                onClick={handleKnowMore}
+                disabled={isDisabled}
                 className="bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-medium"
               >
                 Know More
@@ -73,7 +93,8 @@ function InternshipCard({ internship }: any) {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setIsClicked(true)}
+                onClick={handleApplyNow}
+                disabled={isDisabled}
                 className="bg-green-500 text-white px-2 py-1 rounded-md text-xs font-medium"
               >
                 Apply Now
@@ -92,6 +113,8 @@ export default function InternshipPlatform() {
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [internships, setInternships] = useState<any[]>([]);
+  // Global state to lock card interactions
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const router = useRouter();
 
   // Fetch internship data from Firestore on component mount
@@ -191,7 +214,12 @@ export default function InternshipPlatform() {
           {/* Internship Listings (displaying recommended internships) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {recommendedInternships.map((internship) => (
-              <InternshipCard internship={internship} key={internship.id} />
+              <InternshipCard
+                internship={internship}
+                key={internship.id}
+                activeCardId={activeCardId}
+                setActiveCardId={setActiveCardId}
+              />
             ))}
           </div>
         </main>
