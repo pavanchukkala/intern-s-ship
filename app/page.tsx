@@ -87,7 +87,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: { interns
               >
                 Know More
               </motion.button>
-              <motion.button
+               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleApplyNow}
