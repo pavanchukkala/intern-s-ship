@@ -12,7 +12,11 @@ import { db } from "@/lib/firebase-cardload";
 
 
 // InternshipCard component
-function InternshipCard({ internship, activeCardId, setActiveCardId }: { internship: any, activeCardId: string | null, setActiveCardId: (id: string | null) => void }) {
+function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
+  internship: any, 
+  activeCardId: string | null, 
+  setActiveCardId: (id: string | null) => void 
+}) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
 
@@ -21,9 +25,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: { interns
 
   const handleKnowMore = () => {
     if (isDisabled) return;
-    if (!activeCardId) {
-      setActiveCardId(internship.id);
-    }
+    if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
     // Navigate using the document ID after animation
     setTimeout(() => {
@@ -33,11 +35,12 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: { interns
 
   const handleApplyNow = () => {
     if (isDisabled) return;
-    if (!activeCardId) {
-      setActiveCardId(internship.id);
-    }
+    if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
-    // Add additional logic for Apply Now here if needed
+    // Navigate to the application page after animation
+    setTimeout(() => {
+      router.push(`/internship-apply/${internship.id}`);
+    }, 700);
   };
 
   return (
@@ -87,7 +90,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: { interns
               >
                 Know More
               </motion.button>
-               <motion.button
+              <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleApplyNow}
