@@ -27,7 +27,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Initialize form values once the component mounts.
+  // Initialize form values based on the response schema
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
@@ -45,6 +45,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+
     try {
       const applicationData = {
         internshipId: internship.id,
@@ -53,10 +54,9 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         submittedAt: new Date().toISOString(),
       };
 
-      // Reference the internship document.
-      const internshipDocRef = doc(dbHugeData, "internships", internship.id);
-      // Create a new document in the "responses" subcollection.
-      const responsesCollectionRef = collection(internshipDocRef, "responses");
+      // Instead of referencing a subcollection under a document,
+      // we reference a top-level collection whose name is the internship id.
+      const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
       alert("Your application has been submitted successfully!");
