@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+// For storing responses, use internrespo (firebase-hugedata)
 import { doc, addDoc, collection } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
 
@@ -27,7 +28,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Initialize form values based on the response schema
+  // Initialize form values based on the response schema (set empty strings)
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
@@ -54,8 +55,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         submittedAt: new Date().toISOString(),
       };
 
-      // Instead of referencing a subcollection under a document,
-      // we reference a top-level collection whose name is the internship id.
+      // Use the internship ID as the collection name in internrespo for responses.
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
