@@ -9,8 +9,7 @@ import { db as dbHugeData } from "@/lib/firebase-hugedata";
 interface InternshipData {
   id: string;
   company?: string;
-  // Here, responseSchema is simply an object whose keys represent form fields.
-  // The values can be ignored (or empty strings) since we only need the key names.
+  // responseSchema is used only to determine which keys to display.
   responseSchema?: Record<string, string>;
   [key: string]: any;
 }
@@ -24,7 +23,6 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Initialize form values for each key in the responseSchema
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
@@ -44,14 +42,12 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     setSubmitting(true);
 
     try {
+      // Only store the responses object.
       const applicationData = {
-        internshipId: internship.id,
-        company: internship.company || "Unknown Company",
         responses: formValues,
-        submittedAt: new Date().toISOString(),
       };
 
-      // Use the internship ID as the collection name in internrespo for responses.
+      // Use the internship's document ID as the collection name.
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
@@ -65,7 +61,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     }
   };
 
-  // If no responseSchema is defined, display a message
+  // If no responseSchema is defined, display a message.
   if (!internship.responseSchema) {
     return (
       <div className="text-center text-xl text-gray-500">
