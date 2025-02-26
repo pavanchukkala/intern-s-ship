@@ -1,11 +1,11 @@
 // app/internship-apply/[id]/page.tsx
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { db as dbHugeData } from "@/lib/firebase-hugedata";
+import { db as dbBigData } from "@/lib/firebase-bigdata"; // Using comdata for internship details
 import Link from "next/link";
-import ApplyForm from "./ApplyForm";
+import ApplyForm from "./ApplyForm"; // Client component for the interactive form
 
 export async function generateStaticParams() {
-  const snapshot = await getDocs(collection(dbHugeData, "internships"));
+  const snapshot = await getDocs(collection(dbBigData, "internships"));
   return snapshot.docs.map((doc) => ({
     id: doc.id,
   }));
@@ -20,7 +20,8 @@ interface InternshipData {
 
 export default async function ApplyPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const docRef = doc(dbHugeData, "internships", id);
+  // Fetch internship details from comdata
+  const docRef = doc(dbBigData, "internships", id);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
@@ -42,6 +43,7 @@ export default async function ApplyPage({ params }: { params: { id: string } }) 
         <h1 className="text-3xl font-bold mb-6">
           Apply for {internship.company || "this Internship"}
         </h1>
+        {/* Render the client component for the interactive form */}
         <ApplyForm internship={internship} />
         <div className="mt-6 text-center">
           <Link href="/" className="text-blue-500 hover:underline">
