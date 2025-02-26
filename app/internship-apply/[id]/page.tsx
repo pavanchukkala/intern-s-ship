@@ -1,8 +1,8 @@
 // app/internship-apply/[id]/page.tsx
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { db as dbHugeData } from "@/lib/firebase-hugedata"; // using your new Firebase project
+import { db as dbHugeData } from "@/lib/firebase-hugedata";
 import Link from "next/link";
-import ApplyForm from "./ApplyForm"; // client component for interactivity
+import ApplyForm from "./ApplyForm";
 
 export async function generateStaticParams() {
   const snapshot = await getDocs(collection(dbHugeData, "internships"));
@@ -42,7 +42,6 @@ export default async function ApplyPage({ params }: { params: { id: string } }) 
         <h1 className="text-3xl font-bold mb-6">
           Apply for {internship.company || "this Internship"}
         </h1>
-        {/* Render the client component for the interactive form */}
         <ApplyForm internship={internship} />
         <div className="mt-6 text-center">
           <Link href="/" className="text-blue-500 hover:underline">
