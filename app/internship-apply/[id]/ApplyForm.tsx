@@ -6,15 +6,12 @@ import { useRouter } from "next/navigation";
 import { doc, addDoc, collection } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
 
-interface ResponseSchemaField {
-  label: string;
-  type: string; // e.g., "text", "email", "textarea", etc.
-}
-
 interface InternshipData {
   id: string;
   company?: string;
-  responseSchema?: Record<string, ResponseSchemaField>;
+  // Here, responseSchema is simply an object whose keys represent form fields.
+  // The values can be ignored (or empty strings) since we only need the key names.
+  responseSchema?: Record<string, string>;
   [key: string]: any;
 }
 
@@ -27,6 +24,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
+  // Initialize form values for each key in the responseSchema
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
@@ -37,15 +35,6 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     }
   }, [internship.responseSchema]);
 
-  // If no responseSchema is defined, show a friendly message
-  if (!internship.responseSchema) {
-    return (
-      <div className="text-center text-xl text-gray-500">
-        No application form is configured for this internship.
-      </div>
-    );
-  }
-
   const handleChange = (key: string, value: string) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
@@ -53,6 +42,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+
     try {
       const applicationData = {
         internshipId: internship.id,
@@ -61,7 +51,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         submittedAt: new Date().toISOString(),
       };
 
-      // Use the internship ID as the collection name for responses.
+      // Use the internship ID as the collection name in internrespo for responses.
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
@@ -75,30 +65,29 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     }
   };
 
+  // If no responseSchema is defined, display a message
+  if (!internship.responseSchema) {
+    return (
+      <div className="text-center text-xl text-gray-500">
+        No application form is configured for this internship.
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {Object.entries(internship.responseSchema).map(([key, field]) => (
+      {Object.keys(internship.responseSchema).map((key) => (
         <div key={key}>
           <label className="block text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">
-            {field.label}
+            {key}
           </label>
-          {field.type === "textarea" ? (
-            <textarea
-              value={formValues[key]}
-              onChange={(e) => handleChange(key, e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-indigo-500"
-              rows={4}
-              required
-            />
-          ) : (
-            <input
-              type={field.type}
-              value={formValues[key]}
-              onChange={(e) => handleChange(key, e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-indigo-500"
-              required
-            />
-          )}
+          <input
+            type="text"
+            value={formValues[key]}
+            onChange={(e) => handleChange(key, e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+            required
+          />
         </div>
       ))}
       <button
