@@ -1,20 +1,10 @@
-// components/GlobalStyles.tsx
 "use client";
 
-export default function GlobalStyles() {
+export default function GlobalAnimations() {
   return (
     <style jsx global>{`
-      @keyframes gradient-x {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      .animate-gradient {
-        background-size: 200% 200%;
-        animation: gradient-x 8s ease infinite;
-      }
       @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
       }
       .animate-fadeIn {
@@ -22,6 +12,13 @@ export default function GlobalStyles() {
       }
       .delay-200 {
         animation-delay: 0.2s;
+      }
+      @keyframes pulseSlow {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.5; }
+      }
+      .animate-pulse-slow {
+        animation: pulseSlow 6s infinite;
       }
     `}</style>
   );
