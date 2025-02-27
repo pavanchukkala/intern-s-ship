@@ -1,7 +1,8 @@
 // app/internship/[id]/page.tsx
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase-bigdata"; // using comdata project
+import { db } from "@/lib/firebase-bigdata";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -15,6 +16,11 @@ interface InternshipData {
   id: string;
   [key: string]: any;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
 
 export default async function InternshipDetailPage({
   params,
@@ -37,21 +43,30 @@ export default async function InternshipDetailPage({
   }
 
   const data = docSnap.data();
-
-  // Determine if there's header info available (logo, company, or role)
   const hasHeaderData = data.logo || data.company || data.role;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero Section */}
+    <motion.div
+      className="min-h-screen bg-gray-50 dark:bg-gray-900"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {hasHeaderData ? (
-        <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-12">
+        <motion.header
+          className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
           <div className="container mx-auto px-4 text-center">
             {data.logo ? (
-              <img
+              <motion.img
                 src={data.logo}
                 alt={data.company || "Logo"}
                 className="mx-auto h-24 w-24 rounded-full border-4 border-white shadow-lg"
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 300 }}
               />
             ) : (
               <div className="mx-auto h-24 w-24 flex items-center justify-center rounded-full bg-gray-300">
@@ -59,53 +74,109 @@ export default async function InternshipDetailPage({
               </div>
             )}
             {data.company && (
-              <h1 className="text-4xl font-bold text-white mt-4">
+              <motion.h1
+                className="text-4xl font-bold text-white mt-4"
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
+              >
                 {data.company}
-              </h1>
+              </motion.h1>
             )}
             {data.role && (
-              <p className="text-lg text-white mt-2">{data.role}</p>
+              <motion.p
+                className="text-lg text-white mt-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+              >
+                {data.role}
+              </motion.p>
             )}
-            <Link
-              href="/"
-              className="mt-4 inline-block bg-white text-indigo-600 px-4 py-2 rounded hover:bg-gray-100"
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
             >
-              &larr; Back to Internships
-            </Link>
+              <Link
+                href="/"
+                className="mt-4 inline-block bg-white text-indigo-600 px-4 py-2 rounded hover:bg-gray-100"
+              >
+                &larr; Back to Internships
+              </Link>
+            </motion.div>
           </div>
-        </header>
+        </motion.header>
       ) : (
-        <header className="bg-gradient-to-r from-gray-700 to-gray-900 py-8">
+        <motion.header
+          className="bg-gradient-to-r from-gray-700 to-gray-900 py-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-3xl font-bold text-white">Internship Details</h1>
-            <Link
-              href="/"
-              className="mt-4 inline-block bg-white text-gray-700 px-4 py-2 rounded hover:bg-gray-100"
+            <motion.h1
+              className="text-3xl font-bold text-white"
+              initial={{ y: -20 }}
+              animate={{ y: 0 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
             >
-              &larr; Back to Internships
-            </Link>
+              Internship Details
+            </motion.h1>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+            >
+              <Link
+                href="/"
+                className="mt-4 inline-block bg-white text-gray-700 px-4 py-2 rounded hover:bg-gray-100"
+              >
+                &larr; Back to Internships
+              </Link>
+            </motion.div>
           </div>
-        </header>
+        </motion.header>
       )}
 
-      {/* Details Section */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Internship Information</h2>
+      <motion.main
+        className="container mx-auto px-4 py-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.5 }}
+      >
+        <motion.div
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <motion.h2
+            className="text-2xl font-semibold mb-4"
+            initial={{ x: -20 }}
+            animate={{ x: 0 }}
+            transition={{ delay: 1.1, duration: 0.5 }}
+          >
+            Internship Information
+          </motion.h2>
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {Object.entries(data).map(([key, value]) => (
-              <div key={key} className="py-2">
+              <motion.div
+                key={key}
+                className="py-2"
+                whileHover={{ backgroundColor: "#f0f0f0" }}
+                transition={{ duration: 0.3 }}
+              >
                 <span className="font-semibold capitalize">{key}:</span>
                 <div className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                   {typeof value === "object"
                     ? JSON.stringify(value, null, 2)
                     : value.toString()}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
-      </main>
-    </div>
+        </motion.div>
+      </motion.main>
+    </motion.div>
   );
 }
