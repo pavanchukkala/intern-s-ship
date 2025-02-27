@@ -1,7 +1,8 @@
 // app/internship/[id]/page.tsx
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase-bigdata"; // using comdata project
+import { db } from "@/lib/firebase-bigdata";
 import Link from "next/link";
+import GlobalStyles from "@/components/GlobalStyles"; // <-- New import
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -41,28 +42,8 @@ export default async function InternshipDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Global custom animations */}
-      <style jsx global>{`
-        @keyframes gradient-x {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient-x 8s ease infinite;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 1s ease-out forwards;
-        }
-        .delay-200 {
-          animation-delay: 0.2s;
-        }
-      `}</style>
+      {/* Inject global styles via a client component */}
+      <GlobalStyles />
 
       {/* Hero Section */}
       {hasHeaderData ? (
