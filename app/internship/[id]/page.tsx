@@ -27,11 +27,11 @@ export default async function InternshipDetailPage({
 
   if (!docSnap.exists()) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-8">
-        <Link href="/" className="text-blue-500 hover:underline mb-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-700 to-gray-900 p-8">
+        <Link href="/" className="text-blue-400 hover:underline mb-4">
           &larr; Back to Home
         </Link>
-        <p className="text-xl">Internship not found.</p>
+        <p className="text-2xl text-white">Internship not found.</p>
       </div>
     );
   }
@@ -41,41 +41,64 @@ export default async function InternshipDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Global custom animations */}
+      <style jsx global>{`
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient-x 8s ease infinite;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 1s ease-out forwards;
+        }
+        .delay-200 {
+          animation-delay: 0.2s;
+        }
+      `}</style>
+
       {/* Hero Section */}
       {hasHeaderData ? (
-        <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-12">
-          <div className="container mx-auto px-4 text-center">
+        <header className="py-12 animate-gradient bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
+          <div className="container mx-auto px-4 text-center transform transition duration-500 hover:scale-105">
             {data.logo ? (
               <img
                 src={data.logo}
                 alt={data.company || "Logo"}
-                className="mx-auto h-24 w-24 rounded-full border-4 border-white shadow-lg"
+                className="mx-auto h-24 w-24 rounded-full border-4 border-white shadow-xl animate-bounce"
               />
             ) : (
-              <div className="mx-auto h-24 w-24 flex items-center justify-center rounded-full bg-gray-300">
+              <div className="mx-auto h-24 w-24 flex items-center justify-center rounded-full bg-gray-300 shadow-xl">
                 <span className="text-3xl font-bold text-gray-800">?</span>
               </div>
             )}
             {data.company && (
-              <h1 className="text-4xl font-bold text-white mt-4">
+              <h1 className="text-4xl font-bold text-white mt-4 animate-fadeIn">
                 {data.company}
               </h1>
             )}
             {data.role && (
-              <p className="text-lg text-white mt-2">
+              <p className="text-lg text-white mt-2 animate-fadeIn delay-200">
                 {data.role}
               </p>
             )}
             <Link
               href="/"
-              className="mt-4 inline-block bg-white text-indigo-600 px-4 py-2 rounded hover:bg-gray-100"
+              className="mt-6 inline-block bg-white text-indigo-600 px-6 py-3 rounded-full shadow-lg transform transition hover:scale-110"
             >
               &larr; Back to Internships
             </Link>
           </div>
         </header>
       ) : (
-        <header className="bg-gradient-to-r from-gray-700 to-gray-900 py-8">
+        <header className="py-8 bg-gradient-to-r from-gray-700 to-gray-900">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl font-bold text-white">Internship Details</h1>
             <Link
@@ -89,14 +112,17 @@ export default async function InternshipDetailPage({
       )}
 
       {/* Details Section */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Internship Information</h2>
+      <main className="container mx-auto px-4 py-12">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 transform transition hover:scale-105">
+          <h2 className="text-2xl font-semibold mb-6">Internship Information</h2>
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {Object.entries(data)
               .filter(([key]) => key !== "responseSchema")
               .map(([key, value]) => (
-                <div key={key} className="py-2">
+                <div
+                  key={key}
+                  className="py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded"
+                >
                   <span className="font-semibold capitalize">{key}:</span>
                   <div className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {typeof value === "object"
