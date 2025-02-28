@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
 import ScrollProgress from "@/components/ScrollProgress";
-import { motion } from "framer-motion";
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -56,22 +55,22 @@ export default async function InternshipDetailPage({
       <main className="container mx-auto px-6 py-8">
         <section className="mb-8">
           {/* Hero Section */}
-          <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-md rounded-lg">
+          <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-md rounded-lg transition-all duration-500">
             <div className="text-center">
               {data.logo && (
                 <img
                   src={data.logo}
                   alt={data.company || "Company Logo"}
-                  className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg"
+                  className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg transition-transform duration-500 hover:scale-105"
                 />
               )}
               {data.company && (
-                <h1 className="text-4xl font-bold text-white mt-4">
+                <h1 className="text-4xl font-bold text-white mt-4 transition-transform duration-500 hover:scale-105">
                   {data.company}
                 </h1>
               )}
               {data.role && (
-                <p className="text-lg text-white mt-2 font-medium">
+                <p className="text-lg text-white mt-2 font-medium transition-transform duration-500 hover:scale-105">
                   {data.role}
                 </p>
               )}
@@ -80,20 +79,13 @@ export default async function InternshipDetailPage({
         </section>
         <section className="mb-8">
           {/* Internship Details Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 transition-all"
-          >
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 transition-all duration-500 hover:shadow-2xl">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
               Internship Information
             </h2>
             <div className="divide-y divide-gray-300 dark:divide-gray-700">
               {Object.entries(data)
-                .filter(
-                  ([key]) => key !== "responseSchema" && key !== "logo"
-                )
+                .filter(([key]) => key !== "responseSchema" && key !== "logo")
                 .map(([key, value]) => (
                   <div key={key} className="py-4">
                     <span className="font-semibold capitalize text-gray-700 dark:text-gray-300">
@@ -113,7 +105,7 @@ export default async function InternshipDetailPage({
                   </div>
                 ))}
             </div>
-          </motion.div>
+          </div>
           {/* Professional Verification Message */}
           <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
             All internship information displayed has been thoroughly verified to ensure its accuracy and support informed career decisions.
