@@ -3,7 +3,6 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase-bigdata"; // using comdata project
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/Navbar"; // This Navbar should match your homepage style
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -29,19 +28,15 @@ export default async function InternshipDetailPage({
 
   if (!docSnap.exists()) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-        <Navbar />
-        <div className="flex flex-col items-center justify-center p-8">
-          <Link href="/">
-            <Button
-              variant="outline"
-              className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
-            >
-              &larr; Back to Home
-            </Button>
-          </Link>
-          <p className="text-xl mt-4">Internship not found.</p>
-        </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-8">
+        <p className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+          Internship not found.
+        </p>
+        <Link href="/">
+          <Button className="px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md">
+            &larr; Back to Home
+          </Button>
+        </Link>
       </div>
     );
   }
@@ -50,22 +45,19 @@ export default async function InternshipDetailPage({
   const hasHeaderData = data.logo || data.company || data.role;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-      {/* Navbar */}
-      <Navbar />
-
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
       {/* Hero Section */}
       {hasHeaderData ? (
-        <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-12">
-          <div className="container mx-auto px-4 text-center">
+        <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-md">
+          <div className="container mx-auto px-6 text-center">
             {data.logo ? (
               <img
                 src={data.logo}
-                alt={data.company || "Logo"}
-                className="mx-auto h-24 w-24 rounded-full border-4 border-white shadow-lg"
+                alt={data.company || "Company Logo"}
+                className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg"
               />
             ) : (
-              <div className="mx-auto h-24 w-24 flex items-center justify-center rounded-full bg-gray-300">
+              <div className="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gray-300">
                 <span className="text-3xl font-bold text-gray-800">?</span>
               </div>
             )}
@@ -75,29 +67,33 @@ export default async function InternshipDetailPage({
               </h1>
             )}
             {data.role && (
-              <p className="text-lg text-white mt-2">{data.role}</p>
+              <p className="text-lg text-white mt-2 font-medium">{data.role}</p>
             )}
           </div>
         </header>
       ) : (
-        <header className="bg-gradient-to-r from-gray-700 to-gray-900 py-8">
-          <div className="container mx-auto px-4 text-center">
+        <header className="bg-gradient-to-r from-gray-700 to-gray-900 py-8 shadow-md">
+          <div className="container mx-auto px-6 text-center">
             <h1 className="text-3xl font-bold text-white">Internship Details</h1>
           </div>
         </header>
       )}
 
       {/* Details Section */}
-      <main className="container mx-auto px-4 py-8 flex-grow">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Internship Information</h2>
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <main className="container mx-auto px-6 py-10">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 transition-all">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+            Internship Information
+          </h2>
+          <div className="divide-y divide-gray-300 dark:divide-gray-700">
             {Object.entries(data)
               .filter(([key]) => key !== "responseSchema")
               .map(([key, value]) => (
-                <div key={key} className="py-2">
-                  <span className="font-semibold capitalize">{key}:</span>
-                  <div className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                <div key={key} className="py-4">
+                  <span className="font-semibold capitalize text-gray-700 dark:text-gray-300">
+                    {key}:
+                  </span>
+                  <div className="mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                     {typeof value === "object"
                       ? JSON.stringify(value, null, 2)
                       : value.toString()}
@@ -109,17 +105,12 @@ export default async function InternshipDetailPage({
       </main>
 
       {/* Footer with Back Button */}
-      <footer className="container mx-auto px-4 pb-8">
-        <div className="flex justify-center">
-          <Link href="/">
-            <Button
-              variant="outline"
-              className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
-            >
-              &larr; Back to Internships
-            </Button>
-          </Link>
-        </div>
+      <footer className="container mx-auto px-6 pb-12 flex justify-center">
+        <Link href="/">
+          <Button className="px-6 py-3 text-lg font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg">
+            &larr; Back to Internships
+          </Button>
+        </Link>
       </footer>
     </div>
   );
