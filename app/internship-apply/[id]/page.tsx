@@ -33,7 +33,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
   if (!internship) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-8">
-        <p className="text-xl mb-4">Internship not found.</p>
+        <p className="text-xl mb-4 text-gray-900 dark:text-gray-100">Internship not found.</p>
         <Link href="/" className="text-blue-500 hover:underline">
           &larr; Back to Internships
         </Link>
@@ -76,7 +76,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
       {/* Top Banner & Form */}
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
         <div className="container mx-auto max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
-          <h1 className="text-3xl font-bold mb-6 text-center">
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
             Apply for {internship.company || "this Internship"}
           </h1>
           <ApplyForm internship={internship} />
