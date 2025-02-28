@@ -56,17 +56,12 @@ export default async function InternshipDetailPage({
           {/* Hero Section */}
           <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-md rounded-lg">
             <div className="text-center">
-              {data.logo ? (
+              {data.logo && (
                 <img
                   src={data.logo}
                   alt={data.company || "Company Logo"}
                   className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg"
                 />
-              ) : (
-                // Placeholder when no logo is provided.
-                <div className="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gray-300">
-                  <span className="text-3xl font-bold text-gray-800">?</span>
-                </div>
               )}
               {data.company && (
                 <h1 className="text-4xl font-bold text-white mt-4">
@@ -104,7 +99,7 @@ export default async function InternshipDetailPage({
                 ))}
             </div>
           </div>
-          {/* Verification Message Under Internship Details */}
+          {/* Professional Verification Message Under Internship Details */}
           <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
             All internship information displayed has been thoroughly verified to ensure its accuracy and support informed career decisions.
           </p>
