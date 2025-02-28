@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { addDoc, collection } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
-import { motion } from "framer-motion";
 
 interface InternshipData {
   id: string;
@@ -67,41 +66,28 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   }
 
   return (
-    <motion.form
-      onSubmit={handleSubmit}
-      className="space-y-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <form onSubmit={handleSubmit} className="space-y-6">
       {Object.keys(internship.responseSchema).map((key) => (
-        <div key={key} className="relative">
-          <input
-            type="text"
-            id={`input-${key}`}
-            value={formValues[key]}
-            onChange={(e) => handleChange(key, e.target.value)}
-            placeholder=" "
-            required
-            className="peer block w-full px-3 py-4 border border-gray-300 rounded-lg bg-transparent text-gray-900 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-          />
-          <label
-            htmlFor={`input-${key}`}
-            className="absolute left-3 top-2 text-gray-500 transition-all duration-200 transform origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4"
-          >
+        <div key={key}>
+          <label className="block text-md font-medium text-gray-700 mb-1">
             {key}
           </label>
+          <input
+            type="text"
+            value={formValues[key]}
+            onChange={(e) => handleChange(key, e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+            required
+          />
         </div>
       ))}
-      <motion.button
+      <button
         type="submit"
         disabled={submitting}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white py-3 rounded-lg font-semibold shadow-lg transition-all"
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-semibold transition"
       >
         {submitting ? "Submitting..." : "Submit Application"}
-      </motion.button>
-    </motion.form>
+      </button>
+    </form>
   );
 }
