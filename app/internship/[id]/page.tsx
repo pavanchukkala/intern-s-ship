@@ -46,7 +46,7 @@ export default async function InternshipDetailPage({
   const hasHeaderData = data.logo || data.company || data.role;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       {/* Hero Section */}
       {hasHeaderData ? (
         <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-12">
@@ -70,34 +70,18 @@ export default async function InternshipDetailPage({
             {data.role && (
               <p className="text-lg text-white mt-2">{data.role}</p>
             )}
-            <Link href="/">
-              <Button
-                variant="outline"
-                className="mt-4 px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
-              >
-                &larr; Back to Internships
-              </Button>
-            </Link>
           </div>
         </header>
       ) : (
         <header className="bg-gradient-to-r from-gray-700 to-gray-900 py-8">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl font-bold text-white">Internship Details</h1>
-            <Link href="/">
-              <Button
-                variant="outline"
-                className="mt-4 px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
-              >
-                &larr; Back to Internships
-              </Button>
-            </Link>
           </div>
         </header>
       )}
 
       {/* Details Section */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 flex-grow">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Internship Information</h2>
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -116,6 +100,18 @@ export default async function InternshipDetailPage({
           </div>
         </div>
       </main>
+
+      {/* Footer with Back Button */}
+      <footer className="container mx-auto px-4 pb-8">
+        <Link href="/">
+          <Button
+            variant="outline"
+            className="w-full px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+          >
+            &larr; Back to Internships
+          </Button>
+        </Link>
+      </footer>
     </div>
   );
 }
