@@ -48,7 +48,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
-      // Instead of an alert, show a smooth success message and then redirect.
+      // Show the success message with smooth transition
       setSubmitted(true);
       setTimeout(() => {
         router.push("/");
@@ -69,8 +69,12 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         transition={{ duration: 0.7 }}
         className="text-center p-8"
       >
-        <h2 className="text-2xl font-bold mb-4">Success!</h2>
-        <p className="text-lg">Your application has been submitted successfully.</p>
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+          Thank You!
+        </h2>
+        <p className="text-lg text-gray-800 dark:text-gray-200">
+          Thank you for your interest and enthusiasm! We will send you further instructions to begin your internship journey shortly.
+        </p>
       </motion.div>
     );
   }
@@ -87,14 +91,14 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {Object.keys(internship.responseSchema).map((key) => (
         <div key={key}>
-          <label className="block text-md font-medium text-gray-700 mb-1">
+          <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-1">
             {key}
           </label>
           <input
             type="text"
             value={formValues[key]}
             onChange={(e) => handleChange(key, e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
             required
           />
         </div>
@@ -106,6 +110,9 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
       >
         {submitting ? "Submitting..." : "Submit Application"}
       </button>
+      <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
+        Note: Every internship on our platform undergoes rigorous verification. If you apply for a paid internship and do not receive a response within 48 hours, please contact us immediately via our contact form, and we will promptly address your concerns.
+      </p>
     </form>
   );
 }
