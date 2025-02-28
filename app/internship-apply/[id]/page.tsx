@@ -27,15 +27,26 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
   }, [params.id]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (!internship) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-8">
-        <p className="text-xl mb-4 text-gray-900 dark:text-gray-100">Internship not found.</p>
-        <Link href="/" className="text-blue-500 hover:underline">
-          &larr; Back to Internships
+        <p className="text-xl mb-4 text-gray-900 dark:text-gray-100">
+          Internship not found.
+        </p>
+        <Link href="/">
+          <Button
+            variant="outline"
+            className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+          >
+            &larr; Back to Internships
+          </Button>
         </Link>
       </div>
     );
@@ -68,7 +79,11 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
             onClick={() => setDarkMode(!darkMode)}
             className="p-2"
           >
-            {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
+            {darkMode ? (
+              <Sun size={24} className="text-yellow-400" />
+            ) : (
+              <Moon size={24} className="text-gray-200" />
+            )}
           </Button>
         </div>
       </nav>
@@ -81,8 +96,13 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
           </h1>
           <ApplyForm internship={internship} />
           <div className="mt-6 text-center">
-            <Link href="/" className="text-blue-500 hover:underline">
-              &larr; Back to Internships
+            <Link href="/">
+              <Button
+                variant="outline"
+                className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+              >
+                &larr; Back to Internships
+              </Button>
             </Link>
           </div>
         </div>
