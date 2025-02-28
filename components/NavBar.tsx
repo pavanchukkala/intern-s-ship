@@ -1,11 +1,23 @@
 "use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function NavBar() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return document.documentElement.classList.contains("dark");
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
 
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
@@ -18,11 +30,25 @@ export default function NavBar() {
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-        <a href="/" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
-        <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
-        <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">Contact</a>
-        <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-          {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
+        <a href="/" className="hover:text-yellow-400 text-sm sm:text-base">
+          Home
+        </a>
+        <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+          About
+        </a>
+        <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
+          Contact
+        </a>
+        <Button
+          variant="outline"
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2"
+        >
+          {darkMode ? (
+            <Sun size={24} className="text-yellow-400" />
+          ) : (
+            <Moon size={24} className="text-gray-200" />
+          )}
         </Button>
       </div>
     </nav>
