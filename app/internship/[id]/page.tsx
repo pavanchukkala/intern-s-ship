@@ -103,14 +103,16 @@ export default async function InternshipDetailPage({
 
       {/* Footer with Back Button */}
       <footer className="container mx-auto px-4 pb-8">
-        <Link href="/">
-          <Button
-            variant="outline"
-            className="w-full px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
-          >
-            &larr; Back to Internships
-          </Button>
-        </Link>
+        <div className="flex justify-center">
+          <Link href="/">
+            <Button
+              variant="outline"
+              className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+            >
+              &larr; Back to Internships
+            </Button>
+          </Link>
+        </div>
       </footer>
     </div>
   );
