@@ -69,10 +69,10 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         transition={{ duration: 0.7 }}
         className="text-center p-8"
       >
-        <h2 className="text-lg font-medium text-green-400 dark:text-green-400">
+        <h2 className="text-lg font-medium text-green-450 dark:text-green-400">
           Thank You!
         </h2>
-        <p className="text-lg font-medium text-green-600 dark:text-green-400">
+        <p className="text-lg font-medium text-green-700 dark:text-green-400">
               ✅Thank you for your interest and enthusiasm! We will send you further instructions to begin your internship journey shortly.
         </p>
       </motion.div>
