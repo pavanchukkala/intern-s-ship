@@ -4,6 +4,8 @@ import { db } from "@/lib/firebase-bigdata"; // using comdata project
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
+import ScrollProgress from "@/components/ScrollProgress";
+import { motion } from "framer-motion";
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -46,10 +48,10 @@ export default async function InternshipDetailPage({
   }
 
   const data = docSnap.data();
-  const hasHeaderData = data.logo || data.company || data.role;
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 relative">
+      <ScrollProgress />
       <NavBar />
       <main className="container mx-auto px-6 py-8">
         <section className="mb-8">
@@ -78,19 +80,32 @@ export default async function InternshipDetailPage({
         </section>
         <section className="mb-8">
           {/* Internship Details Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 transition-all">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 transition-all"
+          >
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
               Internship Information
             </h2>
             <div className="divide-y divide-gray-300 dark:divide-gray-700">
               {Object.entries(data)
-                .filter(([key]) => key !== "responseSchema")
+                .filter(
+                  ([key]) => key !== "responseSchema" && key !== "logo"
+                )
                 .map(([key, value]) => (
                   <div key={key} className="py-4">
                     <span className="font-semibold capitalize text-gray-700 dark:text-gray-300">
                       {key}:
                     </span>
-                    <div className="mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                    <div
+                      className={`mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap ${
+                        key.toLowerCase() === "description"
+                          ? "leading-relaxed text-base"
+                          : ""
+                      }`}
+                    >
                       {typeof value === "object"
                         ? JSON.stringify(value, null, 2)
                         : value.toString()}
@@ -98,8 +113,8 @@ export default async function InternshipDetailPage({
                   </div>
                 ))}
             </div>
-          </div>
-          {/* Professional Verification Message Under Internship Details */}
+          </motion.div>
+          {/* Professional Verification Message */}
           <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
             All internship information displayed has been thoroughly verified to ensure its accuracy and support informed career decisions.
           </p>
