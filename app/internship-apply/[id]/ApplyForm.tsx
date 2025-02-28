@@ -1,15 +1,14 @@
-// app/internship-apply/[id]/ApplyForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { doc, addDoc, collection } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
+import { motion } from "framer-motion";
 
 interface InternshipData {
   id: string;
   company?: string;
-  // responseSchema is used only to determine which keys to display.
   responseSchema?: Record<string, string>;
   [key: string]: any;
 }
@@ -42,12 +41,10 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     setSubmitting(true);
 
     try {
-      // Only store the responses object.
       const applicationData = {
         responses: formValues,
       };
 
-      // Use the internship's document ID as the collection name.
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
@@ -61,7 +58,6 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     }
   };
 
-  // If no responseSchema is defined, display a message.
   if (!internship.responseSchema) {
     return (
       <div className="text-center text-xl text-gray-500">
@@ -71,28 +67,41 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <motion.form
+      onSubmit={handleSubmit}
+      className="space-y-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       {Object.keys(internship.responseSchema).map((key) => (
-        <div key={key}>
-          <label className="block text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">
-            {key}
-          </label>
+        <div key={key} className="relative">
           <input
             type="text"
+            id={`input-${key}`}
             value={formValues[key]}
             onChange={(e) => handleChange(key, e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+            placeholder=" "
             required
+            className="peer block w-full px-3 py-4 border border-gray-300 rounded-lg bg-transparent text-gray-900 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
           />
+          <label
+            htmlFor={`input-${key}`}
+            className="absolute left-3 top-2 text-gray-500 transition-all duration-200 transform origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4"
+          >
+            {key}
+          </label>
         </div>
       ))}
-      <button
+      <motion.button
         type="submit"
         disabled={submitting}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-md font-semibold"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white py-3 rounded-lg font-semibold shadow-lg transition-all"
       >
         {submitting ? "Submitting..." : "Submit Application"}
-      </button>
-    </form>
+      </motion.button>
+    </motion.form>
   );
 }
