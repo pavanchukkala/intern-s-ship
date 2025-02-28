@@ -52,7 +52,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
           <motion.div
-            className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+           className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black dark:text-gray-100 p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
             animate={isClicked ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" } : { rotate: -45, borderWidth: "0px" }}
             transition={{ duration: 0.7, ease: "easeInOut" }}
