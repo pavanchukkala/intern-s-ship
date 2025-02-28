@@ -72,7 +72,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           Thank You!
         </h2>
-        <p className="text-lg text-gray-800 dark:text-gray-200">
+        <p className="text-lg text-green-800 dark:text-gray-200">
           Thank you for your interest and enthusiasm! We will send you further instructions to begin your internship journey shortly.
         </p>
       </motion.div>
