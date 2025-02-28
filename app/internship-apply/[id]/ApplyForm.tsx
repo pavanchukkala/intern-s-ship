@@ -69,7 +69,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         transition={{ duration: 0.7 }}
         className="text-center p-8"
       >
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+        <h2 className="text-lg font-medium text-green-400 dark:text-green-400">
           Thank You!
         </h2>
         <p className="text-lg font-medium text-green-600 dark:text-green-400">
