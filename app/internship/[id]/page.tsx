@@ -2,6 +2,7 @@
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase-bigdata"; // using comdata project
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -28,10 +29,15 @@ export default async function InternshipDetailPage({
   if (!docSnap.exists()) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-8">
-        <Link href="/" className="text-blue-500 hover:underline mb-4">
-          &larr; Back to Home
+        <Link href="/">
+          <Button
+            variant="outline"
+            className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+          >
+            &larr; Back to Home
+          </Button>
         </Link>
-        <p className="text-xl">Internship not found.</p>
+        <p className="text-xl mt-4">Internship not found.</p>
       </div>
     );
   }
@@ -62,15 +68,15 @@ export default async function InternshipDetailPage({
               </h1>
             )}
             {data.role && (
-              <p className="text-lg text-white mt-2">
-                {data.role}
-              </p>
+              <p className="text-lg text-white mt-2">{data.role}</p>
             )}
-            <Link
-              href="/"
-              className="mt-4 inline-block bg-white text-indigo-600 px-4 py-2 rounded hover:bg-gray-100"
-            >
-              &larr; Back to Internships
+            <Link href="/">
+              <Button
+                variant="outline"
+                className="mt-4 px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+              >
+                &larr; Back to Internships
+              </Button>
             </Link>
           </div>
         </header>
@@ -78,11 +84,13 @@ export default async function InternshipDetailPage({
         <header className="bg-gradient-to-r from-gray-700 to-gray-900 py-8">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl font-bold text-white">Internship Details</h1>
-            <Link
-              href="/"
-              className="mt-4 inline-block bg-white text-gray-700 px-4 py-2 rounded hover:bg-gray-100"
-            >
-              &larr; Back to Internships
+            <Link href="/">
+              <Button
+                variant="outline"
+                className="mt-4 px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+              >
+                &larr; Back to Internships
+              </Button>
             </Link>
           </div>
         </header>
