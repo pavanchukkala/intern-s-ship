@@ -3,6 +3,7 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase-bigdata"; // using comdata project
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar"; // This Navbar should match your homepage style
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -28,16 +29,19 @@ export default async function InternshipDetailPage({
 
   if (!docSnap.exists()) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-8">
-        <Link href="/">
-          <Button
-            variant="outline"
-            className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
-          >
-            &larr; Back to Home
-          </Button>
-        </Link>
-        <p className="text-xl mt-4">Internship not found.</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+        <Navbar />
+        <div className="flex flex-col items-center justify-center p-8">
+          <Link href="/">
+            <Button
+              variant="outline"
+              className="px-6 py-2 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all"
+            >
+              &larr; Back to Home
+            </Button>
+          </Link>
+          <p className="text-xl mt-4">Internship not found.</p>
+        </div>
       </div>
     );
   }
@@ -47,6 +51,9 @@ export default async function InternshipDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+      {/* Navbar */}
+      <Navbar />
+
       {/* Hero Section */}
       {hasHeaderData ? (
         <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-12">
