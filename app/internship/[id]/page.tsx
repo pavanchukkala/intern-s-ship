@@ -3,6 +3,7 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase-bigdata"; // using comdata project
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import NavBar from "@/components/NavBar"; // Import the NavBar component
 
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
@@ -29,6 +30,7 @@ export default async function InternshipDetailPage({
   if (!docSnap.exists()) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-8">
+        <NavBar />
         <p className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
           Internship not found.
         </p>
@@ -46,6 +48,7 @@ export default async function InternshipDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <NavBar />
       {/* Hero Section */}
       {hasHeaderData ? (
         <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-md">
@@ -104,13 +107,16 @@ export default async function InternshipDetailPage({
         </div>
       </main>
 
-      {/* Footer with Back Button */}
-      <footer className="container mx-auto px-6 pb-12 flex justify-center">
+      {/* Footer with Back Button and Professional Verification Message */}
+      <footer className="container mx-auto px-6 pb-12 flex flex-col items-center space-y-4">
         <Link href="/">
           <Button className="px-6 py-3 text-lg font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg">
             &larr; Back to Internships
           </Button>
         </Link>
+        <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+          The internship information provided on this platform has been carefully verified by our experts to ensure accuracy and support informed career decisions.
+        </p>
       </footer>
     </div>
   );
