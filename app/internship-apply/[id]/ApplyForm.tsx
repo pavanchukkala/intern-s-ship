@@ -1,9 +1,9 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { addDoc, collection } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
+import { motion } from "framer-motion";
 
 interface InternshipData {
   id: string;
@@ -20,6 +20,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const router = useRouter();
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (internship.responseSchema) {
@@ -47,8 +48,11 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
-      alert("Your application has been submitted successfully!");
-      router.push("/");
+      // Instead of an alert, show a smooth success message and then redirect.
+      setSubmitted(true);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     } catch (err) {
       console.error(err);
       alert("Failed to submit your application. Please try again.");
@@ -56,6 +60,20 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
       setSubmitting(false);
     }
   };
+
+  if (submitted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7 }}
+        className="text-center p-8"
+      >
+        <h2 className="text-2xl font-bold mb-4">Success!</h2>
+        <p className="text-lg">Your application has been submitted successfully.</p>
+      </motion.div>
+    );
+  }
 
   if (!internship.responseSchema) {
     return (
