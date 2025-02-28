@@ -63,6 +63,7 @@ export default async function InternshipDetailPage({
                   className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg"
                 />
               ) : (
+                // Placeholder when no logo is provided.
                 <div className="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gray-300">
                   <span className="text-3xl font-bold text-gray-800">?</span>
                 </div>
@@ -103,18 +104,19 @@ export default async function InternshipDetailPage({
                 ))}
             </div>
           </div>
+          {/* Verification Message Under Internship Details */}
+          <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
+            All internship information displayed has been thoroughly verified to ensure its accuracy and support informed career decisions.
+          </p>
         </section>
       </main>
       <footer className="bg-gray-50 dark:bg-gray-800 py-6">
-        <div className="container mx-auto px-6 flex flex-col sm:flex-row items-center justify-between">
+        <div className="container mx-auto px-6 flex justify-center">
           <Link href="/">
             <Button className="px-6 py-3 text-lg font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg">
               &larr; Back to Internships
             </Button>
           </Link>
-          <p className="mt-4 sm:mt-0 text-sm text-gray-600 dark:text-gray-400 text-center">
-            All internship information has been meticulously verified to empower informed career decisions.
-          </p>
         </div>
       </footer>
     </div>
