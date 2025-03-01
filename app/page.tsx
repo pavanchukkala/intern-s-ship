@@ -28,7 +28,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
     setIsClicked(true);
     // Navigate using the document ID after animation
     setTimeout(() => {
-      router.push(`/internship-apply/${internship.id}`);
+      router.push('/internship/${internship.id}');
     }, 700);
   };
 
@@ -38,7 +38,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
     setIsClicked(true);
     // Navigate to the application page after animation
     setTimeout(() => {
-      router.push(/internship-apply/${internship.id});
+      router.push('/internship-apply/${internship.id}');
     }, 700);
   };
 
