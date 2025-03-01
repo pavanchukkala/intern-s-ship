@@ -31,7 +31,8 @@ function InternshipCard({
     setIsClicked(true);
     // Navigate using the document ID after animation
     setTimeout(() => {
-      router.push(`/internship/${internship.id}`);
+     router.push(`/internship/${internship.id}`);
+
 
     }, 700);
   };
