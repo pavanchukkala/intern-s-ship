@@ -121,7 +121,7 @@ export default function AboutPage() {
             Whether you're an internship provider or a driven candidate, our platform is designed with you in mind.
             Dive in, explore the opportunities, and become part of a community that values speed, security, and unmatched design.
           </p>
-          <Link href="/internships">
+          <Link href="/">
             <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
               Explore Internships Now
             </span>
