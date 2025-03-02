@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Globe } from "lucide-react";
 
 export default function AboutPage() {
@@ -40,9 +41,10 @@ export default function AboutPage() {
         <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
           <div className="w-48 h-48 relative rounded-full overflow-hidden mx-auto">
             <Image
-              src="BasicAssets/founder.jpg" 
+              src="/BasicAssets/founder.jpg"
               alt="Chukkala Pavan Kumar"
-              fill
+              width={192}
+              height={192}
               className="object-cover"
             />
           </div>
@@ -119,12 +121,11 @@ export default function AboutPage() {
             Whether you're an internship provider or a driven candidate, our platform is designed with you in mind.
             Dive in, explore the opportunities, and become part of a community that values speed, security, and unmatched design.
           </p>
-          <a
-            href="/internships/app/page.tsx"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300"
-          >
-            Explore Internships Now
-          </a>
+          <Link href="/internships">
+            <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+              Explore Internships Now
+            </span>
+          </Link>
         </div>
       </section>
 
