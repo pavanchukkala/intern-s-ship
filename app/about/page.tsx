@@ -40,7 +40,7 @@ export default function AboutPage() {
         <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
           <div className="w-48 h-48 relative rounded-full overflow-hidden mx-auto">
             <Image
-              src="/images/chukkala-pavan-kumar.jpg" // Replace with your actual image path
+              src="BasicAssets/founder.jpg" 
               alt="Chukkala Pavan Kumar"
               fill
               className="object-cover"
