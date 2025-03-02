@@ -15,8 +15,8 @@ export default function AboutPage() {
           <Image
             src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg"
             alt="Internsship Logo"
-            width={80}
-            height={80}
+            width={140}
+            height={140}
             className="mx-auto mb-4"
           />
           <h1 className="text-5xl font-extrabold mb-4">Welcome to Internship Platform</h1>
