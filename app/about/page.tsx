@@ -120,7 +120,7 @@ export default function AboutPage() {
             Dive in, explore the opportunities, and become part of a community that values speed, security, and unmatched design.
           </p>
           <a
-            href="/internships"
+            href="/internships/app/page.tsx"
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300"
           >
             Explore Internships Now
