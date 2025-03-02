@@ -167,7 +167,7 @@ export default function InternshipPlatform() {
               Home
             </a>
            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
-            <a href="/contact/page.tsx" className="hover:text-yellow-400 text-sm sm:text-base">
+            <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
               Contact
             </a>
             <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
