@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Globe } from "lucide-react";
 
 export default function AboutPage() {
   const currentYear = new Date().getFullYear();
@@ -12,7 +11,14 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16 px-4">
         <div className="container mx-auto text-center">
-          <Globe size={64} className="mx-auto mb-4" />
+          {/* Your Logo */}
+          <Image
+            src="/BasicAssets/logo.jpg"
+            alt="Internsship Logo"
+            width={80}
+            height={80}
+            className="mx-auto mb-4"
+          />
           <h1 className="text-5xl font-extrabold mb-4">Welcome to Internship Platform</h1>
           <p className="text-xl max-w-3xl mx-auto">
             A unique bridge connecting internship-providing companies with ambitious candidates.
@@ -40,13 +46,13 @@ export default function AboutPage() {
       <section className="py-12 bg-gray-100 dark:bg-gray-800 px-4">
         <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
           <div className="w-48 h-48 relative rounded-full overflow-hidden mx-auto">
-           <Image
-  src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/founder.jpg"
-  alt="Chukkala Pavan Kumar"
-  width={192}
-  height={192}
-  className="object-cover"
-/>
+            <Image
+              src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/founder.jpg"
+              alt="Chukkala Pavan Kumar"
+              width={192}
+              height={192}
+              className="object-cover"
+            />
           </div>
           <div className="md:flex-1">
             <h2 className="text-3xl font-bold mb-4">Meet the Founder</h2>
