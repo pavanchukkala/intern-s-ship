@@ -40,13 +40,13 @@ export default function AboutPage() {
       <section className="py-12 bg-gray-100 dark:bg-gray-800 px-4">
         <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
           <div className="w-48 h-48 relative rounded-full overflow-hidden mx-auto">
-            <Image
-              src="/BasicAssets/founder.jpg"
-              alt="Chukkala Pavan Kumar"
-              width={192}
-              height={192}
-              className="object-cover"
-            />
+           <Image
+  src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/founder.jpg"
+  alt="Chukkala Pavan Kumar"
+  width={192}
+  height={192}
+  className="object-cover"
+/>
           </div>
           <div className="md:flex-1">
             <h2 className="text-3xl font-bold mb-4">Meet the Founder</h2>
