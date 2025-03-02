@@ -4,7 +4,8 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/lib/talk"; // Updated import from talk.ts
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, app } from "@/lib/talk"; // Imported from talk.ts
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,10 +63,16 @@ export default function TalkToExpertPage() {
       if (selectedOption === "free") {
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else {
-        const dataToSubmit = {
-          ...chargeData,
-          paymentScreenshot: paymentScreenshot ? paymentScreenshot.name : "",
-        };
+        // Upload the screenshot to Firebase Storage
+        const storage = getStorage(app);
+        let screenshotUrl = "";
+        if (paymentScreenshot) {
+          // Create a unique storage reference using the current timestamp
+          const storageRef = ref(storage, `paymentScreenshots/${paymentScreenshot.name}-${Date.now()}`);
+          await uploadBytes(storageRef, paymentScreenshot);
+          screenshotUrl = await getDownloadURL(storageRef);
+        }
+        const dataToSubmit = { ...chargeData, paymentScreenshot: screenshotUrl };
         await addDoc(collection(db, "talkToExpertCharge"), dataToSubmit);
       }
       setSubmitted(true);
