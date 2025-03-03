@@ -19,7 +19,7 @@ export default function TalkToExpertPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Updated free consultation form state with phone and email
+  // Free consultation form state (collects mobile and email)
   const [freeData, setFreeData] = useState({
     domain: "",
     stream: "",
@@ -29,10 +29,10 @@ export default function TalkToExpertPage() {
     purpose: "",
   });
 
-  // Dedicated consultation form state (email already exists)
+  // Dedicated consultation form state (collects mobile, whatsapp, email, etc.)
   const [dedicatedData, setDedicatedData] = useState({
     name: "",
-    phone: "",
+    mobile: "",
     whatsapp: "",
     email: "",
     transactionId: "",
@@ -68,9 +68,9 @@ export default function TalkToExpertPage() {
       if (selectedOption === "free") {
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else if (selectedOption === "dedicated") {
-        // Require a payment screenshot for dedicated consultation
+        // Enforce payment screenshot for dedicated consultation
         if (!paymentScreenshot) {
-          setError("Payment screenshot is required.");
+          setError("Payment screenshot is required for Dedicated Consultation.");
           setLoading(false);
           return;
         }
@@ -113,7 +113,7 @@ export default function TalkToExpertPage() {
       <main className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
           {/* Landing Cards */}
-          {!selectedOption && !submitted && (
+          {(!selectedOption && !submitted) && (
             <motion.div 
               key="landing"
               initial={{ opacity: 0 }} 
@@ -156,16 +156,23 @@ export default function TalkToExpertPage() {
               </div>
             </motion.div>
           )}
-
+          
           {/* Consultation Form */}
-          {selectedOption && !submitted && (
+          {(selectedOption && !submitted) && (
             <motion.div
               key="form"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
-              className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-2xl border dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-2xl border dark:border-gray-700 relative"
             >
+              {/* Switch Button */}
+              <button
+                onClick={() => setSelectedOption(null)}
+                className="absolute top-4 right-4 text-sm text-indigo-600 dark:text-yellow-400 underline"
+              >
+                Switch Consultation
+              </button>
               <h2 className="text-3xl font-bold mb-6 text-indigo-600 dark:text-yellow-400">
                 {selectedOption === "free" ? "Free Consultation" : "Dedicated Consultation"}
               </h2>
@@ -208,7 +215,6 @@ export default function TalkToExpertPage() {
                         className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
                       />
                     </motion.div>
-                    {/* New Free Consultation Fields */}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.45 }}>
                       <Input 
                         name="phone" 
@@ -252,8 +258,8 @@ export default function TalkToExpertPage() {
                     </motion.div>
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.35 }}>
                       <Input 
-                        name="phone" 
-                        placeholder="Phone Number" 
+                        name="mobile" 
+                        placeholder="Mobile Number" 
                         onChange={handleDedicatedChange} 
                         required 
                         className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
@@ -313,8 +319,6 @@ export default function TalkToExpertPage() {
               </form>
             </motion.div>
           )}
-
-          {/* Success Message */}
           {submitted && (
             <motion.div
               key="submitted"
@@ -331,8 +335,6 @@ export default function TalkToExpertPage() {
           )}
         </AnimatePresence>
       </main>
-
-      {/* Footer with Copyright Banner */}
       <footer className="bg-gray-50 dark:bg-gray-800 text-center py-4 shadow-md">
         <p className="text-gray-600 dark:text-gray-300 text-sm">
           &copy; {new Date().getFullYear()} Interns' Journey. All Rights Reserved.
