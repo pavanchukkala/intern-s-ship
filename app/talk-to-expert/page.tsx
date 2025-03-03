@@ -4,8 +4,7 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, app } from "@/lib/talk";
+import { db } from "@/lib/talk";
 import { Globe, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +18,7 @@ export default function TalkToExpertPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Free consultation form state (collects mobile & email)
+  // Free consultation form state (collects text fields including phone & email)
   const [freeData, setFreeData] = useState({
     domain: "",
     stream: "",
@@ -29,7 +28,7 @@ export default function TalkToExpertPage() {
     purpose: "",
   });
 
-  // Dedicated consultation form state (collects mobile, whatsapp, email, etc.)
+  // Dedicated consultation form state (collects text fields only)
   const [dedicatedData, setDedicatedData] = useState({
     name: "",
     mobile: "",
@@ -37,7 +36,6 @@ export default function TalkToExpertPage() {
     email: "",
     transactionId: "",
   });
-  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
 
   const handleFreeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFreeData({ ...freeData, [e.target.name]: e.target.value });
@@ -45,12 +43,6 @@ export default function TalkToExpertPage() {
 
   const handleDedicatedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDedicatedData({ ...dedicatedData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setPaymentScreenshot(e.target.files[0]);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,34 +54,21 @@ export default function TalkToExpertPage() {
         throw new Error("Firebase is not initialized. Please refresh the page.");
       }
       if (selectedOption === "free") {
-        // Submit free consultation data
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else if (selectedOption === "dedicated") {
-        // For dedicated, enforce payment screenshot
-        if (!paymentScreenshot) {
-          throw new Error("Payment screenshot is required for Dedicated Consultation.");
-        }
-        const storage = getStorage(app);
-        const storageRef = ref(
-          storage,
-          `paymentScreenshots/${paymentScreenshot.name}-${Date.now()}`
-        );
-        await uploadBytes(storageRef, paymentScreenshot);
-        const screenshotUrl = await getDownloadURL(storageRef);
-        const dataToSubmit = { ...dedicatedData, paymentScreenshot: screenshotUrl };
-        await addDoc(collection(db, "talkToExpertDedicated"), dataToSubmit);
+        await addDoc(collection(db, "talkToExpertDedicated"), dedicatedData);
       }
       setSubmitted(true);
       setLoading(false);
       setTimeout(() => router.push("/"), 3000);
     } catch (err: any) {
       console.error("Submission error:", err);
-      setError(`Failed to submit. ${err.message ? err.message : "Please try again later."}`);
+      setError(err.message || "Failed to submit. Please try again later.");
       setLoading(false);
     }
   };
 
-  // Animation variants
+  // Animation variants for cards and form fields
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -103,14 +82,15 @@ export default function TalkToExpertPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 flex flex-col">
       <NavBar />
-
+      
       <main className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
+          {/* Landing Cards */}
           {(!selectedOption && !submitted) && (
-            <motion.div
+            <motion.div 
               key="landing"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
               className="flex flex-col items-center space-y-8"
             >
@@ -150,6 +130,7 @@ export default function TalkToExpertPage() {
             </motion.div>
           )}
 
+          {/* Consultation Form */}
           {(selectedOption && !submitted) && (
             <motion.div
               key="form"
@@ -169,7 +150,7 @@ export default function TalkToExpertPage() {
                 {selectedOption === "free" ? "Free Consultation" : "Dedicated Consultation"}
               </h2>
               {error && (
-                <motion.p
+                <motion.p 
                   className="text-red-500 mb-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -284,18 +265,6 @@ export default function TalkToExpertPage() {
                         required 
                         className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
                       />
-                    </motion.div>
-                    <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.55 }}>
-                      <div>
-                        <label className="block mb-2 font-medium">Payment Screenshot</label>
-                        <input 
-                          type="file" 
-                          accept="image/*" 
-                          onChange={handleFileChange} 
-                          required 
-                          className="w-full p-3 border rounded-xl"
-                        />
-                      </div>
                     </motion.div>
                   </>
                 )}
