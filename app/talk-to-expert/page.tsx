@@ -19,7 +19,7 @@ export default function TalkToExpertPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Free consultation form state (collects mobile and email)
+  // Free consultation form state (collects mobile & email)
   const [freeData, setFreeData] = useState({
     domain: "",
     stream: "",
@@ -39,9 +39,7 @@ export default function TalkToExpertPage() {
   });
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
 
-  const handleFreeChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleFreeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFreeData({ ...freeData, [e.target.name]: e.target.value });
   };
 
@@ -61,18 +59,15 @@ export default function TalkToExpertPage() {
     setLoading(true);
     try {
       if (!db) {
-        setError("Firebase is not initialized. Please refresh the page.");
-        setLoading(false);
-        return;
+        throw new Error("Firebase is not initialized. Please refresh the page.");
       }
       if (selectedOption === "free") {
+        // Submit free consultation data
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else if (selectedOption === "dedicated") {
-        // Enforce payment screenshot for dedicated consultation
+        // For dedicated, enforce payment screenshot
         if (!paymentScreenshot) {
-          setError("Payment screenshot is required for Dedicated Consultation.");
-          setLoading(false);
-          return;
+          throw new Error("Payment screenshot is required for Dedicated Consultation.");
         }
         const storage = getStorage(app);
         const storageRef = ref(
@@ -84,17 +79,17 @@ export default function TalkToExpertPage() {
         const dataToSubmit = { ...dedicatedData, paymentScreenshot: screenshotUrl };
         await addDoc(collection(db, "talkToExpertDedicated"), dataToSubmit);
       }
-      setLoading(false);
       setSubmitted(true);
+      setLoading(false);
       setTimeout(() => router.push("/"), 3000);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Submission error:", err);
-      setError("Failed to submit. Please try again later.");
+      setError(`Failed to submit. ${err.message ? err.message : "Please try again later."}`);
       setLoading(false);
     }
   };
 
-  // Animation variants for cards and form fields
+  // Animation variants
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -107,17 +102,15 @@ export default function TalkToExpertPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 flex flex-col">
-      {/* Reusable NavBar */}
       <NavBar />
-      
+
       <main className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
-          {/* Landing Cards */}
           {(!selectedOption && !submitted) && (
-            <motion.div 
+            <motion.div
               key="landing"
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="flex flex-col items-center space-y-8"
             >
@@ -156,8 +149,7 @@ export default function TalkToExpertPage() {
               </div>
             </motion.div>
           )}
-          
-          {/* Consultation Form */}
+
           {(selectedOption && !submitted) && (
             <motion.div
               key="form"
@@ -177,7 +169,7 @@ export default function TalkToExpertPage() {
                 {selectedOption === "free" ? "Free Consultation" : "Dedicated Consultation"}
               </h2>
               {error && (
-                <motion.p 
+                <motion.p
                   className="text-red-500 mb-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
