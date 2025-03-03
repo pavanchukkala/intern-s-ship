@@ -18,7 +18,7 @@ export default function TalkToExpertPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Free consultation state (with text fields)
+  // Free consultation state (text fields)
   const [freeData, setFreeData] = useState({
     domain: "",
     stream: "",
@@ -40,7 +40,10 @@ export default function TalkToExpertPage() {
   // Payment method state for dedicated consultation
   const [paymentMethod, setPaymentMethod] = useState("googlepay");
 
-  // Determine which QR code to show based on payment method
+  // State to control when to show the QR code
+  const [showQRCode, setShowQRCode] = useState(false);
+
+  // Determine which QR code image to show based on payment method
   let qrCodeImage = "";
   if (paymentMethod === "googlepay") {
     qrCodeImage = "/BasicAssets/googlepay.jpg";
@@ -50,7 +53,9 @@ export default function TalkToExpertPage() {
     qrCodeImage = "/BasicAssets/paytm.jpg";
   }
 
-  const handleFreeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleFreeChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFreeData({ ...freeData, [e.target.name]: e.target.value });
   };
 
@@ -67,6 +72,7 @@ export default function TalkToExpertPage() {
       if (selectedOption === "free") {
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else if (selectedOption === "dedicated") {
+        // Submit dedicated consultation data along with payment method
         const dataToSubmit = { ...dedicatedData, paymentMethod };
         await addDoc(collection(db, "talkToExpertDedicated"), dataToSubmit);
       }
@@ -80,7 +86,7 @@ export default function TalkToExpertPage() {
     }
   };
 
-  // Animation variants
+  // Animation variants for cards and form fields
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -150,7 +156,7 @@ export default function TalkToExpertPage() {
               exit={{ opacity: 0, x: -50 }}
               className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-2xl border dark:border-gray-700 relative"
             >
-              {/* Switch Button */}
+              {/* Switch Consultation Button */}
               <button
                 onClick={() => setSelectedOption(null)}
                 className="absolute top-4 right-4 text-sm text-indigo-600 dark:text-yellow-400 underline"
@@ -161,7 +167,11 @@ export default function TalkToExpertPage() {
                 {selectedOption === "free" ? "Free Consultation" : "Dedicated Consultation"}
               </h2>
               {error && (
-                <motion.p className="text-red-500 mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <motion.p
+                  className="text-red-500 mb-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
                   {error}
                 </motion.p>
               )}
@@ -300,10 +310,22 @@ export default function TalkToExpertPage() {
                         </label>
                       </div>
                     </motion.div>
-                    {/* Display QR Code */}
+                    {/* Button to toggle QR code display */}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.55 }}>
-                      <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
+                      <Button
+                        type="button"
+                        onClick={() => setShowQRCode((prev) => !prev)}
+                        className="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 p-3 rounded-xl shadow-md transition-transform transform hover:scale-105"
+                      >
+                        {showQRCode ? "Hide QR Code" : "Show QR Code"}
+                      </Button>
                     </motion.div>
+                    {/* Conditionally render the QR Code */}
+                    {showQRCode && (
+                      <motion.div variants={fieldVariants} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                        <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
+                      </motion.div>
+                    )}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.6 }}>
                       <Input
                         name="transactionId"
