@@ -100,7 +100,7 @@ export default function TalkToExpertPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 flex flex-col">
-      {/* Using the reusable NavBar */}
+      {/* Reusable NavBar */}
       <NavBar />
       
       <main className="flex-grow flex items-center justify-center p-6">
@@ -305,15 +305,11 @@ export default function TalkToExpertPage() {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-gray-50 dark:bg-gray-800 py-6">
-        <div className="container mx-auto px-6 flex justify-center">
-          <Button
-            onClick={() => router.push("/")}
-            className="px-6 py-3 text-lg font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg"
-          >
-            &larr; Back to Home
-          </Button>
-        </div>
+      {/* Footer with Copyright Banner */}
+      <footer className="bg-gray-50 dark:bg-gray-800 text-center py-4 shadow-md">
+        <p className="text-gray-600 dark:text-gray-300 text-sm">
+          &copy; {new Date().getFullYear()} Interns' Journey. All Rights Reserved.
+        </p>
       </footer>
     </div>
   );
