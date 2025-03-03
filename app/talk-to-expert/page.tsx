@@ -19,15 +19,17 @@ export default function TalkToExpertPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Free consultation form state
+  // Updated free consultation form state with phone and email
   const [freeData, setFreeData] = useState({
     domain: "",
     stream: "",
     education: "",
+    phone: "",
+    email: "",
     purpose: "",
   });
 
-  // Dedicated consultation form state
+  // Dedicated consultation form state (email already exists)
   const [dedicatedData, setDedicatedData] = useState({
     name: "",
     phone: "",
@@ -37,7 +39,9 @@ export default function TalkToExpertPage() {
   });
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
 
-  const handleFreeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleFreeChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFreeData({ ...freeData, [e.target.name]: e.target.value });
   };
 
@@ -64,16 +68,19 @@ export default function TalkToExpertPage() {
       if (selectedOption === "free") {
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else if (selectedOption === "dedicated") {
-        const storage = getStorage(app);
-        let screenshotUrl = "";
-        if (paymentScreenshot) {
-          const storageRef = ref(
-            storage,
-            `paymentScreenshots/${paymentScreenshot.name}-${Date.now()}`
-          );
-          await uploadBytes(storageRef, paymentScreenshot);
-          screenshotUrl = await getDownloadURL(storageRef);
+        // Require a payment screenshot for dedicated consultation
+        if (!paymentScreenshot) {
+          setError("Payment screenshot is required.");
+          setLoading(false);
+          return;
         }
+        const storage = getStorage(app);
+        const storageRef = ref(
+          storage,
+          `paymentScreenshots/${paymentScreenshot.name}-${Date.now()}`
+        );
+        await uploadBytes(storageRef, paymentScreenshot);
+        const screenshotUrl = await getDownloadURL(storageRef);
         const dataToSubmit = { ...dedicatedData, paymentScreenshot: screenshotUrl };
         await addDoc(collection(db, "talkToExpertDedicated"), dataToSubmit);
       }
@@ -201,7 +208,27 @@ export default function TalkToExpertPage() {
                         className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
                       />
                     </motion.div>
+                    {/* New Free Consultation Fields */}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.45 }}>
+                      <Input 
+                        name="phone" 
+                        placeholder="Mobile Number" 
+                        onChange={handleFreeChange} 
+                        required 
+                        className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </motion.div>
+                    <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.5 }}>
+                      <Input 
+                        name="email" 
+                        type="email" 
+                        placeholder="Email" 
+                        onChange={handleFreeChange} 
+                        required 
+                        className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </motion.div>
+                    <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.55 }}>
                       <textarea 
                         name="purpose" 
                         placeholder="Purpose" 
