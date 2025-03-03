@@ -5,15 +5,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, app } from "@/lib/talk"; // Firebase config
-import { Globe, Sun, Moon, CheckCircle } from "lucide-react";
+import { db, app } from "@/lib/talk";
+import { Globe, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import NavBar from "@/components/NavBar";
 
 export default function TalkToExpertPage() {
   const router = useRouter();
-  const [darkMode, setDarkMode] = useState(false);
   const [selectedOption, setSelectedOption] = useState<"free" | "dedicated" | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,7 +87,7 @@ export default function TalkToExpertPage() {
     }
   };
 
-  // Animation variants for cards and fields
+  // Animation variants for cards and form fields
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -99,28 +99,13 @@ export default function TalkToExpertPage() {
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""} min-h-screen bg-gradient-to-b from-gray-50 dark:from-gray-900 to-gray-100 dark:to-gray-800 text-gray-900 dark:text-gray-100 flex flex-col`}>
-      {/* Navbar */}
-      <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 flex justify-between items-center shadow-lg">
-        <div className="flex items-center space-x-3">
-          <Globe className="text-yellow-400" size={36} />
-          <h1 className="text-3xl font-extrabold tracking-tight">Interns' Journey</h1>
-        </div>
-        <div className="flex items-center space-x-6">
-          <a href="/" className="hover:text-yellow-400 transition-colors">Home</a>
-          <a href="/about" className="hover:text-yellow-400 transition-colors">About</a>
-          <a href="/contact" className="hover:text-yellow-400 transition-colors">Contact</a>
-          <a href="/talk-to-expert" className="hover:text-yellow-400 transition-colors">Talk to Expert</a>
-          <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-            {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
-          </Button>
-        </div>
-      </nav>
-
-      {/* Main Content */}
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 flex flex-col">
+      {/* Using the reusable NavBar */}
+      <NavBar />
+      
       <main className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
-          {/* Landing Screen */}
+          {/* Landing Cards */}
           {!selectedOption && !submitted && (
             <motion.div 
               key="landing"
@@ -129,7 +114,9 @@ export default function TalkToExpertPage() {
               exit={{ opacity: 0 }}
               className="flex flex-col items-center space-y-8"
             >
-              <h2 className="text-3xl font-bold mb-4 text-indigo-600 dark:text-yellow-400">Choose Your Consultation</h2>
+              <h2 className="text-3xl font-bold mb-4 text-indigo-600 dark:text-yellow-400">
+                Choose Your Consultation
+              </h2>
               <div className="flex flex-col md:flex-row gap-8">
                 <motion.div
                   variants={cardVariants}
@@ -163,7 +150,7 @@ export default function TalkToExpertPage() {
             </motion.div>
           )}
 
-          {/* Form Screen */}
+          {/* Consultation Form */}
           {selectedOption && !submitted && (
             <motion.div
               key="form"
@@ -300,7 +287,7 @@ export default function TalkToExpertPage() {
             </motion.div>
           )}
 
-          {/* Submitted / Success Screen */}
+          {/* Success Message */}
           {submitted && (
             <motion.div
               key="submitted"
@@ -318,9 +305,15 @@ export default function TalkToExpertPage() {
         </AnimatePresence>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-indigo-600 dark:bg-gray-800 text-white p-4 text-center shadow-md">
-        <p>&copy; {new Date().getFullYear()} Interns' Journey. All Rights Reserved.</p>
+      <footer className="bg-gray-50 dark:bg-gray-800 py-6">
+        <div className="container mx-auto px-6 flex justify-center">
+          <Button
+            onClick={() => router.push("/")}
+            className="px-6 py-3 text-lg font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg"
+          >
+            &larr; Back to Home
+          </Button>
+        </div>
       </footer>
     </div>
   );
