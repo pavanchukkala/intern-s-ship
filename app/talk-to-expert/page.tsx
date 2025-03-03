@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/talk";
-import { Globe, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,13 +37,13 @@ export default function TalkToExpertPage() {
     transactionId: "",
   });
 
-  // Payment method state for dedicated consultation
+  // Payment method state with default "googlepay"
   const [paymentMethod, setPaymentMethod] = useState("googlepay");
 
-  // State to control when to show the QR code
+  // State to control QR code visibility
   const [showQRCode, setShowQRCode] = useState(false);
 
-  // Determine which QR code image to show based on payment method
+  // Determine QR code image based on selected payment method
   let qrCodeImage = "";
   if (paymentMethod === "googlepay") {
     qrCodeImage = "/BasicAssets/googlepay.jpg";
@@ -72,7 +72,6 @@ export default function TalkToExpertPage() {
       if (selectedOption === "free") {
         await addDoc(collection(db, "talkToExpertFree"), freeData);
       } else if (selectedOption === "dedicated") {
-        // Submit dedicated consultation data along with payment method
         const dataToSubmit = { ...dedicatedData, paymentMethod };
         await addDoc(collection(db, "talkToExpertDedicated"), dataToSubmit);
       }
@@ -97,13 +96,12 @@ export default function TalkToExpertPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
       <NavBar />
 
       <main className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
-          {/* Landing Cards */}
-          {(!selectedOption && !submitted) && (
+          {!selectedOption && !submitted && (
             <motion.div
               key="landing"
               initial={{ opacity: 0 }}
@@ -147,7 +145,6 @@ export default function TalkToExpertPage() {
             </motion.div>
           )}
 
-          {/* Consultation Form */}
           {(selectedOption && !submitted) && (
             <motion.div
               key="form"
@@ -156,7 +153,6 @@ export default function TalkToExpertPage() {
               exit={{ opacity: 0, x: -50 }}
               className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-2xl border dark:border-gray-700 relative"
             >
-              {/* Switch Consultation Button */}
               <button
                 onClick={() => setSelectedOption(null)}
                 className="absolute top-4 right-4 text-sm text-indigo-600 dark:text-yellow-400 underline"
@@ -167,11 +163,7 @@ export default function TalkToExpertPage() {
                 {selectedOption === "free" ? "Free Consultation" : "Dedicated Consultation"}
               </h2>
               {error && (
-                <motion.p
-                  className="text-red-500 mb-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
+                <motion.p className="text-red-500 mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   {error}
                 </motion.p>
               )}
@@ -310,7 +302,7 @@ export default function TalkToExpertPage() {
                         </label>
                       </div>
                     </motion.div>
-                    {/* Button to toggle QR code display */}
+                    {/* Toggle button for QR code */}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.55 }}>
                       <Button
                         type="button"
@@ -320,7 +312,6 @@ export default function TalkToExpertPage() {
                         {showQRCode ? "Hide QR Code" : "Show QR Code"}
                       </Button>
                     </motion.div>
-                    {/* Conditionally render the QR Code */}
                     {showQRCode && (
                       <motion.div variants={fieldVariants} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                         <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
