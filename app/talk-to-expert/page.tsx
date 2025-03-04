@@ -37,8 +37,8 @@ export default function TalkToExpertPage() {
     transactionId: "",
   });
 
-  // Payment method state with default "googlepay"
-  const [paymentMethod, setPaymentMethod] = useState("googlepay");
+  // Payment method state with no default selection
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   // State to control QR code visibility
   const [showQRCode, setShowQRCode] = useState(false);
@@ -278,7 +278,7 @@ export default function TalkToExpertPage() {
                             checked={paymentMethod === "googlepay"}
                             onChange={() => setPaymentMethod("googlepay")}
                           />
-                          <span>GooglePay</span>
+                          <span>Google Pay</span>
                         </label>
                         <label className="flex items-center space-x-1 cursor-pointer">
                           <input
@@ -314,7 +314,11 @@ export default function TalkToExpertPage() {
                     </motion.div>
                     {showQRCode && (
                       <motion.div variants={fieldVariants} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-                        <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
+                        {paymentMethod ? (
+                          <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
+                        ) : (
+                          <p className="text-red-500">Please select a payment method to view the QR Code.</p>
+                        )}
                       </motion.div>
                     )}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.6 }}>
