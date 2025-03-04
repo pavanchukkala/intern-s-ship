@@ -40,9 +40,6 @@ export default function TalkToExpertPage() {
   // Payment method state with no default selection
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  // State to control QR code visibility
-  const [showQRCode, setShowQRCode] = useState(false);
-
   // Determine QR code image based on selected payment method
   let qrCodeImage = "";
   if (paymentMethod === "googlepay") {
@@ -145,7 +142,7 @@ export default function TalkToExpertPage() {
             </motion.div>
           )}
 
-          {(selectedOption && !submitted) && (
+          {selectedOption && !submitted && (
             <motion.div
               key="form"
               initial={{ opacity: 0, x: 50 }}
@@ -302,23 +299,15 @@ export default function TalkToExpertPage() {
                         </label>
                       </div>
                     </motion.div>
-                    {/* Toggle button for QR code */}
-                    <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.55 }}>
-                      <Button
-                        type="button"
-                        onClick={() => setShowQRCode((prev) => !prev)}
-                        className="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 p-3 rounded-xl shadow-md transition-transform transform hover:scale-105"
+                    {/* Automatically display QR code if paymentMethod is selected */}
+                    {paymentMethod && (
+                      <motion.div
+                        variants={fieldVariants}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
                       >
-                        {showQRCode ? "Hide QR Code" : "Show QR Code"}
-                      </Button>
-                    </motion.div>
-                    {showQRCode && (
-                      <motion.div variants={fieldVariants} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-                        {paymentMethod ? (
-                          <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
-                        ) : (
-                          <p className="text-red-500">Please select a payment method to view the QR Code.</p>
-                        )}
+                        <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
                       </motion.div>
                     )}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.6 }}>
