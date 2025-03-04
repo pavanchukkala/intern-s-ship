@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -31,11 +32,11 @@ export const metadata: Metadata = {
     title: 'internsship | Leading Internship Platform for Future Innovators',
     description:
       'Join internsship to connect with top companies and boost your career through innovative internships and cutting-edge technology.',
-    url: 'https://intern-s-ship.vercel.app', // Your current Vercel URL
+    url: 'https://intern-s-ship.vercel.app',
     siteName: 'internsship',
     images: [
       {
-        url: 'https://intern-s-ship.vercel.app/og-image.png', // Update with your OG image URL if available
+        url: 'https://intern-s-ship.vercel.app/og-image.png',
         width: 1200,
         height: 630,
         alt: 'internsship Open Graph Image',
@@ -49,8 +50,8 @@ export const metadata: Metadata = {
     title: 'internsship | Leading Internship Platform for Future Innovators',
     description:
       'Internsship connects top talent with industry-leading companies for innovative internships and career growth.',
-    site: '@internsship', // Update with your Twitter handle if available
-    creator: '@internsship', // Update with your Twitter handle or creator name
+    site: '@internsship',
+    creator: '@internsship',
   },
   alternates: {
     canonical: 'https://intern-s-ship.vercel.app',
@@ -70,7 +71,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <header style={{ padding: '1rem', textAlign: 'center' }}>
+          <Image
+            src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg"
+            alt="internsship Logo"
+            width={200}
+            height={100}
+            priority
+          />
+        </header>
+        <main>{children}</main>
+      </body>
     </html>
   )
 }
