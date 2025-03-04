@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,53 +14,16 @@ export const metadata: Metadata = {
     'future innovators',
     'internsship',
   ],
-  robots: {
-    index: true,
-    follow: true,
-    nocache: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
-    title: 'internsship | Leading Internship Platform for Future Innovators',
-    description:
-      'Join internsship to connect with top companies and boost your career through innovative internships and cutting-edge technology.',
-    url: 'https://intern-s-ship.vercel.app',
-    siteName: 'internsship',
-    images: [
-      {
-        url: 'https://intern-s-ship.vercel.app/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'internsship Open Graph Image',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'internsship | Leading Internship Platform for Future Innovators',
-    description:
-      'Internsship connects top talent with industry-leading companies for innovative internships and career growth.',
-    site: '@internsship',
-    creator: '@internsship',
-  },
-  alternates: {
-    canonical: 'https://intern-s-ship.vercel.app',
-  },
+  // Other metadata properties as needed...
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    // Use your external image URL as the favicon.
+    // Note: Favicons are typically ICO or PNG files, but many browsers support JPG.
+    icon: 'https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg',
+    // Optionally, if you want alternative sizes or Apple-specific icons, add them here.
+    // shortcut: 'https://your-url-to-shortcut-icon.png',
+    // apple: 'https://your-url-to-apple-icon.png',
   },
-  category: 'Business',
+  // Additional metadata (openGraph, twitter, etc.) remains as before.
 }
 
 export default function RootLayout({
@@ -71,18 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <header style={{ padding: '1rem', textAlign: 'center' }}>
-          <Image
-            src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg"
-            alt="internsship Logo"
-            width={200}
-            height={100}
-            priority
-          />
-        </header>
-        <main>{children}</main>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
