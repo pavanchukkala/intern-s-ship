@@ -14,9 +14,8 @@ export default function AboutPage() {
        <Image
   src="/BasicAssets/logo.jpg"
   alt="Internsship Logo"
-  width={140}
-  height={140}
-  className="mx-auto mb-4 border border-red-500" // Add border for debugging
+  width={160}
+  height={160}
   unoptimized
 />
 
