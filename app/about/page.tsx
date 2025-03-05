@@ -11,14 +11,8 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16 px-4">
         <div className="container mx-auto text-center">
-        <Image
-  src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/public/BasicAssets/founder.jpg"
-  alt="Internsship Logo"
-  width={140}
-  height={140}
-  className="mx-auto mb-4 border border-red-500" // Add border for debugging
-  unoptimized
-/>
+        <Image src="/BasicAssets/founder.jpg" alt="Founder" width={192} height={192} />
+
 
 
           <h1 className="text-5xl font-extrabold mb-4">Welcome to Internship Platform</h1>
