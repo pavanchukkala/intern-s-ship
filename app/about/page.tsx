@@ -12,7 +12,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16 px-4">
         <div className="container mx-auto text-center">
         <Image
-  src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg"
+  src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/public/BasicAssets/founder.jpg"
   alt="Internsship Logo"
   width={140}
   height={140}
