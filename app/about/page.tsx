@@ -13,7 +13,7 @@ export default function AboutPage() {
         <div className="container mx-auto text-center">
           {/* Your Logo */}
           <Image
-            src="/BasicAssets/logo.jpg"
+            src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg"
             alt="Internsship Logo"
             width={140}
             height={140}
