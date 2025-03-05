@@ -43,7 +43,7 @@ export default function AboutPage() {
         <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
           <div className="w-48 h-48 relative rounded-full overflow-hidden mx-auto">
             <Image
-              src="https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/founder.jpg"
+              src="/BasicAssets/founder.jpg"
               alt="Chukkala Pavan Kumar"
               width={192}
               height={192}
