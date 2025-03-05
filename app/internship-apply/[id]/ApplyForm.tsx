@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
@@ -22,12 +21,29 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Payment states
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentTransactionId, setPaymentTransactionId] = useState("");
+
+  // Determine QR code image based on payment method
+  let qrCodeImage = "";
+  if (paymentMethod === "googlepay") {
+    qrCodeImage = "/BasicAssets/googlepay.jpg";
+  } else if (paymentMethod === "phonepay") {
+    qrCodeImage = "/BasicAssets/phonepay.jpg";
+  } else if (paymentMethod === "paytm") {
+    qrCodeImage = "/BasicAssets/paytm.jpg";
+  }
+
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
-      Object.keys(internship.responseSchema).forEach((key) => {
-        initialValues[key] = "";
-      });
+      // Exclude the "pay" field from being rendered as a normal input
+      Object.keys(internship.responseSchema)
+        .filter((key) => key !== "pay")
+        .forEach((key) => {
+          initialValues[key] = "";
+        });
       setFormValues(initialValues);
     }
   }, [internship.responseSchema]);
@@ -41,18 +57,21 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     setSubmitting(true);
 
     try {
-      const applicationData = {
+      const applicationData: Record<string, any> = {
         responses: formValues,
       };
+
+      // Only include payment details if "pay" field exists
+      if (internship.responseSchema && "pay" in internship.responseSchema) {
+        applicationData.paymentMethod = paymentMethod;
+        applicationData.transactionId = paymentTransactionId;
+      }
 
       const responsesCollectionRef = collection(dbHugeData, internship.id);
       await addDoc(responsesCollectionRef, applicationData);
 
-      // Show the success message with smooth transition
       setSubmitted(true);
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      setTimeout(() => router.push("/"), 2000);
     } catch (err) {
       console.error(err);
       alert("Failed to submit your application. Please try again.");
@@ -73,7 +92,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
           Thank You!
         </h2>
         <p className="text-lg font-medium text-green-700 dark:text-green-400">
-              ✅Thank you for your interest and enthusiasm! We will send you further instructions to begin your internship journey shortly.
+          ✅ Thank you for your interest! We will send further instructions soon.
         </p>
       </motion.div>
     );
@@ -89,20 +108,86 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {Object.keys(internship.responseSchema).map((key) => (
-        <div key={key}>
-          <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {key}
-          </label>
-          <input
-            type="text"
-            value={formValues[key]}
-            onChange={(e) => handleChange(key, e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
-            required
-          />
+      {/* Render non-payment fields */}
+      {Object.keys(internship.responseSchema)
+        .filter((key) => key !== "pay")
+        .map((key) => (
+          <div key={key}>
+            <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {key}
+            </label>
+            <input
+              type="text"
+              value={formValues[key]}
+              onChange={(e) => handleChange(key, e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+              required
+            />
+          </div>
+        ))}
+
+      {/* Conditionally display payment UI if "pay" field exists */}
+      {internship.responseSchema && "pay" in internship.responseSchema && (
+        <div className="mt-6 space-y-4">
+          <p className="text-md font-medium text-gray-700 dark:text-gray-300">
+            Select Payment Method:
+          </p>
+          <div className="flex space-x-4">
+            <label className="flex items-center space-x-1 cursor-pointer">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="googlepay"
+                checked={paymentMethod === "googlepay"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <span>Google Pay</span>
+            </label>
+            <label className="flex items-center space-x-1 cursor-pointer">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="phonepay"
+                checked={paymentMethod === "phonepay"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <span>PhonePe</span>
+            </label>
+            <label className="flex items-center space-x-1 cursor-pointer">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="paytm"
+                checked={paymentMethod === "paytm"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <span>Paytm</span>
+            </label>
+          </div>
+          {paymentMethod && (
+            <div className="mt-4">
+              <img
+                src={qrCodeImage}
+                alt={`${paymentMethod} QR Code`}
+                className="w-48 h-48 object-contain"
+              />
+            </div>
+          )}
+          <div className="mt-4">
+            <label className="block text-md font-medium text-gray-700 dark:text-gray-300">
+              Transaction ID
+            </label>
+            <input
+              type="text"
+              value={paymentTransactionId}
+              onChange={(e) => setPaymentTransactionId(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+              required
+            />
+          </div>
         </div>
-      ))}
+      )}
+
       <button
         type="submit"
         disabled={submitting}
@@ -111,7 +196,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         {submitting ? "Submitting..." : "Submit Application"}
       </button>
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
-        Note: Every internship on our platform undergoes rigorous verification. If you apply for a paid internship and do not receive a response within 48 hours, please contact us immediately via our contact form, and we will promptly address your concerns.
+        Note: Every internship on our platform undergoes rigorous verification. If you apply for a paid internship and do not receive a response within 48 hours, please contact us immediately.
       </p>
     </form>
   );
