@@ -129,6 +129,10 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
       {/* Conditionally display payment UI if "pay" field exists */}
       {internship.responseSchema && "pay" in internship.responseSchema && (
         <div className="mt-6 space-y-4">
+          {/* Display the payment amount for candidate reference */}
+          <p className="text-md font-medium text-gray-700 dark:text-gray-300">
+            Payment Amount: {internship.responseSchema.pay}
+          </p>
           <p className="text-md font-medium text-gray-700 dark:text-gray-300">
             Select Payment Method:
           </p>
@@ -196,7 +200,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         {submitting ? "Submitting..." : "Submit Application"}
       </button>
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
-        Note: Every internship on our platform undergoes rigorous verification. If you apply for a paid internship and do not receive a response within 48 hours, please contact us immediately.
+        Note: Every internship on our platform undergoes rigorous verification.
       </p>
     </form>
   );
