@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button"; // optional, if you prefer using your custom Button
 
 const FILTERS = [
   "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
@@ -17,12 +16,14 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
   return (
     <div className="w-full">
       <div className="flex justify-end mb-2">
-        <Button
+        <button
           onClick={() => setShowFilters(!showFilters)}
-          className="text-xs border border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+          onBlur={(e) => e.currentTarget.blur()}
+          style={{ WebkitTapHighlightColor: "transparent" }}
+          className="text-xs border border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 px-3 py-1 rounded"
         >
           {showFilters ? "Hide Filters" : "Show Filters"}
-        </Button>
+        </button>
       </div>
       {showFilters && (
         <div className="mb-4 flex flex-wrap gap-3">
@@ -32,6 +33,8 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
               <button
                 key={filter}
                 onClick={() => toggleFilter(filter)}
+                onBlur={(e) => e.currentTarget.blur()}
+                style={{ WebkitTapHighlightColor: "transparent" }}
                 className={`px-3 py-2 transition-all duration-300 transform rounded-xl shadow-md text-xs focus:outline-none
                   ${
                     isSelected
