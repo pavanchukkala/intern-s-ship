@@ -1,4 +1,3 @@
-// app/contact/page.tsx
 "use client";
 export const dynamic = "force-dynamic";
 
@@ -6,10 +5,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase"; // adjust the path if needed
-import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -20,7 +20,6 @@ export default function ContactPage() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
 
   const handleChange = (
@@ -52,40 +51,8 @@ export default function ContactPage() {
   };
 
   return (
-    <div
-      className={`${
-        darkMode ? "dark" : ""
-      } min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
-    >
-      {/* Navbar */}
-      <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 flex justify-between items-center shadow-lg w-full">
-        <div className="flex items-center space-x-3">
-          <Globe className="text-yellow-400" size={32} />
-          <h1 className="text-2xl font-extrabold">Interns' Journey</h1>
-        </div>
-        <div className="flex items-center space-x-4">
-          <a href="/" className="hover:text-yellow-400 transition-colors">
-            Home
-          </a>
-          <a href="/about" className="hover:text-yellow-400 transition-colors">
-            About
-          </a>
-          <a href="/contact" className="hover:text-yellow-400 transition-colors">
-            Contact
-          </a>
-          <Button
-            variant="outline"
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2"
-          >
-            {darkMode ? (
-              <Sun size={24} className="text-yellow-400" />
-            ) : (
-              <Moon size={24} className="text-gray-200" />
-            )}
-          </Button>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <NavBar />
 
       {/* Main Content */}
       <main className="flex flex-col items-center p-4">
@@ -160,10 +127,7 @@ export default function ContactPage() {
         </motion.div>
       </main>
 
-      {/* Footer */}
-      <footer className="w-full bg-indigo-600 dark:bg-gray-800 text-white p-4 text-center shadow-md">
-        <p>&copy; {new Date().getFullYear()} Interns' Journey. All Rights Reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
