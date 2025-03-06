@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
 import ScrollProgress from "@/components/ScrollProgress";
-
+import Footer from "@/components/Footer"; // Import Footer
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
   const snapshot = await getDocs(collection(db, "internships"));
@@ -122,5 +122,7 @@ export default async function InternshipDetailPage({
         </div>
       </footer>
     </div>
+     {/* Footer */}
+        <Footer /> {/* Reuse Footer Component */}
   );
 }
