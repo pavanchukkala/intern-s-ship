@@ -9,6 +9,7 @@ import SearchBar from "@/components/SearchBar";
 import Footer from "@/components/Footer";
 import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
+import useFilteredInternships from "@/hooks/useFilteredInternships";
 
 // InternshipCard component
 function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
@@ -132,30 +133,8 @@ export default function Page() {
     fetchInternships();
   }, []);
 
-  // Filtering logic: checks both search query and filter selections.
-  const filteredInternships = internships.filter((internship) => {
-    const searchMatch =
-      internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.skills.toLowerCase().includes(searchQuery.toLowerCase());
-
-    if (selectedFilters.length === 0) return searchMatch;
-
-    const matchesFilters = selectedFilters.every((filter) => {
-      return (
-        (internship.type && internship.type.toLowerCase().includes(filter.toLowerCase())) ||
-        (internship.stipend && internship.stipend.toLowerCase().includes(filter.toLowerCase())) ||
-        (internship.duration && internship.duration.toLowerCase().includes(filter.toLowerCase())) ||
-        (internship.companySize && internship.companySize.toLowerCase().includes(filter.toLowerCase())) ||
-        (internship.industry && internship.industry.toLowerCase().includes(filter.toLowerCase())) ||
-        (internship.experienceLevel && internship.experienceLevel.toLowerCase().includes(filter.toLowerCase()))
-      );
-    });
-
-    return searchMatch && matchesFilters;
-  });
-
-  // For now, recommendedInternships is the same as filteredInternships.
+  // Use the custom hook for filtering
+  const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
   const recommendedInternships = filteredInternships;
 
   return (
