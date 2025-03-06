@@ -9,7 +9,8 @@ import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-
+import NavBar from "@/components/NavBar"; // Import NavBar
+import Footer from "@/components/Footer"; // Import Footer
 export default function RegisterInternship() {
   const [formData, setFormData] = useState({
     organization: "",
@@ -49,21 +50,7 @@ export default function RegisterInternship() {
 
   return (
     <div className={`${darkMode ? "dark" : ""} min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}>
-      {/* Navbar */}
-      <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 flex justify-between items-center shadow-lg w-full">
-        <div className="flex items-center space-x-3">
-          <Globe className="text-yellow-400" size={32} />
-          <h1 className="text-2xl font-extrabold">Interns' Journey</h1>
-        </div>
-        <div className="flex items-center space-x-4">
-          <a href="/" className="hover:text-yellow-400 transition-colors">Home</a>
-          <a href="/about" className="hover:text-yellow-400 transition-colors">About</a>
-          <a href="/contact" className="hover:text-yellow-400 transition-colors">Contact</a>
-          <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-            {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
-          </Button>
-        </div>
-      </nav>
+     <NavBar />
 
       {/* Main Content */}
       <main className="flex flex-col items-center p-4">
@@ -103,10 +90,7 @@ export default function RegisterInternship() {
         </motion.div>
       </main>
 
-      {/* Footer */}
-      <footer className="w-full bg-indigo-600 dark:bg-gray-800 text-white p-4 text-center shadow-md">
-        <p>&copy; 2024 Interns' Journey. All Rights Reserved.</p>
-      </footer>
+     <Footer />
     </div>
   );
 }
