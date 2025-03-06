@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
 import { motion } from "framer-motion";
-
+import Footer from "@/components/Footer"; // Import Footer
 interface InternshipData {
   id: string;
   company?: string;
@@ -203,5 +203,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         Note: Every internship on our platform undergoes rigorous verification.
       </p>
     </form>
+     {/* Footer */}
+        <Footer /> {/* Reuse Footer Component */}
   );
 }
