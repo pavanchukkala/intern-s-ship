@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; // optional, if you prefer using your custom Button
 
 const FILTERS = [
   "Paid", "Free", "Stipend-based", "Hourly Pay", "Project-based", "Short-term", "Long-term",
@@ -15,35 +15,37 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
   };
 
   return (
-    <>
+    <div className="w-full">
       <div className="flex justify-end mb-2">
         <Button
-          variant="outline"
           onClick={() => setShowFilters(!showFilters)}
-          className="text-xs"
+          className="text-xs border border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
         >
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
       </div>
       {showFilters && (
         <div className="mb-4 flex flex-wrap gap-3">
-          {FILTERS.map((filter) => (
-            <Button
-              key={filter}
-              variant={selectedFilters.includes(filter) ? "default" : "outline"}
-              size="sm"
-              onClick={() => toggleFilter(filter)}
-              className={`px-3 py-2 transition-all transform ${
-                selectedFilters.includes(filter)
-                  ? "scale-110 bg-indigo-600 text-white shadow-lg"
-                  : "scale-100 bg-white dark:bg-gray-800"
-              } hover:scale-105 hover:bg-indigo-600 hover:text-white rounded-xl shadow-md text-xs`}
-            >
-              {filter}
-            </Button>
-          ))}
+          {FILTERS.map((filter) => {
+            const isSelected = selectedFilters.includes(filter);
+            return (
+              <button
+                key={filter}
+                onClick={() => toggleFilter(filter)}
+                className={`px-3 py-2 transition-all duration-300 transform rounded-xl shadow-md text-xs focus:outline-none
+                  ${
+                    isSelected
+                      ? "scale-110 bg-indigo-600 text-white shadow-lg border-2 border-indigo-700"
+                      : "scale-100 bg-white dark:bg-gray-800 text-gray-800 border border-gray-300"
+                  }
+                  hover:scale-105 hover:bg-indigo-600 hover:text-white`}
+              >
+                {filter}
+              </button>
+            );
+          })}
         </div>
       )}
-    </>
+    </div>
   );
 }
