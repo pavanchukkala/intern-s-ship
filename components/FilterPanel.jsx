@@ -18,9 +18,8 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
       <div className="flex justify-end mb-2">
         <button
           onClick={() => setShowFilters(!showFilters)}
-          onBlur={(e) => e.currentTarget.blur()}
           style={{ WebkitTapHighlightColor: "transparent" }}
-          className="text-xs border border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 px-3 py-1 rounded"
+          className="text-xs border border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 px-3 py-1 rounded focus:outline-none"
         >
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
@@ -32,8 +31,10 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
             return (
               <button
                 key={filter}
-                onClick={() => toggleFilter(filter)}
-                onBlur={(e) => e.currentTarget.blur()}
+                onClick={(e) => {
+                  toggleFilter(filter);
+                  e.currentTarget.blur(); // Force blur on click to remove persistent focus styling
+                }}
                 style={{ WebkitTapHighlightColor: "transparent" }}
                 className={`px-3 py-2 transition-all duration-300 transform rounded-xl shadow-md text-xs focus:outline-none
                   ${
