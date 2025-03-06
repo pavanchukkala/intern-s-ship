@@ -1,4 +1,3 @@
-// app/page.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -7,7 +6,7 @@ import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
-import Footer from "@/components/Footer"; 
+import Footer from "@/components/Footer";
 import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 
@@ -53,7 +52,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
           <motion.div
-           className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black dark:text-gray-100 p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
+            className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black dark:text-gray-100 p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
             animate={isClicked ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" } : { rotate: -45, borderWidth: "0px" }}
             transition={{ duration: 0.7, ease: "easeInOut" }}
@@ -107,7 +106,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
   );
 }
 
-export default function InternshipPlatform() {
+export default function Page() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
@@ -133,22 +132,31 @@ export default function InternshipPlatform() {
     fetchInternships();
   }, []);
 
-  // Filter internships by company, role, or skills based on the search query
-  const filteredInternships = internships.filter(
-    (internship) =>
+  // Filtering logic: checks both search query and filter selections.
+  const filteredInternships = internships.filter((internship) => {
+    const searchMatch =
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      internship.skills.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      internship.skills.toLowerCase().includes(searchQuery.toLowerCase());
 
-  // Currently, recommendations are just the filtered list
+    if (selectedFilters.length === 0) return searchMatch;
+
+    const matchesFilters = selectedFilters.every((filter) => {
+      return (
+        (internship.type && internship.type.toLowerCase().includes(filter.toLowerCase())) ||
+        (internship.stipend && internship.stipend.toLowerCase().includes(filter.toLowerCase())) ||
+        (internship.duration && internship.duration.toLowerCase().includes(filter.toLowerCase())) ||
+        (internship.companySize && internship.companySize.toLowerCase().includes(filter.toLowerCase())) ||
+        (internship.industry && internship.industry.toLowerCase().includes(filter.toLowerCase())) ||
+        (internship.experienceLevel && internship.experienceLevel.toLowerCase().includes(filter.toLowerCase()))
+      );
+    });
+
+    return searchMatch && matchesFilters;
+  });
+
+  // For now, recommendedInternships is the same as filteredInternships.
   const recommendedInternships = filteredInternships;
-
-  const toggleFilter = (filter: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
-    );
-  };
 
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
@@ -167,7 +175,7 @@ export default function InternshipPlatform() {
             <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
               Home
             </a>
-           <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
+            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
             <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
               Contact
             </a>
@@ -193,11 +201,11 @@ export default function InternshipPlatform() {
 
           {/* Search & Filter Components */}
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <FilterPanel
-            selectedFilters={selectedFilters}
-            toggleFilter={toggleFilter}
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
+          <FilterPanel 
+            selectedFilters={selectedFilters} 
+            setSelectedFilters={setSelectedFilters}
+            showFilters={showFilters} 
+            setShowFilters={setShowFilters} 
           />
 
           {/* Internship Listings */}
