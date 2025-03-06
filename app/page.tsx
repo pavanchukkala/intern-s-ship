@@ -7,6 +7,7 @@ import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
+import Footer from "@/components/Footer"; 
 import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 
