@@ -211,6 +211,7 @@ export default function InternshipPlatform() {
             ))}
           </div>
         </main>
+        <Footer />
       </div>
     </div>
   );
