@@ -351,7 +351,7 @@ export default function TalkToExpertPage() {
         </AnimatePresence>
       </main>
 
-      <NavBar />
+      <Footer />
     </div>
   );
 }
