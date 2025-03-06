@@ -89,8 +89,7 @@ export default function RegisterInternship() {
           )}
         </motion.div>
       </main>
-
-     <Footer />
+<Footer /> {/* Reuse Footer Component */}
     </div>
   );
 }
