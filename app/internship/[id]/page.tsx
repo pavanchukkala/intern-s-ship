@@ -121,8 +121,8 @@ export default async function InternshipDetailPage({
           </Link>
         </div>
       </footer>
-    </div>
-     {/* Footer */}
+       {/* Footer */}
         <Footer /> {/* Reuse Footer Component */}
+    </div>
   );
 }
