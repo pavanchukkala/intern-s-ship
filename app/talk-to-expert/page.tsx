@@ -350,11 +350,7 @@ export default function TalkToExpertPage() {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-gray-50 dark:bg-gray-800 text-center py-4 shadow-md">
-        <p className="text-gray-600 dark:text-gray-300 text-sm">
-          &copy; {new Date().getFullYear()} Interns' Journey. All Rights Reserved.
-        </p>
-      </footer>
+      <NavBar />
     </div>
   );
 }
