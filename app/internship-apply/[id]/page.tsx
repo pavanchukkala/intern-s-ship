@@ -7,7 +7,7 @@ import Link from "next/link";
 import ApplyForm from "./ApplyForm";
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import Footer from "@/components/Footer"; // Import Footer
 export default function ApplyPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
@@ -87,7 +87,8 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
           </Button>
         </div>
       </nav>
-
+{/* Footer */}
+        <Footer /> {/* Reuse Footer Component */}
       {/* Top Banner & Form */}
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
         <div className="container mx-auto max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
@@ -107,6 +108,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }
