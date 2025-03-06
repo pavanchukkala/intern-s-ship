@@ -9,7 +9,8 @@ import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/NavBar"; // Import NavBar
+import Footer from "@/components/Footer"; // Import Footer
 
 export default function TalkToExpertPage() {
   const router = useRouter();
