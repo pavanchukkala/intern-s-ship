@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import NavBar from "@/components/NavBar";
-import Footer from "@/src/components/Footer";
+import Footer from "@/components/Footer";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
