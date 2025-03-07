@@ -76,7 +76,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
               <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
               <h2 className="text-xl font-bold">{internship.role}</h2>
               <p className="text-sm">{internship.company} | {internship.location}</p>
-              <p className="text-xs text-gray-500">{internship.duration} | stipend:{internship.stipend}</p>
+              <p className="text-xs text-gray-500">{internship.duration} | stipend:{internship.stipend}₹</p>
               <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
             </div>
 
