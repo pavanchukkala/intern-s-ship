@@ -24,10 +24,11 @@ export default function useFilteredInternships(
   return useMemo(() => {
     return internships.filter((internship) => {
       // Check if the internship matches the search query.
-      const searchMatch =
-        internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        internship.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        internship.skills.toLowerCase().includes(searchQuery.toLowerCase());
+        const searchMatch =
+  (typeof internship.company === "string" && internship.company.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (typeof internship.role === "string" && internship.role.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (typeof internship.skills === "string" && internship.skills.toLowerCase().includes(searchQuery.toLowerCase()));
+
 
       // If no filters are applied, return the search result.
       if (Object.keys(selectedFilters).length === 0) return searchMatch;
