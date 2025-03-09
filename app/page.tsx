@@ -193,14 +193,9 @@ const recommendedInternships = useMemo(
 
           {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {recommendedInternships.map((internship) => (
-              <InternshipCard
-                internship={internship}
-                key={internship.id}
-                activeCardId={activeCardId}
-                setActiveCardId={setActiveCardId}
-              />
-            ))}
+            {recommendedInternships.map((internship) => ( // 28
+        <InternshipCard key={internship.id} internship={internship} /> // 29
+      ))}    
           </div>
         </main>
         <Footer />
