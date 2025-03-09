@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
-
+import { recommendInternships } from "@/lib/recommendation";
 // InternshipCard component
 function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
   internship: any, 
