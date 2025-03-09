@@ -135,7 +135,7 @@ export default function Page() {
 
   // Use the custom hook for filtering
   const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
-  const recommendedInternships = filteredInternships;
+  const recommendedInternships = recommendInternships(filteredInternships); 
 
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
