@@ -10,7 +10,6 @@ import Footer from "@/components/Footer";
 import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
-import { recommendInternships } from "@/lib/recommendation"; 
 
 // InternshipCard component
 function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
@@ -30,7 +29,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
     setIsClicked(true);
     // Navigate using the document ID after animation
     setTimeout(() => {
-      router.push(`/internship/${internship.id}`);
+      router.push(/internship/${internship.id});
     }, 700);
   };
 
@@ -40,7 +39,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
     setIsClicked(true);
     // Navigate to the application page after animation
     setTimeout(() => {
-      router.push(`/internship-apply/${internship.id}`);
+      router.push(/internship-apply/${internship.id});
     }, 700);
   };
 
@@ -136,10 +135,10 @@ export default function Page() {
 
   // Use the custom hook for filtering
   const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
-const recommendedInternships = recommendInternships(filteredInternships); 
+  const recommendedInternships = filteredInternships;
 
   return (
-    <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
+    <div className={${darkMode ? "dark" : ""} overflow-x-hidden}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
@@ -186,7 +185,9 @@ const recommendedInternships = recommendInternships(filteredInternships);
             setSelectedFilters={setSelectedFilters}
             showFilters={showFilters} 
             setShowFilters={setShowFilters} 
- {/* Internship Listings */}
+          />
+
+          {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {recommendedInternships.map((internship) => (
               <InternshipCard
