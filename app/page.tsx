@@ -39,7 +39,7 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
     setIsClicked(true);
     // Navigate to the application page after animation
     setTimeout(() => {
-      router.push(/internship-apply/${internship.id});
+      router.push(`/internship-apply/${internship.id}`);
     }, 700);
   };
 
