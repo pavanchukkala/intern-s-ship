@@ -190,7 +190,7 @@ const recommendedInternships = useMemo(
             showFilters={showFilters} 
             setShowFilters={setShowFilters} 
           />
-
+<div>
           {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {recommendedInternships.map((internship) => ( // 28
