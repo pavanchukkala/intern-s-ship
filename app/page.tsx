@@ -136,10 +136,7 @@ export default function Page() {
 
   // Use the custom hook for filtering
   const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
-const recommendedInternships = useMemo(
-  () => recommendInternships(filteredInternships),
-  [filteredInternships]
-);
+const recommendedInternships = recommendInternships(filteredInternships); 
 
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
@@ -189,13 +186,16 @@ const recommendedInternships = useMemo(
             setSelectedFilters={setSelectedFilters}
             showFilters={showFilters} 
             setShowFilters={setShowFilters} 
-          />
-<div>
-          {/* Internship Listings */}
+ {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {recommendedInternships.map((internship) => ( // 28
-        <InternshipCard key={internship.id} internship={internship} /> // 29
-      ))}    
+            {recommendedInternships.map((internship) => (
+              <InternshipCard
+                internship={internship}
+                key={internship.id}
+                activeCardId={activeCardId}
+                setActiveCardId={setActiveCardId}
+              />
+            ))}
           </div>
         </main>
         <Footer />
