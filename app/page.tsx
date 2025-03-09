@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
+import { recommendInternships } from "@/lib/recommendation"; 
 
 // InternshipCard component
 function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
@@ -135,7 +136,7 @@ export default function Page() {
 
   // Use the custom hook for filtering
   const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
-  const recommendedInternships = filteredInternships;
+const recommendedInternships = recommendInternships(filteredInternships); 
 
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
