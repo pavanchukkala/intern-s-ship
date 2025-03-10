@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { Globe, Sun, Moon } from "lucide-react";
@@ -12,7 +12,6 @@ import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
 
-// InternshipCard component
 function InternshipCard({
   internship,
   activeCardId,
@@ -24,14 +23,12 @@ function InternshipCard({
 }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
-  // Only allow clicks if another card is active and it’s not this one
   const isDisabled = activeCardId && activeCardId !== internship.id;
 
   const handleKnowMore = () => {
     if (isDisabled) return;
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
-    // Navigate using the document ID after animation
     setTimeout(() => {
       router.push(`/internship/${internship.id}`);
     }, 700);
@@ -41,7 +38,6 @@ function InternshipCard({
     if (isDisabled) return;
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
-    // Navigate to the application page after animation
     setTimeout(() => {
       router.push(`/internship-apply/${internship.id}`);
     }, 700);
@@ -135,7 +131,7 @@ function InternshipCard({
   );
 }
 
-export default function Page() {
+function PageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearchQuery = searchParams.get("q") || "";
@@ -150,9 +146,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchInternships() {
       try {
-        const internshipsSnapshot = await getDocs(
-          collection(db, "internships")
-        );
+        const internshipsSnapshot = await getDocs(collection(db, "internships"));
         const internshipsData = internshipsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -201,10 +195,16 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
+            <a
+              href="#"
+              className="hover:text-yellow-400 text-sm sm:text-base"
+            >
               Home
             </a>
-            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+            <a
+              href="/about"
+              className="hover:text-yellow-400 text-sm sm:text-base"
+            >
               About
             </a>
             <a
@@ -252,10 +252,7 @@ export default function Page() {
           </div>
 
           {/* Search & Filter Components */}
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <FilterPanel
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
@@ -278,5 +275,13 @@ export default function Page() {
         <Footer />
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }
