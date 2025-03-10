@@ -12,7 +12,10 @@ export default function SearchBar({ searchQuery, setSearchQuery }) {
         onChange={(e) => setSearchQuery(e.target.value)}
         className="pl-10 pr-4 py-2 w-full border rounded-xl text-sm"
       />
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" size={20} />
+      <Search
+        className="absolute left-3 top-1/2 transform -translate-y-1/2"
+        size={20}
+      />
     </div>
   );
 }
