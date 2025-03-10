@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
+
 // InternshipCard component
 function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
   internship: any, 
@@ -19,7 +20,6 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
 }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
-
   // Only allow clicks if another card is active and it’s not this one
   const isDisabled = activeCardId && activeCardId !== internship.id;
 
@@ -75,9 +75,15 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
             <div className="text-center">
               <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
               <h2 className="text-xl font-bold">{internship.role}</h2>
-              <p className="text-sm">{internship.company} | {internship.location}</p>
-              <p className="text-xs text-gray-500">{internship.duration} | stipend:{internship.stipend}₹</p>
-              <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
+              <p className="text-sm">
+                {internship.company} | {internship.location}
+              </p>
+              <p className="text-xs text-gray-500">
+                {internship.duration} | stipend: {internship.stipend}₹
+              </p>
+              <p className="text-xs text-gray-500">
+                Skills: {internship.skills}
+              </p>
             </div>
 
             <div className="flex gap-2">
@@ -108,13 +114,15 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
 }
 
 export default function Page() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialSearchQuery = searchParams.get("q") || "";
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
-  const router = useRouter();
 
   // Fetch internship data from Firestore on component mount
   useEffect(() => {
@@ -133,7 +141,17 @@ export default function Page() {
     fetchInternships();
   }, []);
 
-  // Use the custom hook for filtering
+  // Update URL query parameter when searchQuery changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (searchQuery) {
+      params.set("q", searchQuery);
+    } else {
+      params.delete("q");
+    }
+    router.replace(`?${params.toString()}`);
+  }, [searchQuery, router]);
+
   const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
   const recommendedInternships = recommendInternships(filteredInternships); 
 
@@ -154,12 +172,22 @@ export default function Page() {
             <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
               Home
             </a>
-            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
+            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+              About
+            </a>
             <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
               Contact
             </a>
-            <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
-              {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-gray-200" />}
+            <Button
+              variant="outline"
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2"
+            >
+              {darkMode ? (
+                <Sun size={24} className="text-yellow-400" />
+              ) : (
+                <Moon size={24} className="text-gray-200" />
+              )}
             </Button>
           </div>
         </nav>
@@ -167,12 +195,22 @@ export default function Page() {
         {/* Main Content */}
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-            <h2 className="text-3xl sm:text-4xl font-bold">Find Your Perfect Internship</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold">
+              Find Your Perfect Internship
+            </h2>
             <div className="flex gap-4">
-              <Button variant="outline" onClick={() => router.push("/register")} className="px-4 py-2 shadow-lg text-sm">
+              <Button
+                variant="outline"
+                onClick={() => router.push("/register")}
+                className="px-4 py-2 shadow-lg text-sm"
+              >
                 Register/publish Internship
               </Button>
-              <Button variant="outline" onClick={() => router.push("/talk-to-expert")} className="px-4 py-2 shadow-lg text-sm">
+              <Button
+                variant="outline"
+                onClick={() => router.push("/talk-to-expert")}
+                className="px-4 py-2 shadow-lg text-sm"
+              >
                 Talk to Expert
               </Button>
             </div>
@@ -180,11 +218,11 @@ export default function Page() {
 
           {/* Search & Filter Components */}
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <FilterPanel 
-            selectedFilters={selectedFilters} 
+          <FilterPanel
+            selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
-            showFilters={showFilters} 
-            setShowFilters={setShowFilters} 
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
           />
 
           {/* Internship Listings */}
