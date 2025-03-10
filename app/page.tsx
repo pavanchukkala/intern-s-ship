@@ -133,6 +133,7 @@ function InternshipCard({
 
 function PageContent() {
   const router = useRouter();
+  // Load the search query from sessionStorage after mount
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
@@ -140,7 +141,6 @@ function PageContent() {
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-  // Load search query from sessionStorage after component mounts
   useEffect(() => {
     const savedQuery = sessionStorage.getItem("searchQuery");
     if (savedQuery) {
@@ -148,12 +148,12 @@ function PageContent() {
     }
   }, []);
 
-  // Persist search query to sessionStorage when it changes
+  // Save the search query to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem("searchQuery", searchQuery);
   }, [searchQuery]);
 
-  // Fetch internship data from Firestore
+  // Fetch internships from Firestore on mount
   useEffect(() => {
     async function fetchInternships() {
       try {
