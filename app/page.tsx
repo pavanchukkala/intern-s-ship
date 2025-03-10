@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { Globe, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -133,21 +133,27 @@ function InternshipCard({
 
 function PageContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  // Initialize search query from sessionStorage (fallback to URL if needed)
-  const initialSearchQueryFromUrl = searchParams.get("q") || "";
-  const initialSearchQuery =
-    typeof window !== "undefined" && sessionStorage.getItem("searchQuery")
-      ? sessionStorage.getItem("searchQuery")!
-      : initialSearchQueryFromUrl;
-  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-  // Fetch internship data from Firestore on mount
+  // Load search query from sessionStorage after component mounts
+  useEffect(() => {
+    const savedQuery = sessionStorage.getItem("searchQuery");
+    if (savedQuery) {
+      setSearchQuery(savedQuery);
+    }
+  }, []);
+
+  // Persist search query to sessionStorage when it changes
+  useEffect(() => {
+    sessionStorage.setItem("searchQuery", searchQuery);
+  }, [searchQuery]);
+
+  // Fetch internship data from Firestore
   useEffect(() => {
     async function fetchInternships() {
       try {
@@ -163,11 +169,6 @@ function PageContent() {
     }
     fetchInternships();
   }, []);
-
-  // Persist search query in sessionStorage on change
-  useEffect(() => {
-    sessionStorage.setItem("searchQuery", searchQuery);
-  }, [searchQuery]);
 
   const filteredInternships = useFilteredInternships(
     internships,
