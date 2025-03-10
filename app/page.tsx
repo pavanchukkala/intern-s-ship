@@ -13,10 +13,14 @@ import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
 
 // InternshipCard component
-function InternshipCard({ internship, activeCardId, setActiveCardId }: { 
-  internship: any, 
-  activeCardId: string | null, 
-  setActiveCardId: (id: string | null) => void 
+function InternshipCard({
+  internship,
+  activeCardId,
+  setActiveCardId,
+}: {
+  internship: any;
+  activeCardId: string | null;
+  setActiveCardId: (id: string | null) => void;
 }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
@@ -49,13 +53,21 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
         <motion.div
           className="absolute w-11/12 h-11/12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
-          animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
+          animate={
+            isClicked
+              ? { rotate: 0, filter: "blur(8px)" }
+              : { rotate: 45, filter: "blur(0px)" }
+          }
           transition={{ duration: 0.7, ease: "easeInOut" }}
         >
           <motion.div
             className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black dark:text-gray-100 p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
-            animate={isClicked ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" } : { rotate: -45, borderWidth: "0px" }}
+            animate={
+              isClicked
+                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
+                : { rotate: -45, borderWidth: "0px" }
+            }
             transition={{ duration: 0.7, ease: "easeInOut" }}
             whileHover={!isClicked ? { scale: 1.05 } : {}}
           >
@@ -64,16 +76,26 @@ function InternshipCard({ internship, activeCardId, setActiveCardId }: {
                 className="absolute inset-0 rounded-lg"
                 initial={{ opacity: 0, borderWidth: "0px" }}
                 animate={{ opacity: 1, borderWidth: "4px" }}
-                transition={{ duration: 0.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+                transition={{
+                  duration: 0.5,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
                 style={{
                   borderStyle: "solid",
-                  borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
+                  borderImage:
+                    "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
                 }}
               />
             )}
 
             <div className="text-center">
-              <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
+              <img
+                src={internship.logo}
+                alt={internship.company}
+                className="h-10 w-10 mb-2 inline-block"
+              />
               <h2 className="text-xl font-bold">{internship.role}</h2>
               <p className="text-sm">
                 {internship.company} | {internship.location}
@@ -128,7 +150,9 @@ export default function Page() {
   useEffect(() => {
     async function fetchInternships() {
       try {
-        const internshipsSnapshot = await getDocs(collection(db, "internships"));
+        const internshipsSnapshot = await getDocs(
+          collection(db, "internships")
+        );
         const internshipsData = internshipsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -152,8 +176,12 @@ export default function Page() {
     router.replace(`?${params.toString()}`);
   }, [searchQuery, router]);
 
-  const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
-  const recommendedInternships = recommendInternships(filteredInternships); 
+  const filteredInternships = useFilteredInternships(
+    internships,
+    searchQuery,
+    selectedFilters
+  );
+  const recommendedInternships = recommendInternships(filteredInternships);
 
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
@@ -163,9 +191,13 @@ export default function Page() {
           <div className="flex items-center space-x-3 mb-4 sm:mb-0">
             <Globe className="text-yellow-400" size={32} />
             <div className="flex flex-col items-center text-center">
-              <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold">
+                INTERNS⛵SHIP
+              </h1>
               <p className="text-lg sm:text-xl font-extrabold">TO</p>
-              <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
+              <p className="text-2xl sm:text-3xl font-extrabold">
+                Internship
+              </p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
@@ -175,7 +207,10 @@ export default function Page() {
             <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
               About
             </a>
-            <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
+            <a
+              href="/contact"
+              className="hover:text-yellow-400 text-sm sm:text-base"
+            >
               Contact
             </a>
             <Button
@@ -217,7 +252,10 @@ export default function Page() {
           </div>
 
           {/* Search & Filter Components */}
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
           <FilterPanel
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
