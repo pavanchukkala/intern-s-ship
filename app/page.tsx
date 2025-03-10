@@ -12,6 +12,7 @@ import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
 
+// InternshipCard component
 function InternshipCard({
   internship,
   activeCardId,
@@ -23,12 +24,14 @@ function InternshipCard({
 }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
+  // Disable interactions if another card is active
   const isDisabled = activeCardId && activeCardId !== internship.id;
 
   const handleKnowMore = () => {
     if (isDisabled) return;
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
+    // Navigate after animation
     setTimeout(() => {
       router.push(`/internship/${internship.id}`);
     }, 700);
@@ -38,6 +41,7 @@ function InternshipCard({
     if (isDisabled) return;
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
+    // Navigate after animation
     setTimeout(() => {
       router.push(`/internship-apply/${internship.id}`);
     }, 700);
@@ -134,7 +138,12 @@ function InternshipCard({
 function PageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialSearchQuery = searchParams.get("q") || "";
+  // Initialize search query from URL or sessionStorage
+  const initialSearchQueryFromUrl = searchParams.get("q") || "";
+  const initialSearchQuery =
+    typeof window !== "undefined" && sessionStorage.getItem("searchQuery")
+      ? sessionStorage.getItem("searchQuery")!
+      : initialSearchQueryFromUrl;
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
@@ -142,7 +151,7 @@ function PageContent() {
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-  // Fetch internship data from Firestore on component mount
+  // Fetch internship data from Firestore
   useEffect(() => {
     async function fetchInternships() {
       try {
@@ -158,6 +167,11 @@ function PageContent() {
     }
     fetchInternships();
   }, []);
+
+  // Persist search query in sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem("searchQuery", searchQuery);
+  }, [searchQuery]);
 
   // Update URL query parameter when searchQuery changes
   useEffect(() => {
@@ -195,16 +209,10 @@ function PageContent() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-            <a
-              href="#"
-              className="hover:text-yellow-400 text-sm sm:text-base"
-            >
+            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
               Home
             </a>
-            <a
-              href="/about"
-              className="hover:text-yellow-400 text-sm sm:text-base"
-            >
+            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
               About
             </a>
             <a
