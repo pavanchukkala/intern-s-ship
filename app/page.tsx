@@ -12,7 +12,6 @@ import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
 
-// InternshipCard component
 function InternshipCard({
   internship,
   activeCardId,
@@ -24,14 +23,12 @@ function InternshipCard({
 }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
-  // Disable interactions if another card is active
   const isDisabled = activeCardId && activeCardId !== internship.id;
 
   const handleKnowMore = () => {
     if (isDisabled) return;
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
-    // Navigate after animation
     setTimeout(() => {
       router.push(`/internship/${internship.id}`);
     }, 700);
@@ -41,7 +38,6 @@ function InternshipCard({
     if (isDisabled) return;
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
-    // Navigate after animation
     setTimeout(() => {
       router.push(`/internship-apply/${internship.id}`);
     }, 700);
@@ -138,7 +134,7 @@ function InternshipCard({
 function PageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  // Initialize search query from URL or sessionStorage
+  // Initialize search query from sessionStorage (fallback to URL if needed)
   const initialSearchQueryFromUrl = searchParams.get("q") || "";
   const initialSearchQuery =
     typeof window !== "undefined" && sessionStorage.getItem("searchQuery")
@@ -151,7 +147,7 @@ function PageContent() {
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-  // Fetch internship data from Firestore
+  // Fetch internship data from Firestore on mount
   useEffect(() => {
     async function fetchInternships() {
       try {
@@ -168,21 +164,10 @@ function PageContent() {
     fetchInternships();
   }, []);
 
-  // Persist search query in sessionStorage
+  // Persist search query in sessionStorage on change
   useEffect(() => {
     sessionStorage.setItem("searchQuery", searchQuery);
   }, [searchQuery]);
-
-  // Update URL query parameter when searchQuery changes
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (searchQuery) {
-      params.set("q", searchQuery);
-    } else {
-      params.delete("q");
-    }
-    router.replace(`?${params.toString()}`);
-  }, [searchQuery, router]);
 
   const filteredInternships = useFilteredInternships(
     internships,
