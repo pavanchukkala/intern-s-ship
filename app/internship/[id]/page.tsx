@@ -17,7 +17,6 @@ export async function generateStaticParams() {
 
 // Helper to format field keys into a readable format.
 function formatKey(key: string): string {
-  // Remove unwanted characters and convert to title case.
   return key
     .replace(/[^a-zA-Z0-9\s]/g, " ") // Replace special characters with a space.
     .split(" ")
@@ -26,13 +25,13 @@ function formatKey(key: string): string {
     .join(" ");
 }
 
-// Helper to render values. Handles nested objects recursively.
+// Helper to render values, handling nested objects recursively.
 function renderValue(value: any): any {
   if (typeof value === "object" && value !== null) {
     return (
-      <div className="ml-4 border-l-2 pl-4">
+      <div className="ml-4 border-l-2 border-gray-300 pl-4 mt-2">
         {Object.entries(value).map(([subKey, subVal]) => (
-          <div key={subKey}>
+          <div key={subKey} className="py-1">
             <strong>{formatKey(subKey)}:</strong> {renderValue(subVal)}
           </div>
         ))}
@@ -80,43 +79,47 @@ export default async function InternshipDetailPage({
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 relative">
       <ScrollProgress />
       <NavBar />
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6 py-8 space-y-12">
+        {/* Hero Section */}
         <section className="mb-8">
-          {/* Hero Section */}
-          <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-md rounded-lg transition-all duration-500">
+          <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-lg rounded-lg transition-transform duration-500 hover:scale-105">
             <div className="text-center">
               {data.logo && (
                 <img
                   src={data.logo}
                   alt={data.company || "Company Logo"}
-                  className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg transition-transform duration-500 hover:scale-105"
+                  className="mx-auto h-20 w-20 rounded-full border-4 border-white shadow-lg"
                 />
               )}
               {data.company && (
-                <h1 className="text-4xl font-bold text-white mt-4 transition-transform duration-500 hover:scale-105">
+                <h1 className="text-4xl font-bold text-white mt-4">
                   {data.company}
                 </h1>
               )}
               {data.role && (
-                <p className="text-lg text-white mt-2 font-medium transition-transform duration-500 hover:scale-105">
+                <p className="text-lg text-white mt-2 font-medium">
                   {data.role}
                 </p>
               )}
             </div>
           </header>
         </section>
-        <section className="mb-8">
-          {/* Internship Details Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 transition-all duration-500 hover:shadow-2xl">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+
+        {/* Internship Information Section */}
+        <section>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white border-b pb-2">
               Internship Information
             </h2>
-            <div className="divide-y divide-gray-300 dark:divide-gray-700">
+            <div className="space-y-4">
               {Object.entries(data)
                 // Skip fields that you don't want to render
                 .filter(([key]) => key !== "responseSchema" && key !== "logo")
                 .map(([key, value]) => (
-                  <div key={key} className="py-4">
+                  <div
+                    key={key}
+                    className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
                     <span className="font-semibold text-gray-700 dark:text-gray-300">
                       {formatKey(key)}:
                     </span>
@@ -127,12 +130,14 @@ export default async function InternshipDetailPage({
                 ))}
             </div>
           </div>
-          {/* Professional Verification Message */}
           <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
-            All internship information displayed has been thoroughly verified to ensure its accuracy and support informed career decisions.
+            All internship information displayed has been thoroughly verified to
+            ensure its accuracy and support informed career decisions.
           </p>
         </section>
       </main>
+
+      {/* Navigation Footer */}
       <footer className="bg-gray-50 dark:bg-gray-800 py-6">
         <div className="container mx-auto px-6 flex justify-center">
           <Link href="/">
