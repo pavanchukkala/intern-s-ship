@@ -20,7 +20,14 @@ export default function ScrollProgress() {
 
   return (
     <div className="fixed top-0 left-0 w-full h-2 z-50">
-      <div className="bg-green-600 h-full" style={{ width: `${scrollPercent}%` }}></div>
-    </div>
+  <div
+    className="bg-green-600 h-full animate-pulse"
+    style={{
+      width: `${scrollPercent}%`,
+      boxShadow: "0 0 10px #38a169, 0 0 20px #38a169", // Glowing effect
+    }}
+  ></div>
+</div>
+
   );
 }
