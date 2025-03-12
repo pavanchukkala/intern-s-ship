@@ -5,13 +5,41 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
 import ScrollProgress from "@/components/ScrollProgress";
-import Footer from "@/components/Footer"; // Import Footer
+import Footer from "@/components/Footer";
+
 // Pre-generate static pages for each internship document by its ID
 export async function generateStaticParams() {
   const snapshot = await getDocs(collection(db, "internships"));
   return snapshot.docs.map((doc) => ({
     id: doc.id,
   }));
+}
+
+// Helper to format field keys into a readable format.
+function formatKey(key: string): string {
+  // Remove unwanted characters and convert to title case.
+  return key
+    .replace(/[^a-zA-Z0-9\s]/g, " ") // Replace special characters with a space.
+    .split(" ")
+    .filter((word) => word.length > 0)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+// Helper to render values. Handles nested objects recursively.
+function renderValue(value: any): any {
+  if (typeof value === "object" && value !== null) {
+    return (
+      <div className="ml-4 border-l-2 pl-4">
+        {Object.entries(value).map(([subKey, subVal]) => (
+          <div key={subKey}>
+            <strong>{formatKey(subKey)}:</strong> {renderValue(subVal)}
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return value.toString();
 }
 
 interface InternshipData {
@@ -85,22 +113,15 @@ export default async function InternshipDetailPage({
             </h2>
             <div className="divide-y divide-gray-300 dark:divide-gray-700">
               {Object.entries(data)
+                // Skip fields that you don't want to render
                 .filter(([key]) => key !== "responseSchema" && key !== "logo")
                 .map(([key, value]) => (
                   <div key={key} className="py-4">
-                    <span className="font-semibold capitalize text-gray-700 dark:text-gray-300">
-                      {key}:
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">
+                      {formatKey(key)}:
                     </span>
-                    <div
-                      className={`mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap ${
-                        key.toLowerCase() === "description"
-                          ? "leading-relaxed text-base"
-                          : ""
-                      }`}
-                    >
-                      {typeof value === "object"
-                        ? JSON.stringify(value, null, 2)
-                        : value.toString()}
+                    <div className="mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                      {renderValue(value)}
                     </div>
                   </div>
                 ))}
@@ -121,8 +142,7 @@ export default async function InternshipDetailPage({
           </Link>
         </div>
       </footer>
-       {/* Footer */}
-        <Footer /> {/* Reuse Footer Component */}
+      <Footer />
     </div>
   );
 }
