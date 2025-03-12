@@ -1,4 +1,5 @@
 // app/internship/[id]/page.tsx
+import React from "react"; // Optional but sometimes helpful
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase-bigdata"; // using comdata project
 import Link from "next/link";
@@ -85,14 +86,11 @@ export default async function InternshipDetailPage({
           <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-12 shadow-lg rounded-lg transition-transform duration-500 hover:scale-105">
             <div className="text-center">
               {data.logo && (
-               {data.logo && (
-  <img
-    src={data.logo}
-    alt={data.company || "Company Logo"}
-    className="mx-auto h-20 w-20 object-contain object-center rounded-full border-4 border-white shadow-lg"
-  />
-)}
-
+                <img
+                  src={data.logo}
+                  alt={data.company || "Company Logo"}
+                  className="mx-auto h-20 w-20 object-contain object-center rounded-full border-4 border-white shadow-lg"
+                />
               )}
               {data.company && (
                 <h1 className="text-4xl font-bold text-white mt-4">
