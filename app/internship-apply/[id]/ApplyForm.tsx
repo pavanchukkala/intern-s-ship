@@ -16,27 +16,96 @@ interface ApplyFormProps {
   internship: InternshipData;
 }
 
-// Define the desired order for your fields (including "pay" if needed)
+// Define the desired order for your fields (including "pay" for payment amount)
 const desiredOrder = [
+  "Name",
+  "Mobile Number",
+  "Mail Id",
   "College Name",
   "Highest Qualification",
-  "Mail Id",
-  "Mobile Number",
-  "Name",
-  "Resume Link",
   "Year Of Pass Out",
+  "Resume Link",
   "pay",
 ];
 
-// Helper to format keys consistently regardless of input variations
+const FUZZY_THRESHOLD = 2;
+
+// Helper to normalize keys (trim and lowercase)
+function normalizeKey(key: string): string {
+  return key.trim().toLowerCase();
+}
+
+// Simple Levenshtein distance algorithm
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
+    Array(n + 1).fill(0)
+  );
+  for (let i = 0; i <= m; i++) {
+    dp[i][0] = i;
+  }
+  for (let j = 0; j <= n; j++) {
+    dp[0][j] = j;
+  }
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1,
+          dp[i][j - 1] + 1,
+          dp[i - 1][j - 1] + 1
+        );
+      }
+    }
+  }
+  return dp[m][n];
+}
+
+// Fuzzy match: returns true if two keys are close enough (within threshold)
+function fuzzyMatch(a: string, b: string, threshold: number = FUZZY_THRESHOLD): boolean {
+  return levenshtein(normalizeKey(a), normalizeKey(b)) <= threshold;
+}
+
+// Helper to format keys for display
 function formatKey(key: string): string {
   return key
-    .replace(/[_\-]+/g, " ") // Replace underscores and hyphens with a space
-    .replace(/[^a-zA-Z0-9\s]/g, "") // Remove any special characters
+    .replace(/[_\-]+/g, " ")
+    .replace(/[^a-zA-Z0-9\s]/g, "")
     .split(" ")
     .filter((word) => word.length > 0)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
+}
+
+// Helper to check if a candidate is already (fuzzily) included in an array
+function fuzzyIncludes(arr: string[], candidate: string): boolean {
+  return arr.some(item => fuzzyMatch(item, candidate));
+}
+
+// Build ordered form keys (excluding "pay")
+function getOrderedFormKeys(responseSchema: Record<string, string>): string[] {
+  const orderedFormKeys: string[] = [];
+  // Add keys from desiredOrder (excluding "pay") using fuzzy matching
+  desiredOrder.forEach((desiredKey) => {
+    if (normalizeKey(desiredKey) === "pay") return;
+    const actualKey = Object.keys(responseSchema).find((key) =>
+      fuzzyMatch(key, desiredKey)
+    );
+    if (actualKey && !fuzzyIncludes(orderedFormKeys, actualKey)) {
+      orderedFormKeys.push(actualKey);
+    }
+  });
+  // Add any additional keys from responseSchema (excluding "pay") not already added
+  Object.keys(responseSchema).forEach((key) => {
+    if (normalizeKey(key) === "pay") return;
+    if (!fuzzyIncludes(orderedFormKeys, key)) {
+      orderedFormKeys.push(key);
+    }
+  });
+  return orderedFormKeys;
 }
 
 export default function ApplyForm({ internship }: ApplyFormProps) {
@@ -59,25 +128,11 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     qrCodeImage = "/BasicAssets/paytm.jpg";
   }
 
-  // When responseSchema is available, initialize form values using ordered keys (excluding "pay")
+  // Initialize form values from the responseSchema using our ordered keys (excluding "pay")
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
-
-      // Create an ordered list of keys for the form (exclude "pay")
-      const orderedFormKeys: string[] = [];
-      desiredOrder.forEach((key) => {
-        if (key !== "pay" && internship.responseSchema?.hasOwnProperty(key)) {
-          orderedFormKeys.push(key);
-        }
-      });
-      // Append any additional keys not in desiredOrder
-      Object.keys(internship.responseSchema).forEach((key) => {
-        if (key !== "pay" && !orderedFormKeys.includes(key)) {
-          orderedFormKeys.push(key);
-        }
-      });
-      // Initialize each field to an empty string
+      const orderedFormKeys = getOrderedFormKeys(internship.responseSchema);
       orderedFormKeys.forEach((key) => {
         initialValues[key] = "";
       });
@@ -143,22 +198,11 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     );
   }
 
-  // Build the ordered list of form keys (excluding "pay")
-  const orderedFormKeys: string[] = [];
-  desiredOrder.forEach((key) => {
-    if (key !== "pay" && internship.responseSchema?.hasOwnProperty(key)) {
-      orderedFormKeys.push(key);
-    }
-  });
-  Object.keys(internship.responseSchema).forEach((key) => {
-    if (key !== "pay" && !orderedFormKeys.includes(key)) {
-      orderedFormKeys.push(key);
-    }
-  });
+  const orderedFormKeys = getOrderedFormKeys(internship.responseSchema);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Render non-payment fields using the custom order */}
+      {/* Render non-payment fields in the desired order */}
       {orderedFormKeys.map((key) => (
         <div key={key}>
           <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -174,12 +218,14 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         </div>
       ))}
 
-      {/* Conditionally display payment UI if "pay" field exists */}
+      {/* Payment Section */}
       {internship.responseSchema && "pay" in internship.responseSchema && (
         <div className="mt-6 space-y-4">
+          {/* Display Payment Amount */}
           <p className="text-md font-medium text-gray-700 dark:text-gray-300">
             Payment Amount: {internship.responseSchema.pay}
           </p>
+          {/* Payment Method Selection */}
           <p className="text-md font-medium text-gray-700 dark:text-gray-300">
             Select Payment Method:
           </p>
