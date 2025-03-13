@@ -23,40 +23,79 @@ const desiredOrder = [
   "Mentorship And Guidance",
 ];
 
-// Helper to format keys consistently regardless of input variations
+const FUZZY_THRESHOLD = 2;
+
+// Normalize keys (trim and lowercase) for uniform comparison
+function normalizeKey(key: string): string {
+  return key.trim().toLowerCase();
+}
+
+// Simple Levenshtein distance algorithm for fuzzy matching
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
+    Array(n + 1).fill(0)
+  );
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1,
+          dp[i][j - 1] + 1,
+          dp[i - 1][j - 1] + 1
+        );
+      }
+    }
+  }
+  return dp[m][n];
+}
+
+// Returns true if the two keys are within the defined fuzzy threshold
+function fuzzyMatch(a: string, b: string, threshold: number = FUZZY_THRESHOLD): boolean {
+  return levenshtein(normalizeKey(a), normalizeKey(b)) <= threshold;
+}
+
+// Helper to format keys for display (restores title case)
 function formatKey(key: string): string {
   return key
-    .replace(/[_\-]+/g, " ") // Replace underscores and hyphens with a space
-    .replace(/[^a-zA-Z0-9\s]/g, "") // Remove any special characters
+    .replace(/[_\-]+/g, " ")
+    .replace(/[^a-zA-Z0-9\s]/g, "")
     .split(" ")
     .filter((word) => word.length > 0)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
 
-// Helper to render values (supports arrays and nested objects)
-function renderValue(value: any): any {
-  if (typeof value === "object" && value !== null) {
-    if (Array.isArray(value)) {
-      return (
-        <div className="ml-4">
-          {value.map((item, index) => (
-            <div key={index}>{renderValue(item)}</div>
-          ))}
-        </div>
-      );
-    }
-    return (
-      <div className="ml-4 border-l-2 border-gray-300 pl-4 mt-2">
-        {Object.entries(value).map(([subKey, subVal]) => (
-          <div key={subKey} className="py-1">
-            <strong>{formatKey(subKey)}:</strong> {renderValue(subVal)}
-          </div>
-        ))}
-      </div>
+// Build an ordered array of [key, value] entries from the Firestore document
+function getOrderedEntries(data: Record<string, any>): [string, any][] {
+  const ignoreKeys = ["logo", "company", "role", "responseSchema"];
+  const orderedKeys: string[] = [];
+
+  // 1. Loop through desiredOrder (skipping "pay") and use fuzzy matching to add keys
+  desiredOrder.forEach((desiredKey) => {
+    if (normalizeKey(desiredKey) === "pay") return; // skip "pay"
+    const matchedKey = Object.keys(data).find(
+      (key) => !ignoreKeys.includes(key) && fuzzyMatch(key, desiredKey)
     );
-  }
-  return value.toString();
+    if (matchedKey && !orderedKeys.includes(matchedKey)) {
+      orderedKeys.push(matchedKey);
+    }
+  });
+
+  // 2. Append any additional keys (not in ignoreKeys) that weren’t matched already
+  Object.keys(data).forEach((key) => {
+    if (ignoreKeys.includes(key)) return;
+    if (!orderedKeys.includes(key)) {
+      orderedKeys.push(key);
+    }
+  });
+
+  return orderedKeys.map((key) => [key, data[key]]);
 }
 
 export default async function InternshipDetailPage({
@@ -87,26 +126,7 @@ export default async function InternshipDetailPage({
   }
 
   const data = docSnap.data();
-
-  // Define keys to ignore (used in hero section)
-  const ignoreKeys = ["logo", "company", "role", "responseSchema"];
-
-  // Build the ordered entries array:
-  let entries: [string, any][] = [];
-
-  // 1. Add keys in the desired order if they exist in the data
-  for (const key of desiredOrder) {
-    if (data.hasOwnProperty(key)) {
-      entries.push([key, data[key]]);
-    }
-  }
-
-  // 2. Add any remaining keys that aren't in the desired order and not ignored
-  for (const key in data) {
-    if (!desiredOrder.includes(key) && !ignoreKeys.includes(key)) {
-      entries.push([key, data[key]]);
-    }
-  }
+  const orderedEntries = getOrderedEntries(data);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 relative">
@@ -145,7 +165,7 @@ export default async function InternshipDetailPage({
               Internship Information
             </h2>
             <div className="space-y-4">
-              {entries.map(([key, value]) => (
+              {orderedEntries.map(([key, value]) => (
                 <div
                   key={key}
                   className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -154,15 +174,16 @@ export default async function InternshipDetailPage({
                     {formatKey(key)}:
                   </span>
                   <div className="mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                    {renderValue(value)}
+                    {typeof value === "object" && value !== null
+                      ? JSON.stringify(value)
+                      : value.toString()}
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
-            All internship information displayed has been thoroughly verified to
-            ensure its accuracy and support informed career decisions.
+            All internship information displayed has been thoroughly verified to ensure its accuracy and support informed career decisions.
           </p>
         </section>
       </main>
