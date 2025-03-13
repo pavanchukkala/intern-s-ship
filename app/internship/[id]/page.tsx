@@ -8,23 +8,33 @@ import NavBar from "@/components/NavBar";
 import ScrollProgress from "@/components/ScrollProgress";
 import Footer from "@/components/Footer";
 
-// Force the page to be dynamic on every request
+// Force dynamic rendering on every request
 export const dynamic = "force-dynamic";
 
-// Helper to format field keys into a readable format, independent of indentation, case, or special characters.
+// Define the desired order for your fields
+const desiredOrder = [
+  "College Name",
+  "Highest Qualification",
+  "Mail Id",
+  "Mobile Number",
+  "Name",
+  "Resume Link",
+  "Year Of Pass Out",
+  "pay",
+];
+
+// Helper to format keys consistently regardless of input variations
 function formatKey(key: string): string {
   return key
-    // Replace underscores and hyphens with a space
-    .replace(/[_\-]+/g, " ")
-    // Remove any remaining special characters
-    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .replace(/[_\-]+/g, " ") // Replace underscores and hyphens with a space
+    .replace(/[^a-zA-Z0-9\s]/g, "") // Remove any special characters
     .split(" ")
     .filter((word) => word.length > 0)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
 
-// Helper to render values, handling nested objects and arrays recursively.
+// Helper to render values (supports arrays and nested objects)
 function renderValue(value: any): any {
   if (typeof value === "object" && value !== null) {
     if (Array.isArray(value)) {
@@ -49,11 +59,6 @@ function renderValue(value: any): any {
   return value.toString();
 }
 
-interface InternshipData {
-  id: string;
-  [key: string]: any;
-}
-
 export default async function InternshipDetailPage({
   params,
 }: {
@@ -73,7 +78,7 @@ export default async function InternshipDetailPage({
           </p>
           <Link href="/">
             <Button className="px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md">
-              &larr; Back to Home
+              &larr; Know More
             </Button>
           </Link>
         </div>
@@ -82,6 +87,26 @@ export default async function InternshipDetailPage({
   }
 
   const data = docSnap.data();
+
+  // Define keys to ignore (used in hero section)
+  const ignoreKeys = ["logo", "company", "role", "responseSchema"];
+
+  // Build the ordered entries array:
+  let entries: [string, any][] = [];
+
+  // 1. Add keys in the desired order if they exist in the data
+  for (const key of desiredOrder) {
+    if (data.hasOwnProperty(key)) {
+      entries.push([key, data[key]]);
+    }
+  }
+
+  // 2. Add any remaining keys that aren't in the desired order and not ignored
+  for (const key in data) {
+    if (!desiredOrder.includes(key) && !ignoreKeys.includes(key)) {
+      entries.push([key, data[key]]);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 relative">
@@ -120,26 +145,19 @@ export default async function InternshipDetailPage({
               Internship Information
             </h2>
             <div className="space-y-4">
-              {Object.entries(data)
-                // Skip specific keys in a case-insensitive manner if needed
-                .filter(
-                  ([key]) =>
-                    key.toLowerCase() !== "responseschema" &&
-                    key.toLowerCase() !== "logo"
-                )
-                .map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <span className="font-semibold text-gray-700 dark:text-gray-300">
-                      {formatKey(key)}:
-                    </span>
-                    <div className="mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                      {renderValue(value)}
-                    </div>
+              {entries.map(([key, value]) => (
+                <div
+                  key={key}
+                  className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">
+                    {formatKey(key)}:
+                  </span>
+                  <div className="mt-1 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                    {renderValue(value)}
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           </div>
           <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
@@ -154,7 +172,7 @@ export default async function InternshipDetailPage({
         <div className="container mx-auto px-6 flex justify-center">
           <Link href="/">
             <Button className="px-6 py-3 text-lg font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg">
-              &larr; Back to Internships
+              &larr; Know More
             </Button>
           </Link>
         </div>
