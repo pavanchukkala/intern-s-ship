@@ -13,14 +13,14 @@ export const dynamic = "force-dynamic";
 
 // Define the desired order for your fields
 const desiredOrder = [
-  "College Name",
-  "Highest Qualification",
-  "Mail Id",
-  "Mobile Number",
-  "Name",
-  "Resume Link",
-  "Year Of Pass Out",
-  "pay",
+  "Company",
+  "Founded",
+  "Team",
+  "CMMi Level",
+  "Quality And Trust",
+  "Hands On Experience",
+  "Certification Excellence",
+  "Mentorship And Guidance",
 ];
 
 // Helper to format keys consistently regardless of input variations
