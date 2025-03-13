@@ -1,8 +1,10 @@
+// app/internship-apply/[id]/ApplyForm.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc } from "firebase/firestore";
 import { db as dbHugeData } from "@/lib/firebase-hugedata";
 import { motion } from "framer-motion";
+
 interface InternshipData {
   id: string;
   company?: string;
@@ -12,6 +14,29 @@ interface InternshipData {
 
 interface ApplyFormProps {
   internship: InternshipData;
+}
+
+// Define the desired order for your fields (including "pay" if needed)
+const desiredOrder = [
+  "College Name",
+  "Highest Qualification",
+  "Mail Id",
+  "Mobile Number",
+  "Name",
+  "Resume Link",
+  "Year Of Pass Out",
+  "pay",
+];
+
+// Helper to format keys consistently regardless of input variations
+function formatKey(key: string): string {
+  return key
+    .replace(/[_\-]+/g, " ") // Replace underscores and hyphens with a space
+    .replace(/[^a-zA-Z0-9\s]/g, "") // Remove any special characters
+    .split(" ")
+    .filter((word) => word.length > 0)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 }
 
 export default function ApplyForm({ internship }: ApplyFormProps) {
@@ -34,15 +59,28 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     qrCodeImage = "/BasicAssets/paytm.jpg";
   }
 
+  // When responseSchema is available, initialize form values using ordered keys (excluding "pay")
   useEffect(() => {
     if (internship.responseSchema) {
       const initialValues: Record<string, string> = {};
-      // Exclude the "pay" field from being rendered as a normal input
-      Object.keys(internship.responseSchema)
-        .filter((key) => key !== "pay")
-        .forEach((key) => {
-          initialValues[key] = "";
-        });
+
+      // Create an ordered list of keys for the form (exclude "pay")
+      const orderedFormKeys: string[] = [];
+      desiredOrder.forEach((key) => {
+        if (key !== "pay" && internship.responseSchema?.hasOwnProperty(key)) {
+          orderedFormKeys.push(key);
+        }
+      });
+      // Append any additional keys not in desiredOrder
+      Object.keys(internship.responseSchema).forEach((key) => {
+        if (key !== "pay" && !orderedFormKeys.includes(key)) {
+          orderedFormKeys.push(key);
+        }
+      });
+      // Initialize each field to an empty string
+      orderedFormKeys.forEach((key) => {
+        initialValues[key] = "";
+      });
       setFormValues(initialValues);
     }
   }, [internship.responseSchema]);
@@ -60,7 +98,7 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
         responses: formValues,
       };
 
-      // Only include payment details if "pay" field exists
+      // Only include payment details if "pay" field exists in the schema
       if (internship.responseSchema && "pay" in internship.responseSchema) {
         applicationData.paymentMethod = paymentMethod;
         applicationData.transactionId = paymentTransactionId;
@@ -105,30 +143,40 @@ export default function ApplyForm({ internship }: ApplyFormProps) {
     );
   }
 
+  // Build the ordered list of form keys (excluding "pay")
+  const orderedFormKeys: string[] = [];
+  desiredOrder.forEach((key) => {
+    if (key !== "pay" && internship.responseSchema?.hasOwnProperty(key)) {
+      orderedFormKeys.push(key);
+    }
+  });
+  Object.keys(internship.responseSchema).forEach((key) => {
+    if (key !== "pay" && !orderedFormKeys.includes(key)) {
+      orderedFormKeys.push(key);
+    }
+  });
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Render non-payment fields */}
-      {Object.keys(internship.responseSchema)
-        .filter((key) => key !== "pay")
-        .map((key) => (
-          <div key={key}>
-            <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-1">
-              {key}
-            </label>
-            <input
-              type="text"
-              value={formValues[key]}
-              onChange={(e) => handleChange(key, e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
-              required
-            />
-          </div>
-        ))}
+      {/* Render non-payment fields using the custom order */}
+      {orderedFormKeys.map((key) => (
+        <div key={key}>
+          <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {formatKey(key)}
+          </label>
+          <input
+            type="text"
+            value={formValues[key]}
+            onChange={(e) => handleChange(key, e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+            required
+          />
+        </div>
+      ))}
 
       {/* Conditionally display payment UI if "pay" field exists */}
       {internship.responseSchema && "pay" in internship.responseSchema && (
         <div className="mt-6 space-y-4">
-          {/* Display the payment amount for candidate reference */}
           <p className="text-md font-medium text-gray-700 dark:text-gray-300">
             Payment Amount: {internship.responseSchema.pay}
           </p>
