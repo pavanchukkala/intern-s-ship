@@ -1,34 +1,41 @@
 // app/internship/[id]/page.tsx
-import React from "react"; // Optional but sometimes helpful
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase-bigdata"; // using comdata project
+import React from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase-bigdata";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
 import ScrollProgress from "@/components/ScrollProgress";
 import Footer from "@/components/Footer";
 
-// Pre-generate static pages for each internship document by its ID
-export async function generateStaticParams() {
-  const snapshot = await getDocs(collection(db, "internships"));
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-  }));
-}
+// Force the page to be dynamic on every request
+export const dynamic = "force-dynamic";
 
-// Helper to format field keys into a readable format.
+// Helper to format field keys into a readable format, independent of indentation, case, or special characters.
 function formatKey(key: string): string {
   return key
-    .replace(/[^a-zA-Z0-9\s]/g, " ") // Replace special characters with a space.
+    // Replace underscores and hyphens with a space
+    .replace(/[_\-]+/g, " ")
+    // Remove any remaining special characters
+    .replace(/[^a-zA-Z0-9\s]/g, "")
     .split(" ")
     .filter((word) => word.length > 0)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
 
-// Helper to render values, handling nested objects recursively.
+// Helper to render values, handling nested objects and arrays recursively.
 function renderValue(value: any): any {
   if (typeof value === "object" && value !== null) {
+    if (Array.isArray(value)) {
+      return (
+        <div className="ml-4">
+          {value.map((item, index) => (
+            <div key={index}>{renderValue(item)}</div>
+          ))}
+        </div>
+      );
+    }
     return (
       <div className="ml-4 border-l-2 border-gray-300 pl-4 mt-2">
         {Object.entries(value).map(([subKey, subVal]) => (
@@ -114,8 +121,12 @@ export default async function InternshipDetailPage({
             </h2>
             <div className="space-y-4">
               {Object.entries(data)
-                // Skip fields that you don't want to render
-                .filter(([key]) => key !== "responseSchema" && key !== "logo")
+                // Skip specific keys in a case-insensitive manner if needed
+                .filter(
+                  ([key]) =>
+                    key.toLowerCase() !== "responseschema" &&
+                    key.toLowerCase() !== "logo"
+                )
                 .map(([key, value]) => (
                   <div
                     key={key}
