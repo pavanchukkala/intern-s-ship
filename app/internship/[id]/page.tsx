@@ -17,6 +17,7 @@ const desiredOrder = [
   "Founded",
   "Team",
   "CMMi Level",
+  "Duration",
   "Quality And Trust",
   "Hands On Experience",
   "Certification Excellence",
