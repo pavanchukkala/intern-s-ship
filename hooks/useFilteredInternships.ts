@@ -66,7 +66,13 @@ export interface Internship {
     technical?: boolean;
     industrySector?: string;    // e.g. "software", "finance", etc.
     experienceLevel?: string;   // e.g. "entry", "mid", "senior"
-    // Add additional metadata fields as needed.
+    // Additional filters:
+    visaSponsored?: boolean;
+    accommodationProvided?: boolean;
+    flexibleHours?: boolean;
+    universityProgram?: boolean;
+    international?: boolean;
+    highGrowth?: boolean;
     [key: string]: any;
   };
   [key: string]: any;
@@ -128,7 +134,7 @@ const filterMapping: Record<string, (i: Internship) => boolean> = {
   "company type: mnc": (i) =>
     i.meta?.companyType?.toLowerCase() === "mnc",
 
-  // Company Size Filters (adjust thresholds as needed)
+  // Company Size Filters
   "company size: small": (i) =>
     typeof i.meta?.companySize === "number" && i.meta.companySize < 50,
   "company size: medium": (i) =>
@@ -155,6 +161,14 @@ const filterMapping: Record<string, (i: Internship) => boolean> = {
     i.meta?.experienceLevel?.toLowerCase() === "mid",
   "experience level: senior": (i) =>
     i.meta?.experienceLevel?.toLowerCase() === "senior",
+
+  // Additional Platform Filters
+  "visa sponsored": (i) => i.meta?.visaSponsored === true,
+  "accommodation provided": (i) => i.meta?.accommodationProvided === true,
+  "flexible hours": (i) => i.meta?.flexibleHours === true,
+  "university program": (i) => i.meta?.universityProgram === true,
+  "international": (i) => i.meta?.international === true,
+  "high growth": (i) => i.meta?.highGrowth === true,
 };
 
 export default function useFilteredInternships(
