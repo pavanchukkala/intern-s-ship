@@ -1,6 +1,8 @@
 // components/FilterSidebar.jsx
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const FILTER_CATEGORIES = [
   {
@@ -89,6 +91,22 @@ const FILTER_CATEGORIES = [
 ];
 
 export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
+  // Initialize all categories as expanded
+  const [expandedCategories, setExpandedCategories] = useState(() => {
+    const init = {};
+    FILTER_CATEGORIES.forEach((cat) => {
+      init[cat.title] = true;
+    });
+    return init;
+  });
+
+  const toggleCategoryExpansion = (categoryTitle) => {
+    setExpandedCategories((prev) => ({
+      ...prev,
+      [categoryTitle]: !prev[categoryTitle],
+    }));
+  };
+
   // Toggle filter selection for a given category.
   const toggleFilter = (categoryTitle, filterValue) => {
     setSelectedFilters((prev) => {
@@ -107,7 +125,7 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
   };
 
   return (
-    <aside className="w-64 min-h-screen p-6 border-r border-gray-200 bg-gray-50 dark:bg-gray-900">
+    <aside className="sticky top-0 w-64 h-screen p-6 border-r border-gray-200 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Filters</h2>
         <button onClick={clearAll} className="text-sm text-red-500 hover:underline">
@@ -117,29 +135,40 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
       <div className="space-y-8">
         {FILTER_CATEGORIES.map((category) => (
           <div key={category.title}>
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              {category.title}
-            </h3>
-            <div className="space-y-2">
-              {category.filters.map((filter) => {
-                const isChecked =
-                  selectedFilters[category.title] &&
-                  selectedFilters[category.title].includes(filter.value);
-                return (
-                  <label key={filter.value} className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => toggleFilter(category.title, filter.value)}
-                      className="form-checkbox h-4 w-4 text-indigo-600"
-                    />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      {filter.label}
-                    </span>
-                  </label>
-                );
-              })}
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                {category.title}
+              </h3>
+              <button onClick={() => toggleCategoryExpansion(category.title)} className="focus:outline-none">
+                {expandedCategories[category.title] ? (
+                  <FiChevronUp className="text-gray-600" />
+                ) : (
+                  <FiChevronDown className="text-gray-600" />
+                )}
+              </button>
             </div>
+            {expandedCategories[category.title] && (
+              <div className="space-y-2">
+                {category.filters.map((filter) => {
+                  const isChecked =
+                    selectedFilters[category.title] &&
+                    selectedFilters[category.title].includes(filter.value);
+                  return (
+                    <label key={filter.value} className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => toggleFilter(category.title, filter.value)}
+                        className="form-checkbox h-4 w-4 text-indigo-600"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {filter.label}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </div>
         ))}
       </div>
