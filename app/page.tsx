@@ -1,5 +1,3 @@
-app/page.tsx
-
 "use client";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
