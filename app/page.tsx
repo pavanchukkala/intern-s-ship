@@ -30,7 +30,7 @@ function InternshipCard({
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
     setTimeout(() => {
-      router.push(/internship/${internship.id});
+      router.push(`/internship/${internship.id}`);
     }, 700);
   };
 
@@ -39,7 +39,7 @@ function InternshipCard({
     if (!activeCardId) setActiveCardId(internship.id);
     setIsClicked(true);
     setTimeout(() => {
-      router.push(/internship-apply/${internship.id});
+      router.push(`/internship-apply/${internship.id}`);
     }, 700);
   };
 
