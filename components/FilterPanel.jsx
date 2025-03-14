@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
 
+// Desktop Filter Sidebar Component (for laptop/desktop)
 function DesktopFilterSidebar({ selectedFilters, setSelectedFilters }) {
   const [expandedCategories, setExpandedCategories] = useState(() => {
     const init = {};
@@ -127,6 +128,7 @@ function DesktopFilterSidebar({ selectedFilters, setSelectedFilters }) {
   );
 }
 
+// Mobile Filter Sidebar Component (for mobile view)
 function MobileFilterSidebar({ selectedFilters, setSelectedFilters }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState(() => {
@@ -271,14 +273,21 @@ function MobileFilterSidebar({ selectedFilters, setSelectedFilters }) {
   );
 }
 
+// Main Component: Renders Desktop or Mobile sidebar based on screen size
 export default function FilterPanel({ selectedFilters, setSelectedFilters }) {
   return (
     <>
       <div className="hidden md:block">
-        <DesktopFilterSidebar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+        <DesktopFilterSidebar
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+        />
       </div>
       <div className="md:hidden">
-        <MobileFilterSidebar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+        <MobileFilterSidebar
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+        />
       </div>
     </>
   );
