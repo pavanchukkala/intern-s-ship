@@ -1,93 +1,83 @@
-// components/FilterPanel.jsx
+// components/FilterSidebar.jsx
 "use client";
-
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
-const FILTERS = [
-  // Payment & Stipend Filters
-  { label: "Paid" },
-  { label: "Free" },
+const FILTER_CATEGORIES = [
   {
-    label: "Stipend-based",
-    subFilters: [
+    title: "Payment & Stipend",
+    filters: [
+      { label: "Paid", value: "paid" },
+      { label: "Free", value: "free" },
+      { label: "Stipend-based", value: "stipend-based" },
       { label: "$0 - $500", value: "$0 - $500" },
       { label: "$500 - $1000", value: "$500 - $1000" },
       { label: "$1000+", value: "$1000+" },
+      { label: "Hourly Pay", value: "hourly pay" },
+      { label: "Project-based", value: "project-based" },
     ],
   },
-  { label: "Hourly Pay" },
-  { label: "Project-based" },
-
-  // Duration Filters
   {
-    label: "Internship Duration",
-    subFilters: [
+    title: "Duration",
+    filters: [
       { label: "Less than 3 months", value: "less than 3 months" },
       { label: "3 to 6 months", value: "3 to 6 months" },
       { label: "6+ months", value: "6+ months" },
+      { label: "Short-term", value: "short-term" },
+      { label: "Long-term", value: "long-term" },
     ],
   },
-  { label: "Short-term" },
-  { label: "Long-term" },
-
-  // Location & Work Type Filters
-  { label: "Remote" },
-  { label: "On-site" },
-  { label: "Hybrid" },
-
-  // Job Type Filters
-  { label: "Part-time" },
-  { label: "Full-time" },
-
-  // Technical Filters
-  { label: "Technical" },
-  { label: "Non-Technical" },
-
-  // Company Type Filters
   {
-    label: "Company Type",
-    subFilters: [
+    title: "Location",
+    filters: [
+      { label: "Remote", value: "remote" },
+      { label: "On-site", value: "on-site" },
+      { label: "Hybrid", value: "hybrid" },
+    ],
+  },
+  {
+    title: "Job Type",
+    filters: [
+      { label: "Part-time", value: "part-time" },
+      { label: "Full-time", value: "full-time" },
+    ],
+  },
+  {
+    title: "Technical",
+    filters: [
+      { label: "Technical", value: "technical" },
+      { label: "Non-Technical", value: "non-technical" },
+    ],
+  },
+  {
+    title: "Company",
+    filters: [
       { label: "Startup", value: "company type: startup" },
       { label: "MNC", value: "company type: mnc" },
-    ],
-  },
-
-  // Company Size Filters
-  {
-    label: "Company Size",
-    subFilters: [
       { label: "Small", value: "company size: small" },
       { label: "Medium", value: "company size: medium" },
       { label: "Large", value: "company size: large" },
     ],
   },
-
-  // Industry Sector Filters
   {
-    label: "Industry Sector",
-    subFilters: [
+    title: "Industry Sector",
+    filters: [
       { label: "Software", value: "industry sector: software" },
       { label: "Finance", value: "industry sector: finance" },
       { label: "Healthcare", value: "industry sector: healthcare" },
       { label: "Education", value: "industry sector: education" },
     ],
   },
-
-  // Experience Level Filters
   {
-    label: "Experience Level",
-    subFilters: [
+    title: "Experience Level",
+    filters: [
       { label: "Entry", value: "experience level: entry" },
       { label: "Mid", value: "experience level: mid" },
       { label: "Senior", value: "experience level: senior" },
     ],
   },
-
-  // Additional Platform Filters
   {
-    label: "Additional Filters",
-    subFilters: [
+    title: "Additional",
+    filters: [
       { label: "Visa Sponsored", value: "visa sponsored" },
       { label: "Accommodation Provided", value: "accommodation provided" },
       { label: "Flexible Hours", value: "flexible hours" },
@@ -98,142 +88,61 @@ const FILTERS = [
   },
 ];
 
-export default function FilterPanel({
-  selectedFilters,
-  setSelectedFilters,
-  showFilters,
-  setShowFilters,
-}) {
-  // Toggle main filter selection. For filters with sub‑filters, an empty array is initialized.
-  const toggleMainFilter = (filterLabel, hasSubFilters) => {
+export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
+  // Toggle filter selection for a given category.
+  const toggleFilter = (categoryTitle, filterValue) => {
     setSelectedFilters((prev) => {
-      const newFilters = { ...prev };
-      if (newFilters[filterLabel]) {
-        delete newFilters[filterLabel];
+      const current = prev[categoryTitle] || [];
+      if (current.includes(filterValue)) {
+        return { ...prev, [categoryTitle]: current.filter((v) => v !== filterValue) };
       } else {
-        newFilters[filterLabel] = hasSubFilters ? [] : true;
+        return { ...prev, [categoryTitle]: [...current, filterValue] };
       }
-      return newFilters;
     });
   };
 
-  // Toggle a sub‑filter value within a main filter.
-  const toggleSubFilter = (mainFilterLabel, subFilterValue) => {
-    setSelectedFilters((prev) => {
-      const newFilters = { ...prev };
-      if (!Array.isArray(newFilters[mainFilterLabel])) {
-        newFilters[mainFilterLabel] = [];
-      }
-      if (newFilters[mainFilterLabel].includes(subFilterValue)) {
-        newFilters[mainFilterLabel] = newFilters[mainFilterLabel].filter(
-          (val) => val !== subFilterValue
-        );
-        if (newFilters[mainFilterLabel].length === 0) {
-          delete newFilters[mainFilterLabel];
-        }
-      } else {
-        newFilters[mainFilterLabel] = [
-          ...newFilters[mainFilterLabel],
-          subFilterValue,
-        ];
-      }
-      return newFilters;
-    });
-  };
-
-  // Clear all filters.
-  const clearAllFilters = () => {
+  // Clear all selected filters.
+  const clearAll = () => {
     setSelectedFilters({});
   };
 
   return (
-    <div className="w-full p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800">
-      {/* Header with controls */}
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-          Filters
-        </h3>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="text-sm px-3 py-1 border rounded focus:outline-none transition-colors duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            {showFilters ? "Hide Filters" : "Show Filters"}
-          </button>
-          {Object.keys(selectedFilters).length > 0 && (
-            <button
-              onClick={clearAllFilters}
-              className="text-sm px-3 py-1 bg-red-500 text-white rounded transition-colors duration-200 hover:bg-red-600 focus:outline-none"
-            >
-              Clear All Filters
-            </button>
-          )}
-        </div>
+    <aside className="w-64 min-h-screen p-6 border-r border-gray-200 bg-gray-50 dark:bg-gray-900">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Filters</h2>
+        <button onClick={clearAll} className="text-sm text-red-500 hover:underline">
+          Clear All
+        </button>
       </div>
-
-      {/* Filters UI */}
-      {showFilters && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {FILTERS.map((filter) => {
-            const isSelected = Object.prototype.hasOwnProperty.call(
-              selectedFilters,
-              filter.label
-            );
-            return (
-              <div key={filter.label} className="flex flex-col">
-                {/* Main filter button */}
-                <button
-                  onClick={(e) => {
-                    toggleMainFilter(filter.label, !!filter.subFilters);
-                    e.currentTarget.blur();
-                  }}
-                  className={`px-3 py-2 rounded-xl text-xs font-medium transition-colors duration-200 ${
-                    isSelected
-                      ? "bg-indigo-600 text-white border border-indigo-700"
-                      : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-600 hover:text-white"
-                  }`}
-                >
-                  {filter.label}
-                </button>
-                {/* Sub-filters, with a subtle fade/slide transition */}
-                {filter.subFilters && isSelected && (
-                  <AnimatePresence>
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="mt-2 flex flex-wrap gap-2 overflow-hidden"
-                    >
-                      {filter.subFilters.map((sub) => {
-                        const isSubSelected =
-                          Array.isArray(selectedFilters[filter.label]) &&
-                          selectedFilters[filter.label].includes(sub.value);
-                        return (
-                          <button
-                            key={sub.value}
-                            onClick={(e) => {
-                              toggleSubFilter(filter.label, sub.value);
-                              e.currentTarget.blur();
-                            }}
-                            className={`px-3 py-1 rounded-md text-xs transition-colors duration-200 ${
-                              isSubSelected
-                                ? "bg-indigo-500 text-white border border-indigo-700"
-                                : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-500 hover:text-white"
-                            }`}
-                          >
-                            {sub.label}
-                          </button>
-                        );
-                      })}
-                    </motion.div>
-                  </AnimatePresence>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      <div className="space-y-8">
+        {FILTER_CATEGORIES.map((category) => (
+          <div key={category.title}>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
+              {category.title}
+            </h3>
+            <div className="space-y-2">
+              {category.filters.map((filter) => {
+                const isChecked =
+                  selectedFilters[category.title] &&
+                  selectedFilters[category.title].includes(filter.value);
+                return (
+                  <label key={filter.value} className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => toggleFilter(category.title, filter.value)}
+                      className="form-checkbox h-4 w-4 text-indigo-600"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      {filter.label}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </aside>
   );
 }
