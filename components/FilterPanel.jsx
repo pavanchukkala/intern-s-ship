@@ -1,8 +1,6 @@
 // components/FilterSidebar.jsx
 "use client";
-
 import React, { useState } from "react";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const FILTER_CATEGORIES = [
   {
@@ -140,11 +138,7 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
                 {category.title}
               </h3>
               <button onClick={() => toggleCategoryExpansion(category.title)} className="focus:outline-none">
-                {expandedCategories[category.title] ? (
-                  <FiChevronUp className="text-gray-600" />
-                ) : (
-                  <FiChevronDown className="text-gray-600" />
-                )}
+                {expandedCategories[category.title] ? "▲" : "▼"}
               </button>
             </div>
             {expandedCategories[category.title] && (
