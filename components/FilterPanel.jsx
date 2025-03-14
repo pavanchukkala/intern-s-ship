@@ -2,51 +2,87 @@
 "use client";
 
 const FILTERS = [
+  // Payment & Stipend Filters
   { label: "Paid" },
   { label: "Free" },
-  { 
-    label: "Stipend-based", 
+  {
+    label: "Stipend-based",
     subFilters: [
       { label: "$0 - $500", value: "$0 - $500" },
       { label: "$500 - $1000", value: "$500 - $1000" },
-      { label: "$1000+", value: "$1000+" }
-    ]
+      { label: "$1000+", value: "$1000+" },
+    ],
   },
   { label: "Hourly Pay" },
   { label: "Project-based" },
-  { 
-    label: "Internship Duration", 
+
+  // Duration Filters
+  {
+    label: "Internship Duration",
     subFilters: [
-      { label: "Less than 3 months", value: "short-term" },
-      { label: "3 to 6 months", value: "long-term" },
-      { label: "6+ months", value: "long-term" } // Adjust if needed.
-    ]
+      { label: "Less than 3 months", value: "less than 3 months" },
+      { label: "3 to 6 months", value: "3 to 6 months" },
+      { label: "6+ months", value: "6+ months" },
+    ],
   },
+  { label: "Short-term" },
+  { label: "Long-term" },
+
+  // Location & Work Type Filters
   { label: "Remote" },
   { label: "On-site" },
   { label: "Hybrid" },
+
+  // Job Type Filters
   { label: "Part-time" },
   { label: "Full-time" },
+
+  // Technical Filters
   { label: "Technical" },
   { label: "Non-Technical" },
-  { 
-    label: "Company Type", 
+
+  // Company Type Filters
+  {
+    label: "Company Type",
     subFilters: [
-      { label: "MNC", value: "Company Type: MNC" }
-      // Extend with additional types.
-    ]
+      { label: "Startup", value: "company type: startup" },
+      { label: "MNC", value: "company type: mnc" },
+    ],
   },
-  { 
-    label: "Industry Sector", 
+
+  // Company Size Filters
+  {
+    label: "Company Size",
     subFilters: [
-      { label: "Software", value: "Industry Sector: Software" }
-      // Extend with more sectors.
-    ]
-  }
+      { label: "Small", value: "company size: small" },
+      { label: "Medium", value: "company size: medium" },
+      { label: "Large", value: "company size: large" },
+    ],
+  },
+
+  // Industry Sector Filters
+  {
+    label: "Industry Sector",
+    subFilters: [
+      { label: "Software", value: "industry sector: software" },
+      { label: "Finance", value: "industry sector: finance" },
+      { label: "Healthcare", value: "industry sector: healthcare" },
+      { label: "Education", value: "industry sector: education" },
+    ],
+  },
+
+  // Experience Level Filters
+  {
+    label: "Experience Level",
+    subFilters: [
+      { label: "Entry", value: "experience level: entry" },
+      { label: "Mid", value: "experience level: mid" },
+      { label: "Senior", value: "experience level: senior" },
+    ],
+  },
 ];
 
 export default function FilterPanel({ selectedFilters, setSelectedFilters, showFilters, setShowFilters }) {
-  // Toggle a main filter.
   const toggleMainFilter = (filterLabel, hasSubFilters) => {
     setSelectedFilters((prev) => {
       const newFilters = { ...prev };
@@ -59,7 +95,6 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
     });
   };
 
-  // Toggle a sub‑filter.
   const toggleSubFilter = (mainFilterLabel, subFilterValue) => {
     setSelectedFilters((prev) => {
       const newFilters = { ...prev };
@@ -78,7 +113,6 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
     });
   };
 
-  // Clear all filters.
   const clearAllFilters = () => {
     setSelectedFilters({});
   };
@@ -98,7 +132,6 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
       </div>
-
       {showFilters && (
         <>
           {Object.keys(selectedFilters).length > 0 && (
@@ -115,7 +148,6 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
               </button>
             </div>
           )}
-
           <div className="mb-4 flex flex-wrap gap-3">
             {FILTERS.map((filter) => {
               const isSelected = Object.prototype.hasOwnProperty.call(selectedFilters, filter.label);
