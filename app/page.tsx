@@ -1,3 +1,4 @@
+// app/page.tsx
 "use client";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 import Footer from "@/components/Footer";
-import FilterPanel from "@/components/FilterPanel";
+import FilterSidebarOverlay from "@/components/FilterSidebarOverlay";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
@@ -61,7 +62,11 @@ function InternshipCard({
             initial={{ rotate: -45, borderWidth: "0px" }}
             animate={
               isClicked
-                ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
+                ? {
+                    rotate: 0,
+                    borderWidth: "4px",
+                    borderColor: "rgba(255,0,150,0.8)",
+                  }
                 : { rotate: -45, borderWidth: "0px" }
             }
             transition={{ duration: 0.7, ease: "easeInOut" }}
@@ -133,10 +138,10 @@ function InternshipCard({
 
 function PageContent() {
   const router = useRouter();
-  // Load the search query from sessionStorage after mount
+  // Load and persist search query
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState({});
+  const [filtersVisible, setFiltersVisible] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
@@ -148,12 +153,11 @@ function PageContent() {
     }
   }, []);
 
-  // Save the search query to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem("searchQuery", searchQuery);
   }, [searchQuery]);
 
-  // Fetch internships from Firestore on mount
+  // Fetch internships from Firestore
   useEffect(() => {
     async function fetchInternships() {
       try {
@@ -177,6 +181,11 @@ function PageContent() {
   );
   const recommendedInternships = recommendInternships(filteredInternships);
 
+  const onApplyFilters = () => {
+    // Additional logic can be added here if needed.
+    setFiltersVisible(false);
+  };
+
   return (
     <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
@@ -189,16 +198,17 @@ function PageContent() {
                 INTERNS⛵SHIP
               </h1>
               <p className="text-lg sm:text-xl font-extrabold">TO</p>
-              <p className="text-2xl sm:text-3xl font-extrabold">
-                Internship
-              </p>
+              <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-6">
             <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
               Home
             </a>
-            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+            <a
+              href="/about"
+              className="hover:text-yellow-400 text-sm sm:text-base"
+            >
               About
             </a>
             <a
@@ -245,14 +255,17 @@ function PageContent() {
             </div>
           </div>
 
-          {/* Search & Filter Components */}
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <FilterPanel
-            selectedFilters={selectedFilters}
-            setSelectedFilters={setSelectedFilters}
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
-          />
+          {/* Search & Filters */}
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <Button
+              variant="outline"
+              onClick={() => setFiltersVisible(true)}
+              className="px-4 py-2 shadow-lg text-sm"
+            >
+              Filters
+            </Button>
+          </div>
 
           {/* Internship Listings */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -268,6 +281,15 @@ function PageContent() {
         </main>
         <Footer />
       </div>
+
+      {/* Filter Sidebar Overlay */}
+      <FilterSidebarOverlay
+        visible={filtersVisible}
+        onClose={() => setFiltersVisible(false)}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+        onApplyFilters={onApplyFilters}
+      />
     </div>
   );
 }
