@@ -1,6 +1,8 @@
 // components/FilterPanel.jsx
 "use client";
-import React, { useState } from "react";
+
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const FILTERS = [
   // Payment & Stipend Filters
@@ -102,22 +104,20 @@ export default function FilterPanel({
   showFilters,
   setShowFilters,
 }) {
-  // Toggle a main filter. If it has sub-filters, initialize with an empty array.
+  // Toggle main filter selection. For filters with sub‑filters, an empty array is initialized.
   const toggleMainFilter = (filterLabel, hasSubFilters) => {
     setSelectedFilters((prev) => {
       const newFilters = { ...prev };
       if (newFilters[filterLabel]) {
-        // Deselect the filter (and any sub-filters)
         delete newFilters[filterLabel];
       } else {
-        // Select the filter; if sub-filters exist, use an empty array for later selections.
         newFilters[filterLabel] = hasSubFilters ? [] : true;
       }
       return newFilters;
     });
   };
 
-  // Toggle a sub-filter for a given main filter.
+  // Toggle a sub‑filter value within a main filter.
   const toggleSubFilter = (mainFilterLabel, subFilterValue) => {
     setSelectedFilters((prev) => {
       const newFilters = { ...prev };
@@ -141,14 +141,14 @@ export default function FilterPanel({
     });
   };
 
-  // Clear all selected filters.
+  // Clear all filters.
   const clearAllFilters = () => {
     setSelectedFilters({});
   };
 
   return (
     <div className="w-full p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800">
-      {/* Header and control buttons */}
+      {/* Header with controls */}
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">
           Filters
@@ -171,9 +171,9 @@ export default function FilterPanel({
         </div>
       </div>
 
-      {/* Render filters only if showFilters is true */}
+      {/* Filters UI */}
       {showFilters && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {FILTERS.map((filter) => {
             const isSelected = Object.prototype.hasOwnProperty.call(
               selectedFilters,
@@ -187,39 +187,47 @@ export default function FilterPanel({
                     toggleMainFilter(filter.label, !!filter.subFilters);
                     e.currentTarget.blur();
                   }}
-                  className={`px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 ${
+                  className={`px-3 py-2 rounded-xl text-xs font-medium transition-colors duration-200 ${
                     isSelected
-                      ? "bg-indigo-600 text-white shadow-lg border-2 border-indigo-700"
+                      ? "bg-indigo-600 text-white border border-indigo-700"
                       : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-600 hover:text-white"
                   }`}
                 >
                   {filter.label}
                 </button>
-                {/* If sub-filters exist and the main filter is selected, show them */}
+                {/* Sub-filters, with a subtle fade/slide transition */}
                 {filter.subFilters && isSelected && (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {filter.subFilters.map((sub) => {
-                      const isSubSelected =
-                        Array.isArray(selectedFilters[filter.label]) &&
-                        selectedFilters[filter.label].includes(sub.value);
-                      return (
-                        <button
-                          key={sub.value}
-                          onClick={(e) => {
-                            toggleSubFilter(filter.label, sub.value);
-                            e.currentTarget.blur();
-                          }}
-                          className={`px-3 py-1 rounded-md text-xs transition-all duration-200 ${
-                            isSubSelected
-                              ? "bg-indigo-500 text-white border border-indigo-700"
-                              : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-500 hover:text-white"
-                          }`}
-                        >
-                          {sub.label}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-2 flex flex-wrap gap-2 overflow-hidden"
+                    >
+                      {filter.subFilters.map((sub) => {
+                        const isSubSelected =
+                          Array.isArray(selectedFilters[filter.label]) &&
+                          selectedFilters[filter.label].includes(sub.value);
+                        return (
+                          <button
+                            key={sub.value}
+                            onClick={(e) => {
+                              toggleSubFilter(filter.label, sub.value);
+                              e.currentTarget.blur();
+                            }}
+                            className={`px-3 py-1 rounded-md text-xs transition-colors duration-200 ${
+                              isSubSelected
+                                ? "bg-indigo-500 text-white border border-indigo-700"
+                                : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-500 hover:text-white"
+                            }`}
+                          >
+                            {sub.label}
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  </AnimatePresence>
                 )}
               </div>
             );
