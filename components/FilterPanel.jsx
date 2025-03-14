@@ -80,6 +80,19 @@ const FILTERS = [
       { label: "Senior", value: "experience level: senior" },
     ],
   },
+
+  // Additional Filters Related to the Platform
+  {
+    label: "Additional Filters",
+    subFilters: [
+      { label: "Visa Sponsored", value: "visa sponsored" },
+      { label: "Accommodation Provided", value: "accommodation provided" },
+      { label: "Flexible Hours", value: "flexible hours" },
+      { label: "University Program", value: "university program" },
+      { label: "International", value: "international" },
+      { label: "High Growth", value: "high growth" },
+    ],
+  },
 ];
 
 export default function FilterPanel({ selectedFilters, setSelectedFilters, showFilters, setShowFilters }) {
@@ -118,16 +131,12 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
   };
 
   return (
-    <div className="w-full">
-      <div className="flex justify-end mb-2">
+    <div className="w-full p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Filters</h3>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          style={{ WebkitTapHighlightColor: "transparent" }}
-          className={`text-xs transition-colors duration-300 px-3 py-1 rounded focus:outline-none border ${
-            showFilters
-              ? "bg-black text-white hover:bg-white hover:text-black border-black"
-              : "bg-white text-black hover:bg-black hover:text-white border-black"
-          }`}
+          className="text-sm px-3 py-1 border rounded focus:outline-none transition-colors duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
         >
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
@@ -141,14 +150,13 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
                   clearAllFilters();
                   e.currentTarget.blur();
                 }}
-                style={{ WebkitTapHighlightColor: "transparent" }}
-                className="text-xs border border-red-500 bg-red-500 text-white px-3 py-1 rounded transition-colors duration-300 hover:bg-red-600 focus:outline-none"
+                className="text-xs px-3 py-1 bg-red-500 text-white rounded transition-colors duration-200 hover:bg-red-600 focus:outline-none"
               >
                 Clear All Filters
               </button>
             </div>
           )}
-          <div className="mb-4 flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {FILTERS.map((filter) => {
               const isSelected = Object.prototype.hasOwnProperty.call(selectedFilters, filter.label);
               return (
@@ -158,12 +166,11 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
                       toggleMainFilter(filter.label, !!filter.subFilters);
                       e.currentTarget.blur();
                     }}
-                    style={{ WebkitTapHighlightColor: "transparent" }}
-                    className={`px-3 py-2 transition-all duration-300 transform rounded-xl shadow-md text-xs focus:outline-none ${
+                    className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors duration-200 ${
                       isSelected
-                        ? "scale-110 bg-indigo-600 text-white shadow-lg border-2 border-indigo-700"
-                        : "scale-100 bg-white dark:bg-gray-800 text-gray-800 border border-gray-300"
-                    } hover:scale-105 hover:bg-indigo-600 hover:text-white`}
+                        ? "bg-indigo-600 text-white border border-indigo-700"
+                        : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-600 hover:text-white"
+                    }`}
                   >
                     {filter.label}
                   </button>
@@ -180,12 +187,11 @@ export default function FilterPanel({ selectedFilters, setSelectedFilters, showF
                               toggleSubFilter(filter.label, sub.value);
                               e.currentTarget.blur();
                             }}
-                            style={{ WebkitTapHighlightColor: "transparent" }}
-                            className={`px-2 py-1 transition-all duration-300 transform rounded-md shadow-sm text-xs focus:outline-none ${
+                            className={`px-3 py-1 rounded-md text-xs transition-colors duration-200 ${
                               isSubSelected
-                                ? "bg-indigo-500 text-white border-2 border-indigo-700"
-                                : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300"
-                            } hover:bg-indigo-500 hover:text-white`}
+                                ? "bg-indigo-500 text-white border border-indigo-700"
+                                : "bg-white dark:bg-gray-800 text-gray-800 border border-gray-300 hover:bg-indigo-500 hover:text-white"
+                            }`}
                           >
                             {sub.label}
                           </button>
