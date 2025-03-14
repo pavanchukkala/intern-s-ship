@@ -1,11 +1,15 @@
 // components/FilterPanel.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { FILTER_CATEGORIES } from './filterDefinitions';
 
-// This component expects two props:
-// - selectedFilters: an object representing the currently active filters
-// - setSelectedFilters: a function to update the filter state
 const FilterPanel = ({ selectedFilters, setSelectedFilters }) => {
+  // State to control which parent filters have their subfilters visible.
+  const [openSubFilters, setOpenSubFilters] = useState({});
+
+  const toggleSubFilterAccordion = (filterValue) => {
+    setOpenSubFilters((prev) => ({ ...prev, [filterValue]: !prev[filterValue] }));
+  };
+
   // For filters without sub‑filters.
   const handleChange = (filter) => (e) => {
     const checked = e.target.checked;
@@ -19,8 +23,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters }) => {
     }
   };
 
-  // For filters with sub‑filters:
-  // Toggling the parent checkbox selects/deselects all its sub‑filters.
+  // For parent filters with sub‑filters.
   const handleParentChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -57,34 +60,43 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters }) => {
     });
   };
 
-  // Determine if a parent filter (with sub‑filters) should appear as fully checked.
+  // Check if all subfilters are selected.
   const isParentChecked = (filter) => {
     const selectedSubs = selectedFilters[filter.value];
     return selectedSubs && selectedSubs.length === filter.subFilters.length;
   };
 
   return (
-    <div className="filter-panel">
+    <div className="p-4 space-y-6">
       {FILTER_CATEGORIES.map((category) => (
-        <div key={category.title} className="filter-category">
-          <h4>{category.title}</h4>
-          <div className="filter-options">
+        <div key={category.title} className="bg-white shadow rounded-lg p-4">
+          <h4 className="text-xl font-semibold mb-3">{category.title}</h4>
+          <div className="space-y-3">
             {category.filters.map((filter) => (
-              <div key={filter.value} className="filter-option">
+              <div key={filter.value} className="border-b pb-2">
                 {filter.subFilters ? (
-                  <>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={isParentChecked(filter)}
-                        onChange={handleParentChange(filter)}
-                      />
-                      {filter.label}
-                    </label>
-                    <div className="sub-filters" style={{ paddingLeft: '1rem' }}>
-                      {filter.subFilters.map((sub) => (
-                        <div key={sub.value} className="sub-filter-option">
-                          <label>
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={isParentChecked(filter)}
+                          onChange={handleParentChange(filter)}
+                          className="form-checkbox h-5 w-5 text-blue-600"
+                        />
+                        <span className="font-medium">{filter.label}</span>
+                      </label>
+                      <button
+                        onClick={() => toggleSubFilterAccordion(filter.value)}
+                        className="text-sm text-blue-500 focus:outline-none"
+                      >
+                        {openSubFilters[filter.value] ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                    {openSubFilters[filter.value] && (
+                      <div className="pl-6 mt-2 grid grid-cols-2 gap-2">
+                        {filter.subFilters.map((sub) => (
+                          <label key={sub.value} className="flex items-center space-x-2">
                             <input
                               type="checkbox"
                               checked={
@@ -93,21 +105,23 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters }) => {
                                   : false
                               }
                               onChange={handleSubChange(filter, sub)}
+                              className="form-checkbox h-5 w-5 text-blue-600"
                             />
-                            {sub.label}
+                            <span className="text-sm">{sub.label}</span>
                           </label>
-                        </div>
-                      ))}
-                    </div>
-                  </>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ) : (
-                  <label>
+                  <label className="flex items-center space-x-2">
                     <input
                       type="checkbox"
                       checked={!!selectedFilters[filter.value]}
                       onChange={handleChange(filter)}
+                      className="form-checkbox h-5 w-5 text-blue-600"
                     />
-                    {filter.label}
+                    <span className="font-medium">{filter.label}</span>
                   </label>
                 )}
               </div>
