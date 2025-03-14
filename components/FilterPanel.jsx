@@ -273,7 +273,7 @@ function MobileFilterSidebar({ selectedFilters, setSelectedFilters }) {
   );
 }
 
-// Main Component: Renders Desktop or Mobile sidebar based on screen size
+// Main FilterPanel Component: Renders Desktop or Mobile sidebar based on screen size
 export default function FilterPanel({ selectedFilters, setSelectedFilters }) {
   return (
     <>
