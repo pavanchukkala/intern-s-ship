@@ -1,4 +1,4 @@
-// components/FilterSidebar.jsx
+// components/ResponsiveFilterSidebar.jsx
 "use client";
 import React, { useState } from "react";
 
@@ -88,24 +88,21 @@ const FILTER_CATEGORIES = [
   },
 ];
 
-export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
-  // Initialize all categories as expanded
+//
+// Desktop Sidebar Component
+//
+function DesktopFilterSidebar({ selectedFilters, setSelectedFilters }) {
+  // Track which categories are expanded (default: all expanded)
   const [expandedCategories, setExpandedCategories] = useState(() => {
     const init = {};
-    FILTER_CATEGORIES.forEach((cat) => {
-      init[cat.title] = true;
-    });
+    FILTER_CATEGORIES.forEach((cat) => (init[cat.title] = true));
     return init;
   });
 
-  const toggleCategoryExpansion = (categoryTitle) => {
-    setExpandedCategories((prev) => ({
-      ...prev,
-      [categoryTitle]: !prev[categoryTitle],
-    }));
+  const toggleCategory = (title) => {
+    setExpandedCategories((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
-  // Toggle filter selection for a given category.
   const toggleFilter = (categoryTitle, filterValue) => {
     setSelectedFilters((prev) => {
       const current = prev[categoryTitle] || [];
@@ -117,7 +114,6 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
     });
   };
 
-  // Clear all selected filters.
   const clearAll = () => {
     setSelectedFilters({});
   };
@@ -130,35 +126,35 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
           Clear All
         </button>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-6">
         {FILTER_CATEGORIES.map((category) => (
           <div key={category.title}>
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
                 {category.title}
               </h3>
-              <button onClick={() => toggleCategoryExpansion(category.title)} className="focus:outline-none">
+              <button onClick={() => toggleCategory(category.title)} className="focus:outline-none">
                 {expandedCategories[category.title] ? "▲" : "▼"}
               </button>
             </div>
             {expandedCategories[category.title] && (
-              <div className="space-y-2">
+              <div className="flex flex-wrap gap-2">
                 {category.filters.map((filter) => {
-                  const isChecked =
+                  const isActive =
                     selectedFilters[category.title] &&
                     selectedFilters[category.title].includes(filter.value);
                   return (
-                    <label key={filter.value} className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => toggleFilter(category.title, filter.value)}
-                        className="form-checkbox h-4 w-4 text-indigo-600"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
-                        {filter.label}
-                      </span>
-                    </label>
+                    <button
+                      key={filter.value}
+                      onClick={() => toggleFilter(category.title, filter.value)}
+                      className={`px-3 py-1 rounded-full text-sm border transition-colors duration-200 ${
+                        isActive
+                          ? "bg-indigo-600 text-white border-indigo-600"
+                          : "bg-white dark:bg-gray-800 text-gray-700 border-gray-300 hover:bg-indigo-100"
+                      }`}
+                    >
+                      {filter.label}
+                    </button>
                   );
                 })}
               </div>
@@ -167,5 +163,119 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters }) {
         ))}
       </div>
     </aside>
+  );
+}
+
+//
+// Mobile Sidebar Component (as an overlay)
+//
+function MobileFilterSidebar({ selectedFilters, setSelectedFilters }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState(() => {
+    const init = {};
+    FILTER_CATEGORIES.forEach((cat) => (init[cat.title] = true));
+    return init;
+  });
+
+  const toggleCategory = (title) => {
+    setExpandedCategories((prev) => ({ ...prev, [title]: !prev[title] }));
+  };
+
+  const toggleFilter = (categoryTitle, filterValue) => {
+    setSelectedFilters((prev) => {
+      const current = prev[categoryTitle] || [];
+      if (current.includes(filterValue)) {
+        return { ...prev, [categoryTitle]: current.filter((v) => v !== filterValue) };
+      } else {
+        return { ...prev, [categoryTitle]: [...current, filterValue] };
+      }
+    });
+  };
+
+  const clearAll = () => {
+    setSelectedFilters({});
+  };
+
+  return (
+    <>
+      {/* Toggle button to open mobile filters */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="p-3 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-100 fixed bottom-4 right-4 z-50 rounded-full shadow-lg md:hidden"
+      >
+        Filters
+      </button>
+      {isOpen && (
+        <div className="fixed inset-0 z-40 flex">
+          <div className="w-64 bg-gray-50 dark:bg-gray-900 h-full overflow-y-auto p-6 border-r border-gray-200">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Filters</h2>
+              <button onClick={clearAll} className="text-sm text-red-500 hover:underline">
+                Clear All
+              </button>
+            </div>
+            <div className="space-y-6">
+              {FILTER_CATEGORIES.map((category) => (
+                <div key={category.title}>
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                      {category.title}
+                    </h3>
+                    <button onClick={() => toggleCategory(category.title)} className="focus:outline-none">
+                      {expandedCategories[category.title] ? "▲" : "▼"}
+                    </button>
+                  </div>
+                  {expandedCategories[category.title] && (
+                    <div className="flex flex-wrap gap-2">
+                      {category.filters.map((filter) => {
+                        const isActive =
+                          selectedFilters[category.title] &&
+                          selectedFilters[category.title].includes(filter.value);
+                        return (
+                          <button
+                            key={filter.value}
+                            onClick={() => toggleFilter(category.title, filter.value)}
+                            className={`px-3 py-1 rounded-full text-sm border transition-colors duration-200 ${
+                              isActive
+                                ? "bg-indigo-600 text-white border-indigo-600"
+                                : "bg-white dark:bg-gray-800 text-gray-700 border-gray-300 hover:bg-indigo-100"
+                            }`}
+                          >
+                            {filter.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setIsOpen(false)} className="mt-6 w-full py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+              Apply Filters
+            </button>
+          </div>
+          {/* Overlay to close the mobile sidebar */}
+          <div onClick={() => setIsOpen(false)} className="flex-1 bg-black opacity-50"></div>
+        </div>
+      )}
+    </>
+  );
+}
+
+//
+// Main Responsive Component: shows desktop sidebar on larger screens and mobile overlay on small screens
+//
+export default function ResponsiveFilterSidebar({ selectedFilters, setSelectedFilters }) {
+  return (
+    <>
+      {/* Desktop Sidebar (visible on md and up) */}
+      <div className="hidden md:block">
+        <DesktopFilterSidebar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+      </div>
+      {/* Mobile Sidebar (visible on smaller screens) */}
+      <div className="md:hidden">
+        <MobileFilterSidebar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+      </div>
+    </>
   );
 }
