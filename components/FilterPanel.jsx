@@ -121,14 +121,18 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
       {/* Detailed Filter Sidebar Overlay */}
       {sidebarOpen && (
         <>
+          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black bg-opacity-30 z-40"
             onClick={() => setSidebarOpen(false)}
           ></div>
-          <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 shadow-2xl z-50 overflow-y-auto p-6">
+          {/* Sidebar */}
+          <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 rounded-r-lg shadow-xl z-50 overflow-y-auto p-8">
             {/* Sidebar Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-6">
-              <h4 className="text-2xl font-bold text-blue-700">Filters</h4>
+              <h4 className="text-3xl font-extrabold text-blue-800">
+                Filters
+              </h4>
               <button
                 onClick={() => setSidebarOpen(false)}
                 className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-200 focus:outline-none"
@@ -151,19 +155,27 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
             {FILTER_CATEGORIES.map((category) => (
               <div key={category.title} className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h5 className="text-xl font-bold text-blue-700">{category.title}</h5>
+                  <h5 className="text-xl font-bold text-blue-700">
+                    {category.title}
+                  </h5>
                   <button
                     onClick={() => toggleCategory(category.title)}
                     className="focus:outline-none"
                     aria-label="Toggle category"
                   >
-                    <div className="flex flex-col justify-center items-center">
-                      <div
-                        className={`w-6 h-1 bg-gray-500 transition-transform duration-300 ${
-                          expandedCategories[category.title] ? "rotate-90" : ""
-                        }`}
-                      ></div>
-                    </div>
+                    {/* Triangle icon using an SVG */}
+                    <svg
+                      className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${
+                        expandedCategories[category.title]
+                          ? "rotate-180"
+                          : "rotate-0"
+                      }`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" />
+                    </svg>
                   </button>
                 </div>
                 {expandedCategories[category.title] && (
@@ -184,7 +196,8 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                   }));
                                   if (activeRange[filter.value]) {
                                     setSelectedFilters((prev) => {
-                                      const { [filter.value]: removed, ...rest } = prev;
+                                      const { [filter.value]: removed, ...rest } =
+                                        prev;
                                       return rest;
                                     });
                                   }
