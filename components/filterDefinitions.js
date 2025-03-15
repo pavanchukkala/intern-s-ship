@@ -1,4 +1,6 @@
 // /components/filterDefinitions.js
+// Define your filter categories here.
+// For any filter that should use a slider, set type: "range" with min and max values.
 export const FILTER_CATEGORIES = [
   {
     title: "Payment & Stipend",
@@ -8,11 +10,9 @@ export const FILTER_CATEGORIES = [
       { 
         label: "Stipend-based", 
         value: "stipend-based",
-        subFilters: [
-          { label: "$0 - $500", value: "$0 - $500" },
-          { label: "$500 - $1000", value: "$500 - $1000" },
-          { label: "$1000+", value: "$1000+" },
-        ],
+        type: "range",  // Use slider for stipend range
+        min: 0,
+        max: 2000,      // Adjust these values as needed
       },
       { label: "Hourly Pay", value: "hourly pay" },
       { label: "Project-based", value: "project-based" },
@@ -24,11 +24,9 @@ export const FILTER_CATEGORIES = [
       { 
         label: "Internship Duration", 
         value: "internship duration",
-        subFilters: [
-          { label: "Less than 3 months", value: "less than 3 months" },
-          { label: "3 to 6 months", value: "3 to 6 months" },
-          { label: "6+ months", value: "6+ months" },
-        ],
+        type: "range",  // Use slider for duration (e.g., in months)
+        min: 1,
+        max: 12,
       },
       { label: "Short-term", value: "short-term" },
       { label: "Long-term", value: "long-term" },
