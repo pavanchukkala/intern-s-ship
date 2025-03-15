@@ -1,6 +1,6 @@
 // /components/filterDefinitions.js
-// Define your filter categories here.
-// For any filter that should use a slider, set type: "range" with min and max values.
+// Define your filter categories. For any filter that should use a slider,
+// add type: "range" with appropriate min and max values.
 export const FILTER_CATEGORIES = [
   {
     title: "Payment & Stipend",
@@ -24,7 +24,7 @@ export const FILTER_CATEGORIES = [
       { 
         label: "Internship Duration", 
         value: "internship duration",
-        type: "range",  // Use slider for duration (e.g., in months)
+        type: "range",  // Use slider for duration (e.g., months)
         min: 1,
         max: 12,
       },
