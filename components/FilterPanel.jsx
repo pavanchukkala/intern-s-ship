@@ -2,9 +2,7 @@
 "use client";
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
-import { Filter, ChevronLeft } from "lucide-react";
-import ReactSlider from "react-slider";
-import "react-slider/dist/react-slider.css";
+import { Filter, XCircle } from "lucide-react";
 
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +18,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }));
   };
 
-  // Handlers for basic checkbox filters.
+  // Handlers for simple checkbox filters.
   const handleCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -73,12 +71,28 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // Handler for range filters using react-slider.
-  const handleRangeChange = (filter, newValue) => {
-    setSelectedFilters((prev) => ({ ...prev, [filter.value]: newValue }));
+  // Handlers for range filters using two native range inputs.
+  const handleRangeMinChange = (filter, value) => {
+    setSelectedFilters((prev) => {
+      const currentRange = prev[filter.value] || [filter.min, filter.max];
+      let newMin = value;
+      let newMax = currentRange[1];
+      if (newMin > newMax) newMin = newMax;
+      return { ...prev, [filter.value]: [newMin, newMax] };
+    });
   };
 
-  // Helper: check if all sub‑filters are selected.
+  const handleRangeMaxChange = (filter, value) => {
+    setSelectedFilters((prev) => {
+      const currentRange = prev[filter.value] || [filter.min, filter.max];
+      let newMin = currentRange[0];
+      let newMax = value;
+      if (newMax < newMin) newMax = newMin;
+      return { ...prev, [filter.value]: [newMin, newMax] };
+    });
+  };
+
+  // Helper to check if all sub‑filters are selected.
   const isParentChecked = (filter) => {
     const selectedSubs = selectedFilters[filter.value];
     return selectedSubs && selectedSubs.length === filter.subFilters.length;
@@ -108,7 +122,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
           aria-label="Toggle filters sidebar"
         >
           {sidebarOpen ? (
-            <ChevronLeft size={20} className="text-gray-700 dark:text-gray-200" />
+            <XCircle size={20} className="text-red-500" />
           ) : (
             <Filter size={20} className="text-gray-700 dark:text-gray-200" />
           )}
@@ -132,16 +146,16 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
               </h4>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:from-purple-600 hover:to-pink-600 transition duration-200 focus:outline-none"
-                aria-label="Collapse filters sidebar"
+                className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-200 focus:outline-none"
+                aria-label="Close filters sidebar"
               >
-                <ChevronLeft size={24} />
+                <XCircle size={24} className="text-gray-600" />
               </button>
             </div>
             {/* Clear All Button */}
             <button
               onClick={() => setSelectedFilters({})}
-              className="mb-6 w-full py-2 bg-red-600 text-white font-semibold rounded-lg shadow hover:bg-red-700 transition duration-200 focus:outline-none"
+              className="mb-6 w-full py-2 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition duration-200 focus:outline-none"
             >
               Clear All
             </button>
@@ -174,22 +188,62 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                   : `${filter.min} - ${filter.max}`}
                               </span>
                             </label>
-                            <ReactSlider
-                              className="w-full h-2 bg-gray-300 rounded-lg"
-                              thumbClassName="w-4 h-4 bg-blue-600 rounded-full shadow-md cursor-pointer"
-                              trackClassName="bg-blue-200"
-                              min={filter.min}
-                              max={filter.max}
-                              value={
-                                selectedFilters[filter.value] ||
-                                [filter.min, filter.max]
-                              }
-                              onChange={(value) =>
-                                handleRangeChange(filter, value)
-                              }
-                              pearling
-                              minDistance={1}
-                            />
+                            <div className="flex space-x-4">
+                              <div className="flex-1">
+                                <label className="block text-xs text-gray-500 dark:text-gray-400">
+                                  Min
+                                </label>
+                                <input
+                                  type="range"
+                                  min={filter.min}
+                                  max={filter.max}
+                                  value={
+                                    selectedFilters[filter.value]
+                                      ? selectedFilters[filter.value][0]
+                                      : filter.min
+                                  }
+                                  onChange={(e) =>
+                                    handleRangeMinChange(
+                                      filter,
+                                      Number(e.target.value)
+                                    )
+                                  }
+                                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
+                                />
+                                <div className="text-xs text-center text-gray-600 dark:text-gray-400">
+                                  {selectedFilters[filter.value]
+                                    ? selectedFilters[filter.value][0]
+                                    : filter.min}
+                                </div>
+                              </div>
+                              <div className="flex-1">
+                                <label className="block text-xs text-gray-500 dark:text-gray-400">
+                                  Max
+                                </label>
+                                <input
+                                  type="range"
+                                  min={filter.min}
+                                  max={filter.max}
+                                  value={
+                                    selectedFilters[filter.value]
+                                      ? selectedFilters[filter.value][1]
+                                      : filter.max
+                                  }
+                                  onChange={(e) =>
+                                    handleRangeMaxChange(
+                                      filter,
+                                      Number(e.target.value)
+                                    )
+                                  }
+                                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
+                                />
+                                <div className="text-xs text-center text-gray-600 dark:text-gray-400">
+                                  {selectedFilters[filter.value]
+                                    ? selectedFilters[filter.value][1]
+                                    : filter.max}
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         ) : filter.subFilters ? (
                           <div className="mb-4">
@@ -211,9 +265,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                     type="checkbox"
                                     checked={
                                       selectedFilters[filter.value]
-                                        ? selectedFilters[filter.value].includes(
-                                            sub.value
-                                          )
+                                        ? selectedFilters[filter.value].includes(sub.value)
                                         : false
                                     }
                                     onChange={handleSubCheckboxChange(filter, sub)}
