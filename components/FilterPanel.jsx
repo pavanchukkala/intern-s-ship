@@ -1,8 +1,8 @@
-// components/FilterPanel.jsx
 "use client";
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
 import { Filter, XCircle } from "lucide-react";
+import RangeSlider from "./RangeSlider"; // import the draggable slider
 
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -71,25 +71,9 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // Handlers for range filters using two native range inputs.
-  const handleRangeMinChange = (filter, value) => {
-    setSelectedFilters((prev) => {
-      const currentRange = prev[filter.value] || [filter.min, filter.max];
-      let newMin = value;
-      let newMax = currentRange[1];
-      if (newMin > newMax) newMin = newMax;
-      return { ...prev, [filter.value]: [newMin, newMax] };
-    });
-  };
-
-  const handleRangeMaxChange = (filter, value) => {
-    setSelectedFilters((prev) => {
-      const currentRange = prev[filter.value] || [filter.min, filter.max];
-      let newMin = currentRange[0];
-      let newMax = value;
-      if (newMax < newMin) newMax = newMin;
-      return { ...prev, [filter.value]: [newMin, newMax] };
-    });
+  // New handler for draggable range filters.
+  const handleRangeChange = (filter, values) => {
+    setSelectedFilters((prev) => ({ ...prev, [filter.value]: values }));
   };
 
   // Helper to check if all sub‑filters are selected.
@@ -188,62 +172,17 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                   : `${filter.min} - ${filter.max}`}
                               </span>
                             </label>
-                            <div className="flex space-x-4">
-                              <div className="flex-1">
-                                <label className="block text-xs text-gray-500 dark:text-gray-400">
-                                  Min
-                                </label>
-                                <input
-                                  type="range"
-                                  min={filter.min}
-                                  max={filter.max}
-                                  value={
-                                    selectedFilters[filter.value]
-                                      ? selectedFilters[filter.value][0]
-                                      : filter.min
-                                  }
-                                  onChange={(e) =>
-                                    handleRangeMinChange(
-                                      filter,
-                                      Number(e.target.value)
-                                    )
-                                  }
-                                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
-                                />
-                                <div className="text-xs text-center text-gray-600 dark:text-gray-400">
-                                  {selectedFilters[filter.value]
-                                    ? selectedFilters[filter.value][0]
-                                    : filter.min}
-                                </div>
-                              </div>
-                              <div className="flex-1">
-                                <label className="block text-xs text-gray-500 dark:text-gray-400">
-                                  Max
-                                </label>
-                                <input
-                                  type="range"
-                                  min={filter.min}
-                                  max={filter.max}
-                                  value={
-                                    selectedFilters[filter.value]
-                                      ? selectedFilters[filter.value][1]
-                                      : filter.max
-                                  }
-                                  onChange={(e) =>
-                                    handleRangeMaxChange(
-                                      filter,
-                                      Number(e.target.value)
-                                    )
-                                  }
-                                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
-                                />
-                                <div className="text-xs text-center text-gray-600 dark:text-gray-400">
-                                  {selectedFilters[filter.value]
-                                    ? selectedFilters[filter.value][1]
-                                    : filter.max}
-                                </div>
-                              </div>
-                            </div>
+                            <RangeSlider
+                              min={filter.min}
+                              max={filter.max}
+                              values={
+                                selectedFilters[filter.value] ||
+                                [filter.min, filter.max]
+                              }
+                              onChange={(values) =>
+                                handleRangeChange(filter, values)
+                              }
+                            />
                           </div>
                         ) : filter.subFilters ? (
                           <div className="mb-4">
@@ -265,7 +204,9 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                     type="checkbox"
                                     checked={
                                       selectedFilters[filter.value]
-                                        ? selectedFilters[filter.value].includes(sub.value)
+                                        ? selectedFilters[filter.value].includes(
+                                            sub.value
+                                          )
                                         : false
                                     }
                                     onChange={handleSubCheckboxChange(filter, sub)}
