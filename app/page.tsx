@@ -248,10 +248,13 @@ function PageContent() {
           {/* Search & Filter Components */}
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <FilterPanel
+            visible={showFilters}
+            onClose={() => setShowFilters(false)}
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
+            onApplyFilters={() => {
+              // Add your filter application logic here if needed
+            }}
           />
 
           {/* Internship Listings */}
