@@ -1,14 +1,21 @@
+// /components/FilterPanel.jsx
 "use client";
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
 import { Filter, XCircle } from "lucide-react";
-import DualRangeSlider from "./DualRangeSlider"; // using the custom slider
+import DualRangeSlider from "./DualRangeSlider";
 
+// FilterPanel renders a basic filter bar and a detailed sidebar overlay.
+// It supports checkboxes, parent-child subfilters, and range (slider) filters.
+// For range filters, a checkbox toggles the display of the slider.
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState(
     FILTER_CATEGORIES.reduce((acc, cur) => ({ ...acc, [cur.title]: true }), {})
   );
+
+  // Local state to track which range filters are active (i.e. slider is visible)
+  const [activeRange, setActiveRange] = useState({});
 
   // Toggle category expansion.
   const toggleCategory = (categoryTitle) => {
@@ -18,7 +25,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }));
   };
 
-  // Handlers for simple checkbox filters.
+  // Handle simple checkbox filter changes.
   const handleCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -31,7 +38,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }
   };
 
-  // Handler for parent filters with sub‑filters.
+  // Handle parent filters with sub‑filters.
   const handleParentCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -47,7 +54,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }
   };
 
-  // Handler for individual sub‑filters.
+  // Handle individual sub‑filter checkbox changes.
   const handleSubCheckboxChange = (parentFilter, subFilter) => (e) => {
     const checked = e.target.checked;
     setSelectedFilters((prev) => {
@@ -71,23 +78,23 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // New handler for the custom dual slider.
+  // Handle range filter changes via the custom dual slider.
   const handleRangeChange = (filter, values) => {
     setSelectedFilters((prev) => ({ ...prev, [filter.value]: values }));
   };
 
-  // Helper to check if all sub‑filters are selected.
+  // Check if all sub‑filters for a parent filter are selected.
   const isParentChecked = (filter) => {
     const selectedSubs = selectedFilters[filter.value];
-    return selectedSubs && selectedSubs.length === filter.subFilters.length;
+    return selectedSubs && selectedSubs.length === filter.subFilters?.length;
   };
 
-  // Basic filter chips.
+  // Example basic filter chips for quick access.
   const basicFilters = ["Remote", "Full-time", "Part-time", "On-site"];
 
   return (
     <div>
-      {/* Basic Filter Bar with chips and toggle icon */}
+      {/* Basic Filter Bar */}
       <div className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow mb-4">
         <div className="flex gap-2">
           {basicFilters.map((filter) => (
@@ -123,7 +130,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
           ></div>
           {/* Sidebar */}
           <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 shadow-2xl z-50 overflow-y-auto p-6">
-            {/* Header */}
+            {/* Sidebar Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-6">
               <h4 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
                 Filters
@@ -136,14 +143,17 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                 <XCircle size={24} className="text-gray-600" />
               </button>
             </div>
-            {/* Clear All Button */}
+            {/* Clear All Filters */}
             <button
-              onClick={() => setSelectedFilters({})}
+              onClick={() => {
+                setSelectedFilters({});
+                setActiveRange({});
+              }}
               className="mb-6 w-full py-2 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition duration-200 focus:outline-none"
             >
               Clear All
             </button>
-            {/* Filter Categories */}
+            {/* Render Filter Categories */}
             {FILTER_CATEGORIES.map((category) => (
               <div key={category.title} className="mb-6">
                 <div className="flex items-center justify-between mb-3">
@@ -163,28 +173,54 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                     {category.filters.map((filter) => (
                       <div key={filter.value} className="pl-2">
                         {filter.type === "range" ? (
+                          // For range filters, first show a checkbox to toggle the slider.
                           <div className="flex flex-col">
-                            <label className="text-gray-700 dark:text-gray-300 mb-2">
-                              {filter.label}:{" "}
-                              <span className="font-semibold">
-                                {selectedFilters[filter.value]
-                                  ? `${selectedFilters[filter.value][0]} - ${selectedFilters[filter.value][1]}`
-                                  : `${filter.min} - ${filter.max}`}
+                            <div className="flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={activeRange[filter.value] || false}
+                                onChange={() => {
+                                  setActiveRange((prev) => ({
+                                    ...prev,
+                                    [filter.value]: !prev[filter.value],
+                                  }));
+                                  // If unchecking, clear any selected range value.
+                                  if (activeRange[filter.value]) {
+                                    setSelectedFilters((prev) => {
+                                      const { [filter.value]: removed, ...rest } = prev;
+                                      return rest;
+                                    });
+                                  }
+                                }}
+                                className="form-checkbox h-4 w-4 text-blue-600"
+                              />
+                              <span className="ml-2 text-gray-700 dark:text-gray-300">
+                                {filter.label}
                               </span>
-                            </label>
-                            <DualRangeSlider
-                              min={filter.min}
-                              max={filter.max}
-                              values={
-                                selectedFilters[filter.value] ||
-                                [filter.min, filter.max]
-                              }
-                              onChange={(values) =>
-                                handleRangeChange(filter, values)
-                              }
-                            />
+                            </div>
+                            {activeRange[filter.value] && (
+                              <div className="mt-2">
+                                <span className="block mb-1 font-semibold text-gray-600">
+                                  {selectedFilters[filter.value]
+                                    ? `${selectedFilters[filter.value][0]} - ${selectedFilters[filter.value][1]}`
+                                    : `${filter.min} - ${filter.max}`}
+                                </span>
+                                <DualRangeSlider
+                                  min={filter.min}
+                                  max={filter.max}
+                                  values={
+                                    selectedFilters[filter.value] ||
+                                    [filter.min, filter.max]
+                                  }
+                                  onChange={(values) =>
+                                    handleRangeChange(filter, values)
+                                  }
+                                />
+                              </div>
+                            )}
                           </div>
                         ) : filter.subFilters ? (
+                          // Render checkboxes for parent filters with sub-filters.
                           <div className="mb-4">
                             <div className="flex items-center">
                               <input
@@ -220,6 +256,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                             </div>
                           </div>
                         ) : (
+                          // Render a simple checkbox if no specific type is set.
                           <div className="flex items-center">
                             <input
                               type="checkbox"
