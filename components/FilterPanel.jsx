@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
 import { Filter, XCircle } from "lucide-react";
-import RangeSlider from "./RangeSlider"; // import the draggable slider
+import DualRangeSlider from "./DualRangeSlider"; // using the custom slider
 
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -71,7 +71,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // New handler for draggable range filters.
+  // New handler for the custom dual slider.
   const handleRangeChange = (filter, values) => {
     setSelectedFilters((prev) => ({ ...prev, [filter.value]: values }));
   };
@@ -172,7 +172,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                   : `${filter.min} - ${filter.max}`}
                               </span>
                             </label>
-                            <RangeSlider
+                            <DualRangeSlider
                               min={filter.min}
                               max={filter.max}
                               values={
