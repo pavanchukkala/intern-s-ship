@@ -6,21 +6,21 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
   const [dragging, setDragging] = useState(null);
   const sliderRef = useRef(null);
 
-  // Convert a value to a percentage for positioning the handles/active track.
+  // Convert a value to its relative percentage position
   const getPosition = (value) => ((value - min) / (max - min)) * 100;
 
-  // Begin dragging a handle.
+  // Initiate dragging for a specific handle
   const handleMouseDown = (handleIndex) => (e) => {
     setDragging(handleIndex);
     e.preventDefault();
   };
 
-  // End dragging.
+  // End dragging
   const handleMouseUp = () => {
     setDragging(null);
   };
 
-  // Update handle positions based on mouse movement.
+  // Update handle positions on mouse move
   const handleMouseMove = (e) => {
     if (dragging === null) return;
     if (!sliderRef.current) return;
@@ -29,13 +29,10 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
     percent = Math.max(0, Math.min(percent, 1));
     let newValue = Math.round(min + percent * (max - min));
     const newValues = [...values];
-
     if (dragging === 0) {
-      // Prevent left handle from surpassing the right handle.
       if (newValue > newValues[1]) newValue = newValues[1];
       newValues[0] = newValue;
     } else {
-      // Prevent right handle from dropping below the left handle.
       if (newValue < newValues[0]) newValue = newValues[0];
       newValues[1] = newValue;
     }
@@ -54,50 +51,39 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
   return (
     <div
       ref={sliderRef}
-      className="relative h-4 rounded-full"
-      style={{
-        margin: "0 15px",
-        background: "linear-gradient(90deg, #f0f0f0, #f0f0f0)", // Base track color
-      }}
+      className="relative h-3 bg-gray-300 rounded-full"
+      style={{ margin: "0 15px" }}
     >
-      {/* Active track with a vibrant gradient, slight blur, and shadow */}
+      {/* Active track with a subtle gradient and shadow */}
       <div
-        className="absolute rounded-full transition-all duration-200"
+        className="absolute h-3 rounded-full"
         style={{
-          height: "100%",
           left: `${getPosition(values[0])}%`,
           width: `${getPosition(values[1]) - getPosition(values[0])}%`,
-          background: "linear-gradient(90deg, #ff8a00, #e52e71)",
-          filter: "blur(0.5px)",
-          boxShadow: "0 2px 8px rgba(229, 46, 113, 0.6)",
+          background: "linear-gradient(to right, #3b82f6, #2563eb)",
+          boxShadow: "0 2px 4px rgba(37, 99, 235, 0.4)",
         }}
       ></div>
-      {/* Left handle with a radial gradient and halo effect */}
+      {/* Left handle with refined styling */}
       <div
         onMouseDown={handleMouseDown(0)}
-        className="absolute rounded-full cursor-pointer transition-transform transform hover:scale-110"
+        className="absolute h-6 w-6 bg-white rounded-full cursor-pointer transition-transform transform hover:scale-110"
         style={{
-          height: "24px",
-          width: "24px",
-          background: "radial-gradient(circle, #ffffff 50%, #ff8a00 100%)",
-          border: "2px solid #ff8a00",
-          boxShadow: "0 0 10px rgba(255, 138, 0, 0.8)",
           left: `calc(${getPosition(values[0])}% - 12px)`,
-          top: "-10px",
+          top: "-1.5px",
+          border: "2px solid #2563eb",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
         }}
       ></div>
-      {/* Right handle with a different hue for contrast */}
+      {/* Right handle with similar refined styling */}
       <div
         onMouseDown={handleMouseDown(1)}
-        className="absolute rounded-full cursor-pointer transition-transform transform hover:scale-110"
+        className="absolute h-6 w-6 bg-white rounded-full cursor-pointer transition-transform transform hover:scale-110"
         style={{
-          height: "24px",
-          width: "24px",
-          background: "radial-gradient(circle, #ffffff 50%, #e52e71 100%)",
-          border: "2px solid #e52e71",
-          boxShadow: "0 0 10px rgba(229, 46, 113, 0.8)",
           left: `calc(${getPosition(values[1])}% - 12px)`,
-          top: "-10px",
+          top: "-1.5px",
+          border: "2px solid #2563eb",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
         }}
       ></div>
     </div>
