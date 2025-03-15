@@ -2,7 +2,7 @@
 "use client";
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
-import { Filter, ChevronLeft } from "lucide-react";
+import { Filter, XCircle } from "lucide-react";
 
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -10,7 +10,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     FILTER_CATEGORIES.reduce((acc, cur) => ({ ...acc, [cur.title]: true }), {})
   );
 
-  // Toggle detailed category expansion.
+  // Toggle category expansion.
   const toggleCategory = (categoryTitle) => {
     setExpandedCategories((prev) => ({
       ...prev,
@@ -71,15 +71,13 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // Handler for range filters using two native range inputs.
+  // Handlers for range filters using two native range inputs.
   const handleRangeMinChange = (filter, value) => {
     setSelectedFilters((prev) => {
       const currentRange = prev[filter.value] || [filter.min, filter.max];
       let newMin = value;
       let newMax = currentRange[1];
-      if (value > newMax) {
-        newMin = newMax;
-      }
+      if (newMin > newMax) newMin = newMax;
       return { ...prev, [filter.value]: [newMin, newMax] };
     });
   };
@@ -89,9 +87,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
       const currentRange = prev[filter.value] || [filter.min, filter.max];
       let newMin = currentRange[0];
       let newMax = value;
-      if (value < newMin) {
-        newMax = newMin;
-      }
+      if (newMax < newMin) newMax = newMin;
       return { ...prev, [filter.value]: [newMin, newMax] };
     });
   };
@@ -102,7 +98,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     return selectedSubs && selectedSubs.length === filter.subFilters.length;
   };
 
-  // Define basic filter chips for a quick-access bar.
+  // Basic filter chips.
   const basicFilters = ["Remote", "Full-time", "Part-time", "On-site"];
 
   return (
@@ -126,7 +122,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
           aria-label="Toggle filters sidebar"
         >
           {sidebarOpen ? (
-            <ChevronLeft size={20} className="text-gray-700 dark:text-gray-200" />
+            <XCircle size={20} className="text-red-500" />
           ) : (
             <Filter size={20} className="text-gray-700 dark:text-gray-200" />
           )}
@@ -136,12 +132,12 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
       {/* Detailed Filter Sidebar Overlay */}
       {sidebarOpen && (
         <>
-          {/* Semi-transparent backdrop */}
+          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black bg-opacity-30 z-40"
             onClick={() => setSidebarOpen(false)}
           ></div>
-          {/* Sidebar overlay */}
+          {/* Sidebar */}
           <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 shadow-2xl z-50 overflow-y-auto p-6">
             {/* Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-6">
@@ -150,18 +146,18 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
               </h4>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:from-purple-600 hover:to-pink-600 transition duration-200 focus:outline-none"
-                aria-label="Collapse filters sidebar"
+                className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-200 focus:outline-none"
+                aria-label="Close filters sidebar"
               >
-                <ChevronLeft size={24} />
+                <XCircle size={24} className="text-gray-600" />
               </button>
             </div>
-            {/* Clear Filters */}
+            {/* Clear All Button */}
             <button
               onClick={() => setSelectedFilters({})}
-              className="mb-6 text-sm bg-red-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-red-700 transition duration-200 focus:outline-none"
+              className="mb-6 w-full py-2 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition duration-200 focus:outline-none"
             >
-              Clear Filters
+              Clear All
             </button>
             {/* Filter Categories */}
             {FILTER_CATEGORIES.map((category) => (
@@ -192,49 +188,61 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                   : `${filter.min} - ${filter.max}`}
                               </span>
                             </label>
-                            <div className="relative">
-                              {/* Minimum value slider */}
-                              <input
-                                type="range"
-                                min={filter.min}
-                                max={filter.max}
-                                value={
-                                  selectedFilters[filter.value]
+                            <div className="flex space-x-4">
+                              <div className="flex-1">
+                                <label className="block text-xs text-gray-500 dark:text-gray-400">
+                                  Min
+                                </label>
+                                <input
+                                  type="range"
+                                  min={filter.min}
+                                  max={filter.max}
+                                  value={
+                                    selectedFilters[filter.value]
+                                      ? selectedFilters[filter.value][0]
+                                      : filter.min
+                                  }
+                                  onChange={(e) =>
+                                    handleRangeMinChange(
+                                      filter,
+                                      Number(e.target.value)
+                                    )
+                                  }
+                                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
+                                />
+                                <div className="text-xs text-center text-gray-600 dark:text-gray-400">
+                                  {selectedFilters[filter.value]
                                     ? selectedFilters[filter.value][0]
-                                    : filter.min
-                                }
-                                onChange={(e) =>
-                                  handleRangeMinChange(filter, Number(e.target.value))
-                                }
-                                className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
-                              />
-                              {/* Maximum value slider */}
-                              <input
-                                type="range"
-                                min={filter.min}
-                                max={filter.max}
-                                value={
-                                  selectedFilters[filter.value]
+                                    : filter.min}
+                                </div>
+                              </div>
+                              <div className="flex-1">
+                                <label className="block text-xs text-gray-500 dark:text-gray-400">
+                                  Max
+                                </label>
+                                <input
+                                  type="range"
+                                  min={filter.min}
+                                  max={filter.max}
+                                  value={
+                                    selectedFilters[filter.value]
+                                      ? selectedFilters[filter.value][1]
+                                      : filter.max
+                                  }
+                                  onChange={(e) =>
+                                    handleRangeMaxChange(
+                                      filter,
+                                      Number(e.target.value)
+                                    )
+                                  }
+                                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none"
+                                />
+                                <div className="text-xs text-center text-gray-600 dark:text-gray-400">
+                                  {selectedFilters[filter.value]
                                     ? selectedFilters[filter.value][1]
-                                    : filter.max
-                                }
-                                onChange={(e) =>
-                                  handleRangeMaxChange(filter, Number(e.target.value))
-                                }
-                                className="w-full h-2 bg-gray-300 rounded-lg appearance-none mt-2"
-                              />
-                            </div>
-                            <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-1">
-                              <span>
-                                {selectedFilters[filter.value]
-                                  ? selectedFilters[filter.value][0]
-                                  : filter.min}
-                              </span>
-                              <span>
-                                {selectedFilters[filter.value]
-                                  ? selectedFilters[filter.value][1]
-                                  : filter.max}
-                              </span>
+                                    : filter.max}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ) : filter.subFilters ? (
