@@ -13,8 +13,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
   const [expandedCategories, setExpandedCategories] = useState(
     FILTER_CATEGORIES.reduce((acc, cur) => ({ ...acc, [cur.title]: true }), {})
   );
-
-  // Local state to track which range filters are active (i.e. slider is visible)
   const [activeRange, setActiveRange] = useState({});
 
   // Toggle category expansion.
@@ -25,7 +23,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }));
   };
 
-  // Handle simple checkbox filter changes.
+  // Handle simple checkbox changes.
   const handleCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -83,13 +81,13 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     setSelectedFilters((prev) => ({ ...prev, [filter.value]: values }));
   };
 
-  // Check if all sub‑filters for a parent filter are selected.
+  // Check if all sub‑filters for a parent are selected.
   const isParentChecked = (filter) => {
     const selectedSubs = selectedFilters[filter.value];
     return selectedSubs && selectedSubs.length === filter.subFilters?.length;
   };
 
-  // Example basic filter chips for quick access.
+  // Basic filter chips.
   const basicFilters = ["Remote", "Full-time", "Part-time", "On-site"];
 
   return (
@@ -109,13 +107,13 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
         </div>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition duration-200"
+          className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
           aria-label="Toggle filters sidebar"
         >
           {sidebarOpen ? (
-            <XCircle size={20} className="text-red-500" />
+            <XCircle size={24} className="text-white" />
           ) : (
-            <Filter size={20} className="text-gray-700 dark:text-gray-200" />
+            <Filter size={24} className="text-white" />
           )}
         </button>
       </div>
@@ -123,18 +121,14 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
       {/* Detailed Filter Sidebar Overlay */}
       {sidebarOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black bg-opacity-30 z-40"
             onClick={() => setSidebarOpen(false)}
           ></div>
-          {/* Sidebar */}
           <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 shadow-2xl z-50 overflow-y-auto p-6">
             {/* Sidebar Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-6">
-              <h4 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-                Filters
-              </h4>
+              <h4 className="text-2xl font-bold text-blue-700">Filters</h4>
               <button
                 onClick={() => setSidebarOpen(false)}
                 className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-200 focus:outline-none"
@@ -143,7 +137,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                 <XCircle size={24} className="text-gray-600" />
               </button>
             </div>
-            {/* Clear All Filters */}
+            {/* Clear All Button */}
             <button
               onClick={() => {
                 setSelectedFilters({});
@@ -157,15 +151,19 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
             {FILTER_CATEGORIES.map((category) => (
               <div key={category.title} className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h5 className="text-xl font-medium text-gray-800 dark:text-gray-100">
-                    {category.title}
-                  </h5>
+                  <h5 className="text-xl font-bold text-blue-700">{category.title}</h5>
                   <button
                     onClick={() => toggleCategory(category.title)}
-                    className="text-gray-500 focus:outline-none text-2xl"
+                    className="focus:outline-none"
                     aria-label="Toggle category"
                   >
-                    {expandedCategories[category.title] ? "−" : "+"}
+                    <div className="flex flex-col justify-center items-center">
+                      <div
+                        className={`w-6 h-1 bg-gray-500 transition-transform duration-300 ${
+                          expandedCategories[category.title] ? "rotate-90" : ""
+                        }`}
+                      ></div>
+                    </div>
                   </button>
                 </div>
                 {expandedCategories[category.title] && (
@@ -173,7 +171,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                     {category.filters.map((filter) => (
                       <div key={filter.value} className="pl-2">
                         {filter.type === "range" ? (
-                          // For range filters, first show a checkbox to toggle the slider.
+                          // For range filters, show a checkbox to toggle slider display.
                           <div className="flex flex-col">
                             <div className="flex items-center">
                               <input
@@ -184,7 +182,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                     ...prev,
                                     [filter.value]: !prev[filter.value],
                                   }));
-                                  // If unchecking, clear any selected range value.
                                   if (activeRange[filter.value]) {
                                     setSelectedFilters((prev) => {
                                       const { [filter.value]: removed, ...rest } = prev;
@@ -220,7 +217,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                             )}
                           </div>
                         ) : filter.subFilters ? (
-                          // Render checkboxes for parent filters with sub-filters.
                           <div className="mb-4">
                             <div className="flex items-center">
                               <input
@@ -256,7 +252,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                             </div>
                           </div>
                         ) : (
-                          // Render a simple checkbox if no specific type is set.
                           <div className="flex items-center">
                             <input
                               type="checkbox"
@@ -275,7 +270,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                 )}
               </div>
             ))}
-            {/* Apply Filters Button */}
             <div className="mt-8">
               <button
                 onClick={() => {
