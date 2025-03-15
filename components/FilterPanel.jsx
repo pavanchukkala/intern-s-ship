@@ -2,16 +2,15 @@
 "use client";
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
-import { Filter, X } from "lucide-react";
+import { Filter, ChevronLeft } from "lucide-react";
 
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
-  // Internal state to toggle the detailed filter sidebar.
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState(
     FILTER_CATEGORIES.reduce((acc, cur) => ({ ...acc, [cur.title]: true }), {})
   );
 
-  // Toggle detailed category expansion
+  // Toggle category expansion
   const toggleCategory = (categoryTitle) => {
     setExpandedCategories((prev) => ({
       ...prev,
@@ -19,7 +18,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }));
   };
 
-  // Handlers for filters without sub‑filters.
+  // Handlers for simple checkbox filters.
   const handleCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -72,13 +71,33 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // Helper: Check if all sub‑filters are selected.
+  // Handler for range filters (e.g., price, duration)
+  const handleRangeChange = (filter, value, bound) => {
+    setSelectedFilters((prev) => {
+      const currentRange = prev[filter.value] || [filter.min, filter.max];
+      let newRange = [...currentRange];
+      if (bound === "min") {
+        newRange[0] = value;
+        if (value > newRange[1]) {
+          newRange[1] = value;
+        }
+      } else if (bound === "max") {
+        newRange[1] = value;
+        if (value < newRange[0]) {
+          newRange[0] = value;
+        }
+      }
+      return { ...prev, [filter.value]: newRange };
+    });
+  };
+
+  // Helper to check if all sub‑filters are selected.
   const isParentChecked = (filter) => {
     const selectedSubs = selectedFilters[filter.value];
     return selectedSubs && selectedSubs.length === filter.subFilters.length;
   };
 
-  // Define basic filter chips for a quick-access filter bar.
+  // Define basic filter chips for a quick-access bar.
   const basicFilters = ["Remote", "Full-time", "Part-time", "On-site"];
 
   return (
@@ -102,7 +121,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
           aria-label="Toggle filters sidebar"
         >
           {sidebarOpen ? (
-            <X size={20} className="text-gray-700 dark:text-gray-200" />
+            <ChevronLeft size={20} className="text-gray-700 dark:text-gray-200" />
           ) : (
             <Filter size={20} className="text-gray-700 dark:text-gray-200" />
           )}
@@ -118,47 +137,103 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
             onClick={() => setSidebarOpen(false)}
           ></div>
           {/* Sidebar overlay */}
-          <div className="fixed top-0 left-0 w-64 h-full bg-white dark:bg-gray-900 shadow z-50 overflow-y-auto p-4">
+          <div className="fixed top-0 left-0 w-72 h-full bg-white dark:bg-gray-900 shadow-2xl z-50 overflow-y-auto p-6">
             {/* Header */}
-            <div className="flex items-center justify-between border-b pb-2 mb-4">
-              <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+            <div className="flex items-center justify-between border-b pb-3 mb-6">
+              <h4 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
                 Filters
               </h4>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 focus:outline-none"
-                aria-label="Close sidebar"
+                className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none"
+                aria-label="Collapse filters sidebar"
               >
-                X
+                <ChevronLeft size={24} />
               </button>
             </div>
             {/* Clear Filters */}
             <button
               onClick={() => setSelectedFilters({})}
-              className="mb-4 text-sm text-blue-600 hover:text-blue-800 focus:outline-none"
+              className="mb-6 text-sm bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none"
             >
               Clear Filters
             </button>
             {/* Filter Categories */}
             {FILTER_CATEGORIES.map((category) => (
-              <div key={category.title} className="mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h5 className="text-md font-medium text-gray-800 dark:text-gray-100">
+              <div key={category.title} className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="text-xl font-medium text-gray-800 dark:text-gray-100">
                     {category.title}
                   </h5>
                   <button
                     onClick={() => toggleCategory(category.title)}
-                    className="text-gray-500 focus:outline-none"
+                    className="text-gray-500 focus:outline-none text-2xl"
                     aria-label="Toggle category"
                   >
                     {expandedCategories[category.title] ? "−" : "+"}
                   </button>
                 </div>
                 {expandedCategories[category.title] && (
-                  <div className="space-y-2">
+                  <div className="space-y-4">
                     {category.filters.map((filter) => (
                       <div key={filter.value} className="pl-2">
-                        {filter.subFilters ? (
+                        {filter.type === "range" ? (
+                          <div className="flex flex-col">
+                            <label className="text-gray-700 dark:text-gray-300 mb-1">
+                              {filter.label}
+                            </label>
+                            <div className="flex flex-col space-y-2">
+                              <input
+                                type="range"
+                                min={filter.min}
+                                max={filter.max}
+                                value={
+                                  selectedFilters[filter.value]
+                                    ? selectedFilters[filter.value][0]
+                                    : filter.min
+                                }
+                                onChange={(e) =>
+                                  handleRangeChange(
+                                    filter,
+                                    Number(e.target.value),
+                                    "min"
+                                  )
+                                }
+                                className="accent-blue-600"
+                              />
+                              <input
+                                type="range"
+                                min={filter.min}
+                                max={filter.max}
+                                value={
+                                  selectedFilters[filter.value]
+                                    ? selectedFilters[filter.value][1]
+                                    : filter.max
+                                }
+                                onChange={(e) =>
+                                  handleRangeChange(
+                                    filter,
+                                    Number(e.target.value),
+                                    "max"
+                                  )
+                                }
+                                className="accent-blue-600"
+                              />
+                              <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                                <span>
+                                  {selectedFilters[filter.value]
+                                    ? selectedFilters[filter.value][0]
+                                    : filter.min}
+                                </span>
+                                <span>
+                                  {selectedFilters[filter.value]
+                                    ? selectedFilters[filter.value][1]
+                                    : filter.max}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : filter.subFilters ? (
                           <div className="mb-2">
                             <div className="flex items-center">
                               <input
@@ -171,14 +246,16 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                                 {filter.label}
                               </span>
                             </div>
-                            <div className="ml-6 mt-1 grid grid-cols-2 gap-y-1">
+                            <div className="ml-6 mt-2 grid grid-cols-2 gap-y-1">
                               {filter.subFilters.map((sub) => (
                                 <div key={sub.value} className="flex items-center">
                                   <input
                                     type="checkbox"
                                     checked={
                                       selectedFilters[filter.value]
-                                        ? selectedFilters[filter.value].includes(sub.value)
+                                        ? selectedFilters[filter.value].includes(
+                                            sub.value
+                                          )
                                         : false
                                     }
                                     onChange={handleSubCheckboxChange(filter, sub)}
@@ -211,13 +288,13 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
               </div>
             ))}
             {/* Apply Filters Button */}
-            <div className="mt-4">
+            <div className="mt-8">
               <button
                 onClick={() => {
                   onApplyFilters();
                   setSidebarOpen(false);
                 }}
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:outline-none"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 focus:outline-none"
               >
                 Apply Filters
               </button>
