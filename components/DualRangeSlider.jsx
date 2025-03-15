@@ -1,23 +1,28 @@
+// /components/DualRangeSlider.jsx
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 
+// Custom dual-handle slider component with improved UI.
+// It accepts min, max, current values (an array [minValue, maxValue]), and an onChange callback.
 const DualRangeSlider = ({ min, max, values, onChange }) => {
   const [dragging, setDragging] = useState(null);
   const sliderRef = useRef(null);
 
-  // Helper to convert a value to a percentage.
+  // Convert a value into a percentage for slider positioning.
   const getPosition = (value) => ((value - min) / (max - min)) * 100;
 
-  // Mouse event handlers.
+  // Initiate dragging for the specified handle.
   const handleMouseDown = (handleIndex) => (e) => {
     setDragging(handleIndex);
     e.preventDefault();
   };
 
+  // Stop dragging.
   const handleMouseUp = () => {
     setDragging(null);
   };
 
+  // Update handle position based on mouse movement.
   const handleMouseMove = (e) => {
     if (dragging === null) return;
     if (!sliderRef.current) return;
@@ -39,6 +44,7 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
     onChange(newValues);
   };
 
+  // Attach mousemove and mouseup listeners.
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
@@ -51,12 +57,12 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
   return (
     <div
       ref={sliderRef}
-      className="relative h-4 bg-gray-300 rounded"
+      className="relative h-4 bg-gray-200 rounded-full"
       style={{ margin: "0 15px" }}
     >
-      {/* Highlighted track between handles */}
+      {/* Active track */}
       <div
-        className="absolute h-4 bg-blue-500 rounded"
+        className="absolute h-4 bg-blue-500 rounded-full"
         style={{
           left: `${getPosition(values[0])}%`,
           width: `${getPosition(values[1]) - getPosition(values[0])}%`,
@@ -67,7 +73,7 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
       {/* Left handle */}
       <div
         onMouseDown={handleMouseDown(0)}
-        className="absolute h-6 w-6 bg-white border border-gray-400 rounded-full cursor-pointer"
+        className="absolute h-6 w-6 bg-white border-2 border-blue-500 rounded-full cursor-pointer transition-transform transform hover:scale-110"
         style={{
           left: `calc(${getPosition(values[0])}% - 12px)`,
           top: "-1px",
@@ -76,7 +82,7 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
       {/* Right handle */}
       <div
         onMouseDown={handleMouseDown(1)}
-        className="absolute h-6 w-6 bg-white border border-gray-400 rounded-full cursor-pointer"
+        className="absolute h-6 w-6 bg-white border-2 border-blue-500 rounded-full cursor-pointer transition-transform transform hover:scale-110"
         style={{
           left: `calc(${getPosition(values[1])}% - 12px)`,
           top: "-1px",
