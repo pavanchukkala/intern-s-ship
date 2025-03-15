@@ -1,8 +1,8 @@
-// components/FilterSidebarOverlay.jsx
+// components/FilterPanel.jsx
 import React, { useState } from 'react';
 import { FILTER_CATEGORIES } from './filterDefinitions';
 
-const FilterSidebarOverlay = ({
+const FilterPanel = ({
   visible,
   onClose,
   selectedFilters,
@@ -198,4 +198,4 @@ const FilterSidebarOverlay = ({
   );
 };
 
-export default FilterSidebarOverlay;
+export default FilterPanel;
