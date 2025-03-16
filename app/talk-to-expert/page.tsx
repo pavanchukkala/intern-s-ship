@@ -35,6 +35,7 @@ export default function TalkToExpertPage() {
     mobile: "",
     whatsapp: "",
     email: "",
+    amount: "750₹",
     transactionId: "",
   });
 
