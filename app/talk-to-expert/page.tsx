@@ -35,10 +35,9 @@ export default function TalkToExpertPage() {
     mobile: "",
     whatsapp: "",
     email: "",
-    amount: "750₹",
     transactionId: "",
   });
-
+<p>amount: "750₹"</p>
   // Payment method state with no default selection
   const [paymentMethod, setPaymentMethod] = useState("");
 
