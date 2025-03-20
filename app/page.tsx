@@ -12,15 +12,7 @@ import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
 
-function InternshipCard({
-  internship,
-  activeCardId,
-  setActiveCardId,
-}: {
-  internship: any;
-  activeCardId: string | null;
-  setActiveCardId: (id: string | null) => void;
-}) {
+function InternshipCard({ internship, activeCardId, setActiveCardId }) {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const isDisabled = activeCardId && activeCardId !== internship.id;
@@ -49,15 +41,10 @@ function InternshipCard({
         <motion.div
           className="absolute w-11/12 h-11/12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex justify-center items-center shadow-2xl"
           initial={{ rotate: 45, filter: "blur(0px)" }}
-          animate={
-            isClicked
-              ? { rotate: 0, filter: "blur(8px)" }
-              : { rotate: 45, filter: "blur(0px)" }
-          }
-          transition={{ type: "spring", stiffness: 250, damping: 25 }}
+          animate={isClicked ? { rotate: 0, filter: "blur(8px)" } : { rotate: 45, filter: "blur(0px)" }}
+          transition={{ type: "spring", stiffness: 150, damping: 20 }}
         >
           <motion.div
-            layout
             className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black dark:text-gray-100 p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
             animate={
@@ -65,8 +52,12 @@ function InternshipCard({
                 ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
                 : { rotate: -45, borderWidth: "0px" }
             }
-            transition={{ type: "spring", stiffness: 250, damping: 25 }}
-            whileHover={!isClicked ? { scale: 1.05, transition: { type: "spring", stiffness: 300, damping: 20 } } : {}}
+            transition={{ type: "spring", stiffness: 150, damping: 20 }}
+            whileHover={
+              !isClicked
+                ? { scale: 1.05, transition: { type: "spring", stiffness: 200, damping: 20 } }
+                : {}
+            }
           >
             {isClicked && (
               <motion.div
@@ -75,25 +66,20 @@ function InternshipCard({
                 animate={{ opacity: 1, borderWidth: "4px" }}
                 transition={{
                   type: "spring",
-                  stiffness: 250,
-                  damping: 25,
+                  stiffness: 150,
+                  damping: 20,
                   repeat: Infinity,
                   repeatType: "reverse",
                 }}
                 style={{
                   borderStyle: "solid",
-                  borderImage:
-                    "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
+                  borderImage: "linear-gradient(90deg, #ff007f, #00ff7f, #007fff) 1",
                 }}
               />
             )}
 
             <div className="text-center">
-              <img
-                src={internship.logo}
-                alt={internship.company}
-                className="h-10 w-10 mb-2 inline-block"
-              />
+              <img src={internship.logo} alt={internship.company} className="h-10 w-10 mb-2 inline-block" />
               <h2 className="text-xl font-bold">{internship.role}</h2>
               <p className="text-sm">
                 {internship.company} | {internship.location}
@@ -101,14 +87,12 @@ function InternshipCard({
               <p className="text-xs text-gray-500">
                 {internship.duration} | stipend: {internship.stipend}₹
               </p>
-              <p className="text-xs text-gray-500">
-                Skills: {internship.skills}
-              </p>
+              <p className="text-xs text-gray-500">Skills: {internship.skills}</p>
             </div>
 
             <div className="flex gap-2">
               <motion.button
-                whileHover={{ scale: 1.1, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                whileHover={{ scale: 1.1, transition: { type: "spring", stiffness: 200, damping: 20 } }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleKnowMore}
                 disabled={isDisabled}
@@ -117,7 +101,7 @@ function InternshipCard({
                 Know More
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.1, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                whileHover={{ scale: 1.1, transition: { type: "spring", stiffness: 200, damping: 20 } }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleApplyNow}
                 disabled={isDisabled}
@@ -136,13 +120,12 @@ function InternshipCard({
 function PageContent() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const [showFilters, setShowFilters] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  const [internships, setInternships] = useState<any[]>([]);
-  const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const [internships, setInternships] = useState([]);
+  const [activeCardId, setActiveCardId] = useState(null);
 
-  // Load the search query from sessionStorage after mount
   useEffect(() => {
     const savedQuery = sessionStorage.getItem("searchQuery");
     if (savedQuery) {
@@ -150,12 +133,10 @@ function PageContent() {
     }
   }, []);
 
-  // Save the search query to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem("searchQuery", searchQuery);
   }, [searchQuery]);
 
-  // Fetch internships from Firestore on mount
   useEffect(() => {
     async function fetchInternships() {
       try {
@@ -172,76 +153,64 @@ function PageContent() {
     fetchInternships();
   }, []);
 
-  const filteredInternships = useFilteredInternships(
-    internships,
-    searchQuery,
-    selectedFilters
-  );
+  const filteredInternships = useFilteredInternships(internships, searchQuery, selectedFilters);
   const recommendedInternships = recommendInternships(filteredInternships);
 
   return (
-    <div className={`${darkMode ? "dark" : ""} overflow-hidden`}>
-      {/* Fixed Header: Navbar + SearchBar + FilterPanel */}
+    <div className={`${darkMode ? "dark" : ""} overflow-hidden overflow-x-hidden`}>
+      {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-gray-50 dark:bg-gray-900">
-        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
-          <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-            <Globe className="text-yellow-400" size={32} />
-            <div className="flex flex-col items-center text-center">
-              <h1 className="text-2xl sm:text-3xl font-extrabold">
-                INTERNS⛵SHIP
-              </h1>
-              <p className="text-lg sm:text-xl font-extrabold">TO</p>
-              <p className="text-2xl sm:text-3xl font-extrabold">
-                Internship
-              </p>
+        <div className="max-w-screen-xl mx-auto w-full">
+          <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
+            <div className="flex items-center space-x-3 mb-4 sm:mb-0">
+              <Globe className="text-yellow-400" size={32} />
+              <div className="flex flex-col items-center text-center">
+                <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
+                <p className="text-lg sm:text-xl font-extrabold">TO</p>
+                <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+              <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
+                Home
+              </a>
+              <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+                About
+              </a>
+              <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
+                Contact
+              </a>
+              <Button variant="outline" onClick={() => setDarkMode(!darkMode)} className="p-2">
+                {darkMode ? (
+                  <Sun size={24} className="text-yellow-400" />
+                ) : (
+                  <Moon size={24} className="text-gray-200" />
+                )}
+              </Button>
+            </div>
+          </nav>
+          <div className="p-4 shadow-md">
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <div className="w-full max-w-full overflow-hidden">
+              <FilterPanel
+                visible={showFilters}
+                onClose={() => setShowFilters(false)}
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+                onApplyFilters={() => {}}
+              />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
-              Home
-            </a>
-            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
-              About
-            </a>
-            <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
-              Contact
-            </a>
-            <Button
-              variant="outline"
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2"
-            >
-              {darkMode ? (
-                <Sun size={24} className="text-yellow-400" />
-              ) : (
-                <Moon size={24} className="text-gray-200" />
-              )}
-            </Button>
-          </div>
-        </nav>
-        <div className="p-4 shadow-md">
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <FilterPanel
-            visible={showFilters}
-            onClose={() => setShowFilters(false)}
-            selectedFilters={selectedFilters}
-            setSelectedFilters={setSelectedFilters}
-            onApplyFilters={() => {
-              // Your filter logic here if needed
-            }}
-          />
         </div>
       </header>
 
       {/* Scrollable Internship Cards Section */}
       <main
-        className="pt-40 pb-20 overflow-y-auto scroll-smooth"
+        className="pt-40 pb-20 overflow-y-auto overflow-x-hidden scroll-smooth"
         style={{ height: "calc(100vh - 120px)" }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Find Your Perfect Internship
-          </h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Find Your Perfect Internship</h2>
           <div className="flex gap-4 mb-4">
             <Button
               variant="outline"
@@ -272,8 +241,10 @@ function PageContent() {
       </main>
 
       {/* Fixed Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 z-50">
-        <Footer />
+      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-screen-xl mx-auto w-full">
+          <Footer />
+        </div>
       </footer>
     </div>
   );
