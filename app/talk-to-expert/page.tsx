@@ -310,7 +310,7 @@ export default function TalkToExpertPage() {
                           transition={{ duration: 0.5 }}
                           className="text-center text-sm font-medium mb-2"
                         >
-                          Fee for dedicated consultancy: 750₹
+                         dedicated consultation for just ₹750
                         </motion.p>
                         <motion.div
                           variants={fieldVariants}
