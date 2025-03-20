@@ -133,7 +133,6 @@ function InternshipCard({
 
 function PageContent() {
   const router = useRouter();
-  // Load the search query from sessionStorage after mount
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
@@ -141,6 +140,7 @@ function PageContent() {
   const [internships, setInternships] = useState<any[]>([]);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
+  // Load the search query from sessionStorage after mount
   useEffect(() => {
     const savedQuery = sessionStorage.getItem("searchQuery");
     if (savedQuery) {
@@ -178,9 +178,9 @@ function PageContent() {
   const recommendedInternships = recommendInternships(filteredInternships);
 
   return (
-    <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
-        {/* Navbar */}
+    <div className={`${darkMode ? "dark" : ""} overflow-hidden`}>
+      {/* Fixed Header: Navbar + SearchBar + FilterPanel */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-50 dark:bg-gray-900">
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3 mb-4 sm:mb-0">
             <Globe className="text-yellow-400" size={32} />
@@ -201,10 +201,7 @@ function PageContent() {
             <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
               About
             </a>
-            <a
-              href="/contact"
-              className="hover:text-yellow-400 text-sm sm:text-base"
-            >
+            <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
               Contact
             </a>
             <Button
@@ -220,32 +217,7 @@ function PageContent() {
             </Button>
           </div>
         </nav>
-
-        {/* Main Content */}
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-            <h2 className="text-3xl sm:text-4xl font-bold">
-              Find Your Perfect Internship
-            </h2>
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                onClick={() => router.push("/register")}
-                className="px-4 py-2 shadow-lg text-sm"
-              >
-                Register/publish Internship
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.push("/talk-to-expert")}
-                className="px-4 py-2 shadow-lg text-sm"
-              >
-                Talk to Expert
-              </Button>
-            </div>
-          </div>
-
-          {/* Search & Filter Components */}
+        <div className="p-4 shadow-md">
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <FilterPanel
             visible={showFilters}
@@ -253,11 +225,37 @@ function PageContent() {
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
             onApplyFilters={() => {
-              // Add your filter application logic here if needed
+              // Your filter logic here if needed
             }}
           />
+        </div>
+      </header>
 
-          {/* Internship Listings */}
+      {/* Scrollable Internship Cards Section */}
+      <main
+        className="pt-40 pb-20 overflow-y-auto"
+        style={{ height: "calc(100vh - 120px)" }}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            Find Your Perfect Internship
+          </h2>
+          <div className="flex gap-4 mb-4">
+            <Button
+              variant="outline"
+              onClick={() => router.push("/register")}
+              className="px-4 py-2 shadow-lg text-sm"
+            >
+              Register/publish Internship
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/talk-to-expert")}
+              className="px-4 py-2 shadow-lg text-sm"
+            >
+              Talk to Expert
+            </Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {recommendedInternships.map((internship) => (
               <InternshipCard
@@ -268,9 +266,13 @@ function PageContent() {
               />
             ))}
           </div>
-        </main>
+        </div>
+      </main>
+
+      {/* Fixed Footer */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50">
         <Footer />
-      </div>
+      </footer>
     </div>
   );
 }
