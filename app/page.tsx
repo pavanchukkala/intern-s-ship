@@ -178,7 +178,7 @@ function PageContent() {
   const recommendedInternships = recommendInternships(filteredInternships);
 
   return (
-    <div className={`${darkMode ? "dark" : ""} overflow-x-hidden}`>
+    <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
