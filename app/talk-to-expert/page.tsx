@@ -37,7 +37,7 @@ export default function TalkToExpertPage() {
     email: "",
     transactionId: "",
   });
-<p>amount: "750₹"</p>
+  <p>amount: "750₹"</p>
   // Payment method state with no default selection
   const [paymentMethod, setPaymentMethod] = useState("");
 
@@ -300,16 +300,27 @@ export default function TalkToExpertPage() {
                         </label>
                       </div>
                     </motion.div>
-                    {/* Automatically display QR code if paymentMethod is selected */}
+                    {/* Automatically display fee info and QR code if paymentMethod is selected */}
                     {paymentMethod && (
-                      <motion.div
-                        variants={fieldVariants}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
-                      </motion.div>
+                      <>
+                        <motion.p
+                          variants={fieldVariants}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                          className="text-center text-sm font-medium mb-2"
+                        >
+                          Fee for dedicated consultancy: 750₹
+                        </motion.p>
+                        <motion.div
+                          variants={fieldVariants}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <img src={qrCodeImage} alt={`${paymentMethod} QR Code`} className="w-48 h-48 object-contain" />
+                        </motion.div>
+                      </>
                     )}
                     <motion.div variants={fieldVariants} initial="hidden" animate="visible" transition={{ duration: 0.6 }}>
                       <Input
