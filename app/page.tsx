@@ -54,9 +54,10 @@ function InternshipCard({
               ? { rotate: 0, filter: "blur(8px)" }
               : { rotate: 45, filter: "blur(0px)" }
           }
-          transition={{ duration: 0.7, ease: "easeInOut" }}
+          transition={{ type: "spring", stiffness: 250, damping: 25 }}
         >
           <motion.div
+            layout
             className="w-11/12 h-11/12 bg-white dark:bg-gray-800 text-black dark:text-gray-100 p-5 rounded-lg shadow-xl flex flex-col justify-between items-center relative"
             initial={{ rotate: -45, borderWidth: "0px" }}
             animate={
@@ -64,8 +65,8 @@ function InternshipCard({
                 ? { rotate: 0, borderWidth: "4px", borderColor: "rgba(255,0,150,0.8)" }
                 : { rotate: -45, borderWidth: "0px" }
             }
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-            whileHover={!isClicked ? { scale: 1.05 } : {}}
+            transition={{ type: "spring", stiffness: 250, damping: 25 }}
+            whileHover={!isClicked ? { scale: 1.05, transition: { type: "spring", stiffness: 300, damping: 20 } } : {}}
           >
             {isClicked && (
               <motion.div
@@ -73,8 +74,9 @@ function InternshipCard({
                 initial={{ opacity: 0, borderWidth: "0px" }}
                 animate={{ opacity: 1, borderWidth: "4px" }}
                 transition={{
-                  duration: 0.5,
-                  ease: "easeInOut",
+                  type: "spring",
+                  stiffness: 250,
+                  damping: 25,
                   repeat: Infinity,
                   repeatType: "reverse",
                 }}
@@ -106,7 +108,7 @@ function InternshipCard({
 
             <div className="flex gap-2">
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleKnowMore}
                 disabled={isDisabled}
@@ -115,7 +117,7 @@ function InternshipCard({
                 Know More
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleApplyNow}
                 disabled={isDisabled}
@@ -233,7 +235,7 @@ function PageContent() {
 
       {/* Scrollable Internship Cards Section */}
       <main
-        className="pt-40 pb-20 overflow-y-auto"
+        className="pt-40 pb-20 overflow-y-auto scroll-smooth"
         style={{ height: "calc(100vh - 120px)" }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
