@@ -27,4 +27,4 @@ export default function Footer() {
     </>
   );
 }
-modify this accordingly
+
