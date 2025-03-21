@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
   const router = useRouter();
 
   return (
-    <div className={`${darkMode ? "dark" : ""} overflow-x-hidden`}>
+    <div className={`${darkMode ? "dark" : ""} min-h-screen overflow-x-hidden`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
@@ -42,36 +42,38 @@ export default function PrivacyPolicy() {
         </nav>
 
         {/* Main Content */}
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">Privacy Policy</h2>
-          <section className="space-y-4 text-base leading-relaxed">
-            <p>
-              <strong>Effective Date:</strong> [Insert Date]
-            </p>
-            <p>
-              <strong>Introduction:</strong> We value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and share your information when you use our platform.
-            </p>
-            <p>
-              <strong>Information We Collect:</strong> We collect basic details such as your name, Gmail address, and contact number. This data is collected solely to be shared with respective companies as per their requirements.
-            </p>
-            <p>
-              <strong>How We Use Your Information:</strong> Your data is used to contact you regarding issues you have raised. Other than that, our platform does not use your information for any additional purposes.
-            </p>
-            <p>
-              <strong>Data Sharing:</strong> The data collected is shared with companies based on their specific needs. Although we collect, maintain, and organize your data securely, there remains a chance of data leakage from the company’s side, for which we are not responsible.
-            </p>
-            <p>
-              <strong>Data Security:</strong> We take appropriate measures to secure your data, but no electronic transmission or storage method is completely foolproof.
-            </p>
-            <p>
-              <strong>User Consent:</strong> By using our platform, you consent to the collection and use of your information as detailed in this Privacy Policy.
-            </p>
-          </section>
-          {/* Navigation Back to Home */}
-          <div className="mt-8">
-            <Button variant="outline" onClick={() => router.push("/")}>
-              Back to Home
-            </Button>
+        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">Privacy Policy</h2>
+            <section className="space-y-4 text-base leading-relaxed">
+              <p>
+                <strong>Effective Date:</strong> [Insert Date]
+              </p>
+              <p>
+                <strong>Introduction:</strong> We value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and share your information when you use our platform.
+              </p>
+              <p>
+                <strong>Information We Collect:</strong> We collect basic details such as your name, Gmail address, and contact number. This data is collected solely to be shared with respective companies as per their requirements.
+              </p>
+              <p>
+                <strong>How We Use Your Information:</strong> Your data is used to contact you regarding issues you have raised. Other than that, our platform does not use your information for any additional purposes.
+              </p>
+              <p>
+                <strong>Data Sharing:</strong> The data collected is shared with companies based on their specific needs. Although we collect, maintain, and organize your data securely, there remains a chance of data leakage from the company’s side, for which we are not responsible.
+              </p>
+              <p>
+                <strong>Data Security:</strong> We take appropriate measures to secure your data, but no electronic transmission or storage method is completely foolproof.
+              </p>
+              <p>
+                <strong>User Consent:</strong> By using our platform, you consent to the collection and use of your information as detailed in this Privacy Policy.
+              </p>
+            </section>
+            {/* Navigation Back to Home */}
+            <div className="mt-8">
+              <Button variant="outline" onClick={() => router.push("/")}>
+                Back to Home
+              </Button>
+            </div>
           </div>
         </main>
         <Footer />
@@ -79,4 +81,3 @@ export default function PrivacyPolicy() {
     </div>
   );
 }
-
