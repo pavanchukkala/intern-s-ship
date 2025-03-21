@@ -26,6 +26,7 @@ export default function PrivacyPolicy() {
             <a href="/" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
             <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
             <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">Contact</a>
+            <a href="/legaldocs/privacy-policy" className="hover:text-yellow-400 text-sm sm:text-base">Privacy Policy</a>
             <Button
               variant="outline"
               onClick={() => setDarkMode(!darkMode)}
@@ -49,22 +50,46 @@ export default function PrivacyPolicy() {
                 <strong>Effective Date:</strong> [Insert Date]
               </p>
               <p>
-                <strong>Introduction:</strong> We value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and share your information when you use our platform.
+                <strong>Introduction:</strong> At [Your Company Name], we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit and interact with our platform.
               </p>
               <p>
-                <strong>Information We Collect:</strong> We collect basic details such as your name, Gmail address, and contact number. This data is collected solely to be shared with respective companies as per their requirements.
+                <strong>Information We Collect:</strong> 
+                <br /> <em>Personal Information:</em> When you sign up or interact with our platform, we collect your name, Gmail address, and contact number.
+                <br /> <em>Usage Data:</em> We also collect information regarding your interactions with our site, including your IP address, browser type, and pages visited.
               </p>
               <p>
-                <strong>How We Use Your Information:</strong> Your data is used to contact you regarding issues you have raised. Other than that, our platform does not use your information for any additional purposes.
+                <strong>How We Use Your Information:</strong> 
+                <br /> We use your personal data to:
+                <ul className="list-disc list-inside">
+                  <li>Contact you regarding issues you have raised.</li>
+                  <li>Facilitate your connection with companies based on your profile.</li>
+                  <li>Improve our services and personalize your experience.</li>
+                </ul>
               </p>
               <p>
-                <strong>Data Sharing:</strong> The data collected is shared with companies based on their specific needs. Although we collect, maintain, and organize your data securely, there remains a chance of data leakage from the company’s side, for which we are not responsible.
+                <strong>Data Sharing & Third Parties:</strong>
+                <br /> We may share your information with trusted third-party service providers and companies solely to match you with relevant opportunities. We do not sell or rent your personal data. However, please note that once data is shared with a third party, we cannot guarantee its security, and we are not responsible for any data breaches that occur on their side.
               </p>
               <p>
-                <strong>Data Security:</strong> We take appropriate measures to secure your data, but no electronic transmission or storage method is completely foolproof.
+                <strong>Data Retention:</strong>
+                <br /> We retain your information for as long as necessary to provide you with our services and as required by applicable laws. Once your data is no longer needed, it will be securely deleted.
               </p>
               <p>
-                <strong>User Consent:</strong> By using our platform, you consent to the collection and use of your information as detailed in this Privacy Policy.
+                <strong>Data Security:</strong>
+                <br /> We implement robust security measures to protect your data; however, no method of electronic storage or transmission is 100% secure. We cannot guarantee absolute security.
+              </p>
+              <p>
+                <strong>Your Rights:</strong>
+                <br /> Depending on your location, you may have rights regarding your personal data. This includes the right to access, correct, delete, or restrict the processing of your data. Please contact us at [Your Contact Email] for any requests regarding your data.
+              </p>
+              <p>
+                <strong>Changes to This Privacy Policy:</strong>
+                <br /> We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. We encourage you to review this page periodically for any updates.
+              </p>
+              <p>
+                <strong>Contact Us:</strong>
+                <br /> If you have any questions or concerns about this Privacy Policy, please contact us at:
+                <br /> <em>[Your Contact Information]</em>
               </p>
             </section>
             <div className="mt-10 text-center">
