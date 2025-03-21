@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
 
   return (
     <div className={`${darkMode ? "dark" : ""} min-h-screen overflow-x-hidden`}>
-      <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
           <div className="flex items-center space-x-3 mb-4 sm:mb-0">
@@ -68,7 +68,6 @@ export default function PrivacyPolicy() {
                 <strong>User Consent:</strong> By using our platform, you consent to the collection and use of your information as detailed in this Privacy Policy.
               </p>
             </section>
-            {/* Navigation Back to Home */}
             <div className="mt-10 text-center">
               <Button variant="outline" onClick={() => router.push("/")}>
                 Back to Home
@@ -81,4 +80,3 @@ export default function PrivacyPolicy() {
     </div>
   );
 }
-
