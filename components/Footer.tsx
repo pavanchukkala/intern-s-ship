@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="mt-2">
           <Link href="/legaldocs/disclaimer">
             <a className="text-sm text-gray-600 dark:text-gray-300 hover:underline">
-              Disclaimer
+              •Disclaimer
             </a>
           </Link>
         </div>
@@ -21,12 +21,12 @@ export default function Footer() {
         <div className="mt-4 flex justify-center space-x-4 md:hidden">
           <Link href="/legaldocs/privacy-policy">
             <a className="text-sm text-gray-600 dark:text-gray-300 hover:underline">
-              Privacy Policy
+              •Privacy Policy
             </a>
           </Link>
           <Link href="/legaldocs/terms-and-conditions">
             <a className="text-sm text-gray-600 dark:text-gray-300 hover:underline">
-              Terms &amp; Conditions
+              •Terms &amp; Conditions
             </a>
           </Link>
         </div>
