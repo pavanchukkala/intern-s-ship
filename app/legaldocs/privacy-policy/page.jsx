@@ -53,42 +53,61 @@ export default function PrivacyPolicy() {
                 <strong>Introduction:</strong> At [Your Company Name], we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit and interact with our platform.
               </p>
               <p>
-                <strong>Information We Collect:</strong> 
-                <br /> <em>Personal Information:</em> When you sign up or interact with our platform, we collect your name, Gmail address, and contact number.
-                <br /> <em>Usage Data:</em> We also collect information regarding your interactions with our site, including your IP address, browser type, and pages visited.
+                <strong>Information We Collect:</strong>
+                <br />
+                <em>Personal Information:</em> When you interact with our platform, we may collect your name, Gmail address, and contact number, only when provided for specific purposes.
+                <br />
+                <em>Usage Data:</em> We also gather data about your interactions, such as your IP address, browser type, and pages visited, to help improve our services.
               </p>
               <p>
-                <strong>How We Use Your Information:</strong> 
-                <br /> We use your personal data to:
+                <strong>Our Unique Approach:</strong>
+                <br />
+                We are proud to offer a platform that does not require any login or signup. This means:
                 <ul className="list-disc list-inside">
-                  <li>Contact you regarding issues you have raised.</li>
-                  <li>Facilitate your connection with companies based on your profile.</li>
-                  <li>Improve our services and personalize your experience.</li>
+                  <li>You can access and use our services without creating an account.</li>
+                  <li>We do not track or monitor personal usage, ensuring your privacy is maintained.</li>
+                  <li>Our platform is a secure, controlled, and open source environment where your experience is frictionless and private.</li>
+                </ul>
+              </p>
+              <p>
+                <strong>How We Use Your Information:</strong>
+                <br />
+                We use the information you provide to:
+                <ul className="list-disc list-inside">
+                  <li>Contact you regarding issues or inquiries you may have.</li>
+                  <li>Facilitate your connection with companies and internship opportunities based on your profile.</li>
+                  <li>Enhance and personalize your user experience on our platform.</li>
                 </ul>
               </p>
               <p>
                 <strong>Data Sharing & Third Parties:</strong>
-                <br /> We may share your information with trusted third-party service providers and companies solely to match you with relevant opportunities. We do not sell or rent your personal data. However, please note that once data is shared with a third party, we cannot guarantee its security, and we are not responsible for any data breaches that occur on their side.
+                <br />
+                We may share your information with trusted third-party service providers solely to match you with relevant opportunities. We do not sell or rent your personal data. However, once data is shared, we cannot guarantee its security, and we are not liable for any breaches on their end.
               </p>
               <p>
                 <strong>Data Retention:</strong>
-                <br /> We retain your information for as long as necessary to provide you with our services and as required by applicable laws. Once your data is no longer needed, it will be securely deleted.
+                <br />
+                We retain your information only as long as necessary to provide our services or as required by law. Once no longer needed, your data is securely deleted.
               </p>
               <p>
                 <strong>Data Security:</strong>
-                <br /> We implement robust security measures to protect your data; however, no method of electronic storage or transmission is 100% secure. We cannot guarantee absolute security.
+                <br />
+                We implement robust security measures to protect your data. However, no method of electronic storage or transmission is completely secure.
               </p>
               <p>
                 <strong>Your Rights:</strong>
-                <br /> Depending on your location, you may have rights regarding your personal data. This includes the right to access, correct, delete, or restrict the processing of your data. Please contact us at [Your Contact Email] for any requests regarding your data.
+                <br />
+                Depending on your location, you may have rights over your personal data, including access, correction, deletion, or restriction of its processing. For any requests or inquiries about your data, please contact us at [Your Contact Email].
               </p>
               <p>
                 <strong>Changes to This Privacy Policy:</strong>
-                <br /> We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. We encourage you to review this page periodically for any updates.
+                <br />
+                We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. Please review this page regularly for any updates.
               </p>
               <p>
                 <strong>Contact Us:</strong>
-                <br /> If you have any questions or concerns about this Privacy Policy, please contact us at:
+                <br />
+                If you have any questions or concerns regarding this Privacy Policy, please contact us at: 
                 <br /> <em>[Your Contact Information]</em>
               </p>
             </section>
