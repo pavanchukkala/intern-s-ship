@@ -26,7 +26,6 @@ export default function PrivacyPolicy() {
             <a href="/" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
             <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
             <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">Contact</a>
-            <a href="/legaldocs/privacy-policy" className="hover:text-yellow-400 text-sm sm:text-base">Privacy Policy</a>
             <Button
               variant="outline"
               onClick={() => setDarkMode(!darkMode)}
