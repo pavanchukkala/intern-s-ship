@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-center">Privacy Policy</h2>
             <section className="space-y-6 text-base leading-relaxed">
               <p>
-                <strong>Effective Date:</strong> [Insert Date]
+                <strong>Effective Date:</strong> 21-03-2025
               </p>
               <p>
                 <strong>Introduction:</strong> At [Your Company Name], we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit and interact with our platform.
