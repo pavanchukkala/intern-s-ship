@@ -10,14 +10,15 @@ export default function Footer() {
           © {currentYear} Internsship. All rights reserved.
         </p>
       </footer>
-      <div className="fixed bottom-4 right-4">
+      {/* Visible only on medium screens and up */}
+      <div className="hidden md:block fixed bottom-4 right-4">
         <Link href="/legaldocs/privacy-policy">
           <a className="text-sm text-gray-600 dark:text-gray-300 hover:underline">
             Privacy Policy
           </a>
         </Link>
       </div>
-      <div className="fixed bottom-4 left-4">
+      <div className="hidden md:block fixed bottom-4 left-4">
         <Link href="/legaldocs/terms-and-conditions">
           <a className="text-sm text-gray-600 dark:text-gray-300 hover:underline">
             Terms &amp; Conditions
@@ -27,4 +28,3 @@ export default function Footer() {
     </>
   );
 }
-
