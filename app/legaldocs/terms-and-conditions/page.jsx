@@ -50,7 +50,7 @@ export default function TermsAndConditions() {
                 <strong>Effective Date:</strong> 21-3-2025
               </p>
               <p>
-                <strong>Introduction:</strong> Welcome to [Your Company Name]. By accessing and using our platform, you agree to these Terms and Conditions. Please read them carefully.
+                <strong>Introduction:</strong> Welcome to [company Name]. By accessing and using our platform, you agree to these Terms and Conditions. Please read them carefully.
               </p>
               <p>
                 <strong>User Responsibilities:</strong>
@@ -85,7 +85,7 @@ export default function TermsAndConditions() {
               <p>
                 <strong>Contact Information:</strong>
                 <br />
-                If you have any questions or concerns about these Terms and Conditions, please contact us at: <em>[Your Contact Information]</em>
+                If you have any questions or concerns about these Terms and Conditions, please contact us at: <em>[Contact Information]</em>
               </p>
             </section>
             <div className="mt-10 text-center">
