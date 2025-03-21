@@ -47,7 +47,7 @@ export default function TermsAndConditions() {
             <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-center">Terms and Conditions</h2>
             <section className="space-y-6 text-base leading-relaxed">
               <p>
-                <strong>Effective Date:</strong> [Insert Date]
+                <strong>Effective Date:</strong> 21-3-2025
               </p>
               <p>
                 <strong>Introduction:</strong> Welcome to [Your Company Name]. By accessing and using our platform, you agree to these Terms and Conditions. Please read them carefully.
