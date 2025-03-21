@@ -50,16 +50,44 @@ export default function Disclaimer() {
                 <strong>Effective Date:</strong> [Insert Date]
               </p>
               <p>
-                <strong>General Disclaimer:</strong> The information provided on this platform is for general informational purposes only. Our platform is open source, does not require signups, and does not track users. All content is provided "as is" without warranties of any kind, either express or implied.
+                <strong>General Overview:</strong> 
+                <br />
+                This Disclaimer (“Disclaimer”) governs your use of the information, content, and services provided on the Internsship platform (“Platform”), which is an open source initiative designed for connecting aspiring interns with opportunities. The Platform operates on a model that does not require user registration, login, or tracking, and is intended solely for general informational purposes.
               </p>
               <p>
-                <strong>No Liability:</strong> We do not guarantee the accuracy, completeness, or reliability of the information provided. Users rely on this information at their own risk, and we shall not be held liable for any losses or damages arising from its use or misuse.
+                <strong>No Warranty & “As Is” Basis:</strong>
+                <br />
+                All information and materials on the Platform are provided "as is" and without warranties of any kind, whether express or implied. We expressly disclaim any warranties, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, and non-infringement. Use of this Platform is at your sole risk.
               </p>
               <p>
-                <strong>User Responsibility:</strong> Users are solely responsible for verifying any information before relying on it. We encourage you to exercise caution and conduct your own research when making decisions based on the content provided.
+                <strong>Limitation of Liability:</strong>
+                <br />
+                Under no circumstances shall Internsship, its owners, or any affiliates be liable for any direct, indirect, incidental, consequential, special, or exemplary damages arising from your use of the Platform, even if advised of the possibility of such damages. This includes, but is not limited to, damages resulting from errors, omissions, or inaccuracies in the information provided.
               </p>
               <p>
-                <strong>Third-Party Links:</strong> Any links to external websites are provided for convenience only. We do not endorse or assume responsibility for the content or practices of these third-party sites.
+                <strong>User Responsibilities & Indemnification:</strong>
+                <br />
+                Users are solely responsible for verifying the information provided on the Platform before relying on it for any purpose, including making internship-related decisions. You acknowledge that any actions taken based on the information found on the Platform are undertaken at your own risk. You agree to indemnify, defend, and hold harmless Internsship and its affiliates from any claims, damages, liabilities, or expenses arising from your use or misuse of the Platform.
+              </p>
+              <p>
+                <strong>No Tracking, No Signups:</strong>
+                <br />
+                The Platform is uniquely designed to operate without requiring user signups, logins, or tracking. This model is a core feature intended to enhance privacy and transparency. While this approach minimizes the collection of personal data, users should understand that all information is provided on an “as is” basis and is not subject to further verification.
+              </p>
+              <p>
+                <strong>Third-Party Content & Links:</strong>
+                <br />
+                The Platform may contain links to third-party websites or resources. Internsship does not control, endorse, or assume any responsibility for the content, privacy policies, or practices of any third parties. Your use of any third-party website is at your own risk.
+              </p>
+              <p>
+                <strong>Changes and Updates:</strong>
+                <br />
+                We reserve the right to update or modify this Disclaimer at any time without prior notice. Any changes will be effective immediately upon posting the revised Disclaimer on the Platform. Your continued use of the Platform following any changes signifies your acceptance of the revised terms.
+              </p>
+              <p>
+                <strong>Governing Law & Jurisdiction:</strong>
+                <br />
+                This Disclaimer shall be governed by and construed in accordance with the laws of [Your Jurisdiction]. Any disputes arising from this Disclaimer or your use of the Platform shall be subject to the exclusive jurisdiction of the courts in [Your Jurisdiction].
               </p>
             </section>
             <div className="mt-10 text-center">
