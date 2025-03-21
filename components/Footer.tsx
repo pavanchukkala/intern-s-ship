@@ -20,7 +20,7 @@ export default function Footer() {
       <div className="fixed bottom-4 left-4">
         <Link href="/legaldocs/terms-and-conditions">
           <a className="text-sm text-gray-600 dark:text-gray-300 hover:underline">
-            Privacy Policy
+            Terms &amp; Conditions
           </a>
         </Link>
       </div>
