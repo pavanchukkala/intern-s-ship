@@ -47,7 +47,7 @@ export default function Disclaimer() {
             <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-center">Disclaimer</h2>
             <section className="space-y-6 text-base leading-relaxed">
               <p>
-                <strong>Effective Date:</strong> [Insert Date]
+                <strong>Effective Date:</strong> 21-03-2025
               </p>
               <p>
                 <strong>General Overview:</strong> 
