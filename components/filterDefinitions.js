@@ -6,18 +6,7 @@ export const FILTER_CATEGORIES = [
     title: "Payment & Stipend",
     filters: [
       { label: "Free", value: "free" },
-      { 
-        label: "Stipend-based", 
-        value: "stipend-based",
-        type: "range",  // Use slider for stipend range
-        min: 0,
-        max: 2000,      // Adjust these values as needed
-      },
-      { label: "Hourly Pay", value: "hourly pay" },
-      { label: "Project-based", value: "project-based" },
-    ],
-  },
-   {
+         {
     title: "Compensation",
     filters: [
       {
@@ -36,7 +25,18 @@ export const FILTER_CATEGORIES = [
         ]
       }
     ]
-  }
+  },
+      { 
+        label: "Stipend-based", 
+        value: "stipend-based",
+        type: "range",  // Use slider for stipend range
+        min: 0,
+        max: 2000,      // Adjust these values as needed
+      },
+      { label: "Hourly Pay", value: "hourly pay" },
+      { label: "Project-based", value: "project-based" },
+    ],
+  },
   {
     title: "Duration",
     filters: [
