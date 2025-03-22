@@ -6,26 +6,7 @@ export const FILTER_CATEGORIES = [
     title: "Payment & Stipend",
     filters: [
       { label: "Free", value: "free" },
-         {
-    title: "Compensation",
-    filters: [
-      {
-        label: "Paid",
-        value: "paid",
-        // Use a checkbox type to control the visibility of its sub‑filter
-        type: "checkbox",
-        subFilters: [
-          {
-            label: "Salary Range",
-            value: "paidRange",
-            type: "range",
-            min: 0,
-            max: 200000
-          }
-        ]
-      }
-    ]
-  },
+ { label: "Paid", value: "free" },
       { 
         label: "Stipend-based", 
         value: "stipend-based",
