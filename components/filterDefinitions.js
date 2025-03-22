@@ -6,7 +6,7 @@ export const FILTER_CATEGORIES = [
     title: "Payment & Stipend",
     filters: [
       { label: "Free", value: "free" },
- { label: "Paid", value: "free" },
+      { label: "Paid", value: "free" },
       { 
         label: "Stipend-based", 
         value: "stipend-based",
