@@ -7,19 +7,21 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
 
   const getPosition = (value) => ((value - min) / (max - min)) * 100;
 
-  const handleMouseDown = (handleIndex) => (e) => {
+  // Initiate dragging for a specific handle (mouse & touch)
+  const handleStart = (handleIndex) => (e) => {
     setDragging(handleIndex);
     e.preventDefault();
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setDragging(null);
   };
 
-  const handleMouseMove = (e) => {
+  // Handle move for both mouse and touch events.
+  const handleMove = (clientX) => {
     if (dragging === null || !sliderRef.current) return;
     const rect = sliderRef.current.getBoundingClientRect();
-    let percent = (e.clientX - rect.left) / rect.width;
+    let percent = (clientX - rect.left) / rect.width;
     percent = Math.max(0, Math.min(percent, 1));
     let newValue = Math.round(min + percent * (max - min));
     const newValues = [...values];
@@ -33,12 +35,27 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
     onChange(newValues);
   };
 
+  // Mouse events
+  const handleMouseMove = (e) => {
+    handleMove(e.clientX);
+  };
+
+  // Touch events
+  const handleTouchMove = (e) => {
+    const touch = e.touches[0];
+    handleMove(touch.clientX);
+  };
+
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseup", handleEnd);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleEnd);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleEnd);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleEnd);
     };
   }, [dragging, values]);
 
@@ -57,7 +74,8 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
         }}
       ></div>
       <div
-        onMouseDown={handleMouseDown(0)}
+        onMouseDown={handleStart(0)}
+        onTouchStart={handleStart(0)}
         className="absolute h-6 w-6 bg-white rounded-full cursor-pointer transition-transform transform hover:scale-110"
         style={{
           left: `calc(${getPosition(values[0])}% - 12px)`,
@@ -67,7 +85,8 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
         }}
       ></div>
       <div
-        onMouseDown={handleMouseDown(1)}
+        onMouseDown={handleStart(1)}
+        onTouchStart={handleStart(1)}
         className="absolute h-6 w-6 bg-white rounded-full cursor-pointer transition-transform transform hover:scale-110"
         style={{
           left: `calc(${getPosition(values[1])}% - 12px)`,
