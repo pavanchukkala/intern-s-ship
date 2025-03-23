@@ -1,7 +1,6 @@
-// hooks/useFilteredInternships.ts
 import { useMemo } from "react";
 
-// --- Levenshtein Distance for minimal fuzzy matching ---
+// Levenshtein Distance for minimal fuzzy matching
 function levenshtein(a: string, b: string): number {
   const matrix: number[][] = [];
   for (let i = 0; i <= b.length; i++) {
@@ -29,23 +28,18 @@ function levenshtein(a: string, b: string): number {
 function fuzzyMatch(searchWord: string, targetText: string): boolean {
   const lowerSearch = searchWord.toLowerCase();
   const lowerText = targetText.toLowerCase();
-
-  // Direct substring check
   if (lowerText.includes(lowerSearch)) return true;
-
-  // Check against each word in targetText
   const words = lowerText.split(/\W+/);
   for (let word of words) {
     if (!word) continue;
     const distance = levenshtein(lowerSearch, word);
-    // Allow a threshold of roughly 30% of the search word's length
     const threshold = Math.floor(lowerSearch.length * 0.3);
     if (distance <= threshold) return true;
   }
   return false;
 }
 
-// --- Types ---
+// Types
 export interface Internship {
   company?: string;
   role?: string;
@@ -53,20 +47,19 @@ export interface Internship {
   skills?: string | string[];
   domain?: string;
   description?: string;
-  durationText?: string;  // e.g., "45 Days"
-  durationDays?: number;  // e.g., 45
+  durationText?: string;
+  durationDays?: number;
   stipend?: number;
-  paymentType?: string;   // "hourly", "project", etc.
-  jobType?: string;       // "full-time", "part-time", etc.
+  paymentType?: string;
+  jobType?: string;
   meta?: {
     paid?: boolean;
-    fee?: number;
-    companyType?: string;       // e.g. "startup", "mnc"
-    companySize?: number;       // numeric size (e.g., 56)
+    fee?: number | string;
+    companyType?: string;
+    companySize?: number;
     technical?: boolean;
-    industrySector?: string;    // e.g. "software", "finance", etc.
-    experienceLevel?: string;   // e.g. "entry", "mid", "senior"
-    // Additional filters:
+    industrySector?: string;
+    experienceLevel?: string;
     visaSponsored?: boolean;
     accommodationProvided?: boolean;
     flexibleHours?: boolean;
@@ -79,96 +72,95 @@ export interface Internship {
 }
 
 type Filters = {
-  [key: string]: boolean | string[];
+  [key: string]: boolean | string[] | number[];
 };
 
-// --- Comprehensive Filter Mapping ---
-// All keys are lower-cased to ensure case-insensitive matching.
-const filterMapping: Record<string, (i: Internship) => boolean> = {
-  // Payment & Fee Filters
-  "paid": (i) => i.meta?.paid === true,
-  "free": (i) => i.meta?.paid === false,
-  "stipend-based": (i) => typeof i.meta?.fee === "number",
-  "$0 - $500": (i) =>
-    typeof i.meta?.fee === "number" && i.meta.fee >= 0 && i.meta.fee <= 500,
-  "$500 - $1000": (i) =>
-    typeof i.meta?.fee === "number" && i.meta.fee > 500 && i.meta.fee <= 1000,
-  "$1000+": (i) =>
-    typeof i.meta?.fee === "number" && i.meta.fee > 1000,
-  "hourly pay": (i) => i.paymentType?.toLowerCase() === "hourly",
-  "project-based": (i) => i.paymentType?.toLowerCase() === "project",
-
-  // Duration Filters (assuming durationDays is in days)
-  "less than 3 months": (i) =>
-    typeof i.durationDays === "number" && i.durationDays < 90,
-  "3 to 6 months": (i) =>
-    typeof i.durationDays === "number" &&
-    i.durationDays >= 90 &&
-    i.durationDays <= 180,
-  "6+ months": (i) =>
-    typeof i.durationDays === "number" && i.durationDays > 180,
-  "short-term": (i) =>
-    typeof i.durationDays === "number" && i.durationDays < 90,
-  "long-term": (i) =>
-    typeof i.durationDays === "number" && i.durationDays >= 90,
-
-  // Location & Work Type Filters
-  "remote": (i) => i.location?.toLowerCase().includes("remote"),
-  "on-site": (i) =>
+// Updated mapping: Each predicate accepts an optional filterValue.
+// For range filters (like "paid"), if filterValue is an array, we check within that range.
+const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
+  "paid": (i, filterValue) => {
+    const fee =
+      typeof i.meta?.fee === "string"
+        ? parseFloat(i.meta.fee)
+        : i.meta?.fee;
+    if (Array.isArray(filterValue)) {
+      return i.meta?.paid === true && typeof fee === "number" && fee >= filterValue[0] && fee <= filterValue[1];
+    }
+    return i.meta?.paid === true;
+  },
+  "free": (i, _) => i.meta?.paid === false,
+  "stipend-based": (i, filterValue) => {
+    const fee =
+      typeof i.meta?.fee === "string"
+        ? parseFloat(i.meta.fee)
+        : i.meta?.fee;
+    if (Array.isArray(filterValue)) {
+      return typeof fee === "number" && fee >= filterValue[0] && fee <= filterValue[1];
+    }
+    return typeof fee === "number";
+  },
+  "$0 - $500": (i, _) => {
+    const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
+    return typeof fee === "number" && fee >= 0 && fee <= 500;
+  },
+  "$500 - $1000": (i, _) => {
+    const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
+    return typeof fee === "number" && fee > 500 && fee <= 1000;
+  },
+  "$1000+": (i, _) => {
+    const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
+    return typeof fee === "number" && fee > 1000;
+  },
+  "internship duration": (i, filterValue) => {
+    if (Array.isArray(filterValue)) {
+      return typeof i.durationDays === "number" && i.durationDays >= filterValue[0]*30 && i.durationDays <= filterValue[1]*30;
+    }
+    return typeof i.durationDays === "number";
+  },
+  "short-term": (i, _) => typeof i.durationDays === "number" && i.durationDays < 90,
+  "long-term": (i, _) => typeof i.durationDays === "number" && i.durationDays >= 90,
+  "remote": (i, _) => i.location?.toLowerCase().includes("remote"),
+  "on-site": (i, _) =>
     i.location &&
     !i.location.toLowerCase().includes("remote") &&
     !i.location.toLowerCase().includes("hybrid"),
-  "hybrid": (i) => i.location?.toLowerCase().includes("hybrid"),
-
-  // Job Type Filters
-  "part-time": (i) => i.jobType?.toLowerCase() === "part-time",
-  "full-time": (i) => i.jobType?.toLowerCase() === "full-time",
-
-  // Technical Filters
-  "technical": (i) => i.meta?.technical === true,
-  "non-technical": (i) => i.meta?.technical === false,
-
-  // Company Type Filters
-  "company type: startup": (i) =>
+  "hybrid": (i, _) => i.location?.toLowerCase().includes("hybrid"),
+  "part-time": (i, _) => i.jobType?.toLowerCase() === "part-time",
+  "full-time": (i, _) => i.jobType?.toLowerCase() === "full-time",
+  "technical": (i, _) => i.meta?.technical === true,
+  "non-technical": (i, _) => i.meta?.technical === false,
+  "company type: startup": (i, _) =>
     i.meta?.companyType?.toLowerCase() === "startup",
-  "company type: mnc": (i) =>
+  "company type: mnc": (i, _) =>
     i.meta?.companyType?.toLowerCase() === "mnc",
-
-  // Company Size Filters
-  "company size: small": (i) =>
+  "company size: small": (i, _) =>
     typeof i.meta?.companySize === "number" && i.meta.companySize < 50,
-  "company size: medium": (i) =>
+  "company size: medium": (i, _) =>
     typeof i.meta?.companySize === "number" &&
     i.meta.companySize >= 50 &&
     i.meta.companySize < 200,
-  "company size: large": (i) =>
+  "company size: large": (i, _) =>
     typeof i.meta?.companySize === "number" && i.meta.companySize >= 200,
-
-  // Industry Sector Filters
-  "industry sector: software": (i) =>
+  "industry sector: software": (i, _) =>
     i.meta?.industrySector?.toLowerCase() === "software",
-  "industry sector: finance": (i) =>
+  "industry sector: finance": (i, _) =>
     i.meta?.industrySector?.toLowerCase() === "finance",
-  "industry sector: healthcare": (i) =>
+  "industry sector: healthcare": (i, _) =>
     i.meta?.industrySector?.toLowerCase() === "healthcare",
-  "industry sector: education": (i) =>
+  "industry sector: education": (i, _) =>
     i.meta?.industrySector?.toLowerCase() === "education",
-
-  // Experience Level Filters
-  "experience level: entry": (i) =>
+  "experience level: entry": (i, _) =>
     i.meta?.experienceLevel?.toLowerCase() === "entry",
-  "experience level: mid": (i) =>
+  "experience level: mid": (i, _) =>
     i.meta?.experienceLevel?.toLowerCase() === "mid",
-  "experience level: senior": (i) =>
+  "experience level: senior": (i, _) =>
     i.meta?.experienceLevel?.toLowerCase() === "senior",
-
-  // Additional Platform Filters
-  "visa sponsored": (i) => i.meta?.visaSponsored === true,
-  "accommodation provided": (i) => i.meta?.accommodationProvided === true,
-  "flexible hours": (i) => i.meta?.flexibleHours === true,
-  "university program": (i) => i.meta?.universityProgram === true,
-  "international": (i) => i.meta?.international === true,
-  "high growth": (i) => i.meta?.highGrowth === true,
+  "visa sponsored": (i, _) => i.meta?.visaSponsored === true,
+  "accommodation provided": (i, _) => i.meta?.accommodationProvided === true,
+  "flexible hours": (i, _) => i.meta?.flexibleHours === true,
+  "university program": (i, _) => i.meta?.universityProgram === true,
+  "international": (i, _) => i.meta?.international === true,
+  "high growth": (i, _) => i.meta?.highGrowth === true,
 };
 
 export default function useFilteredInternships(
@@ -176,42 +168,41 @@ export default function useFilteredInternships(
   searchQuery: string,
   selectedFilters: Filters
 ): Internship[] {
-  // Prepare search query words.
   const lowerCaseSearchQuery = searchQuery.trim().toLowerCase();
   const queryWords = lowerCaseSearchQuery.split(/\s+/).filter(Boolean);
 
   return useMemo(() => {
     return internships.filter((internship) => {
-      // Build a searchable text string from various fields.
       const searchableText = `
         ${internship.company || ""}
         ${internship.role || ""}
         ${internship.location || ""}
-        ${typeof internship.skills === "string" ? internship.skills : (Array.isArray(internship.skills) ? internship.skills.join(" ") : "")}
+        ${typeof internship.skills === "string"
+          ? internship.skills
+          : Array.isArray(internship.skills)
+          ? internship.skills.join(" ")
+          : ""}
         ${internship.domain || ""}
         ${internship.description || ""}
         ${internship.meta?.industrySector || ""}
         ${internship.meta?.companyType || ""}
       `;
 
-      // Apply fuzzy text search for each word.
       for (const word of queryWords) {
         if (!fuzzyMatch(word, searchableText)) {
           return false;
         }
       }
 
-      // Apply each selected filter.
       for (const filterLabel in selectedFilters) {
         const filterValue = selectedFilters[filterLabel];
         const lowerLabel = filterLabel.toLowerCase();
         const predicate = filterMapping[lowerLabel];
         if (predicate) {
-          if (!predicate(internship)) {
+          if (!predicate(internship, filterValue)) {
             return false;
           }
         } else if (Array.isArray(filterValue)) {
-          // For sub‑filters, require at least one to match.
           const subFilterPassed = filterValue.some((subFilter) => {
             const lowerSub = subFilter.toLowerCase();
             const subPredicate = filterMapping[lowerSub];
