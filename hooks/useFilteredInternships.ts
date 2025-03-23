@@ -47,19 +47,19 @@ export interface Internship {
   skills?: string | string[];
   domain?: string;
   description?: string;
-  durationText?: string;
-  durationDays?: number;
+  durationText?: string; // e.g., "45 Days"
+  durationDays?: number; // e.g., 45 (Assuming this represents months if using "internship duration" slider)
   stipend?: number;
   paymentType?: string;
   jobType?: string;
   meta?: {
     paid?: boolean;
     fee?: number | string;
-    companyType?: string;
-    companySize?: number;
+    companyType?: string;       // e.g. "startup", "Medium", etc.
+    companySize?: number;       // numeric size if available
     technical?: boolean;
-    industrySector?: string;
-    experienceLevel?: string;
+    industrySector?: string;    // e.g. "software", "finance", etc.
+    experienceLevel?: string;   // e.g. "entry", "mid", "senior"
     visaSponsored?: boolean;
     accommodationProvided?: boolean;
     flexibleHours?: boolean;
@@ -75,14 +75,11 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated mapping: Each predicate accepts an optional filterValue.
-// For range filters (like "paid"), if filterValue is an array, we check within that range.
+// Updated filter mapping with adjustments for internship duration and company type/size.
+// For fuzzy matching typos, we use fuzzyMatch when comparing strings.
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
-    const fee =
-      typeof i.meta?.fee === "string"
-        ? parseFloat(i.meta.fee)
-        : i.meta?.fee;
+    const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     if (Array.isArray(filterValue)) {
       return i.meta?.paid === true && typeof fee === "number" && fee >= filterValue[0] && fee <= filterValue[1];
     }
@@ -90,10 +87,7 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
   },
   "free": (i, _) => i.meta?.paid === false,
   "stipend-based": (i, filterValue) => {
-    const fee =
-      typeof i.meta?.fee === "string"
-        ? parseFloat(i.meta.fee)
-        : i.meta?.fee;
+    const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     if (Array.isArray(filterValue)) {
       return typeof fee === "number" && fee >= filterValue[0] && fee <= filterValue[1];
     }
@@ -111,14 +105,15 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
+  // For internship duration, we now compare the numbers directly (assuming they're in months)
   "internship duration": (i, filterValue) => {
     if (Array.isArray(filterValue)) {
-      return typeof i.durationDays === "number" && i.durationDays >= filterValue[0]*30 && i.durationDays <= filterValue[1]*30;
+      return typeof i.durationDays === "number" && i.durationDays >= filterValue[0] && i.durationDays <= filterValue[1];
     }
     return typeof i.durationDays === "number";
   },
-  "short-term": (i, _) => typeof i.durationDays === "number" && i.durationDays < 90,
-  "long-term": (i, _) => typeof i.durationDays === "number" && i.durationDays >= 90,
+  "short-term": (i, _) => typeof i.durationDays === "number" && i.durationDays < 3,
+  "long-term": (i, _) => typeof i.durationDays === "number" && i.durationDays >= 3,
   "remote": (i, _) => i.location?.toLowerCase().includes("remote"),
   "on-site": (i, _) =>
     i.location &&
@@ -129,32 +124,61 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
   "full-time": (i, _) => i.jobType?.toLowerCase() === "full-time",
   "technical": (i, _) => i.meta?.technical === true,
   "non-technical": (i, _) => i.meta?.technical === false,
-  "company type: startup": (i, _) =>
-    i.meta?.companyType?.toLowerCase() === "startup",
-  "company type: mnc": (i, _) =>
-    i.meta?.companyType?.toLowerCase() === "mnc",
-  "company size: small": (i, _) =>
-    typeof i.meta?.companySize === "number" && i.meta.companySize < 50,
-  "company size: medium": (i, _) =>
-    typeof i.meta?.companySize === "number" &&
-    i.meta.companySize >= 50 &&
-    i.meta.companySize < 200,
-  "company size: large": (i, _) =>
-    typeof i.meta?.companySize === "number" && i.meta.companySize >= 200,
+  // For company type filters, we first try companyType then fall back to fuzzy matching.
+  "company type: startup": (i, _) => {
+    if (typeof i.meta?.companyType === "string") {
+      return fuzzyMatch("startup", i.meta.companyType);
+    }
+    return false;
+  },
+  "company type: mnc": (i, _) => {
+    if (typeof i.meta?.companyType === "string") {
+      return fuzzyMatch("mnc", i.meta.companyType);
+    }
+    return false;
+  },
+  // For company size, if numeric is available use it; otherwise, use companyType string.
+  "company size: small": (i, _) => {
+    if (typeof i.meta?.companySize === "number") {
+      return i.meta.companySize < 50;
+    }
+    if (typeof i.meta?.companyType === "string") {
+      return fuzzyMatch("small", i.meta.companyType);
+    }
+    return false;
+  },
+  "company size: medium": (i, _) => {
+    if (typeof i.meta?.companySize === "number") {
+      return i.meta.companySize >= 50 && i.meta.companySize < 200;
+    }
+    if (typeof i.meta?.companyType === "string") {
+      return fuzzyMatch("medium", i.meta.companyType);
+    }
+    return false;
+  },
+  "company size: large": (i, _) => {
+    if (typeof i.meta?.companySize === "number") {
+      return i.meta.companySize >= 200;
+    }
+    if (typeof i.meta?.companyType === "string") {
+      return fuzzyMatch("large", i.meta.companyType);
+    }
+    return false;
+  },
   "industry sector: software": (i, _) =>
-    i.meta?.industrySector?.toLowerCase() === "software",
+    fuzzyMatch("software", i.meta?.industrySector || ""),
   "industry sector: finance": (i, _) =>
-    i.meta?.industrySector?.toLowerCase() === "finance",
+    fuzzyMatch("finance", i.meta?.industrySector || ""),
   "industry sector: healthcare": (i, _) =>
-    i.meta?.industrySector?.toLowerCase() === "healthcare",
+    fuzzyMatch("healthcare", i.meta?.industrySector || ""),
   "industry sector: education": (i, _) =>
-    i.meta?.industrySector?.toLowerCase() === "education",
+    fuzzyMatch("education", i.meta?.industrySector || ""),
   "experience level: entry": (i, _) =>
-    i.meta?.experienceLevel?.toLowerCase() === "entry",
+    fuzzyMatch("entry", i.meta?.experienceLevel || ""),
   "experience level: mid": (i, _) =>
-    i.meta?.experienceLevel?.toLowerCase() === "mid",
+    fuzzyMatch("mid", i.meta?.experienceLevel || ""),
   "experience level: senior": (i, _) =>
-    i.meta?.experienceLevel?.toLowerCase() === "senior",
+    fuzzyMatch("senior", i.meta?.experienceLevel || ""),
   "visa sponsored": (i, _) => i.meta?.visaSponsored === true,
   "accommodation provided": (i, _) => i.meta?.accommodationProvided === true,
   "flexible hours": (i, _) => i.meta?.flexibleHours === true,
@@ -173,6 +197,7 @@ export default function useFilteredInternships(
 
   return useMemo(() => {
     return internships.filter((internship) => {
+      // Build a searchable text string from various fields.
       const searchableText = `
         ${internship.company || ""}
         ${internship.role || ""}
@@ -188,12 +213,14 @@ export default function useFilteredInternships(
         ${internship.meta?.companyType || ""}
       `;
 
+      // Apply fuzzy text search for each word.
       for (const word of queryWords) {
         if (!fuzzyMatch(word, searchableText)) {
           return false;
         }
       }
 
+      // Apply each selected filter.
       for (const filterLabel in selectedFilters) {
         const filterValue = selectedFilters[filterLabel];
         const lowerLabel = filterLabel.toLowerCase();
@@ -203,6 +230,7 @@ export default function useFilteredInternships(
             return false;
           }
         } else if (Array.isArray(filterValue)) {
+          // For sub‑filters, require at least one to match.
           const subFilterPassed = filterValue.some((subFilter) => {
             const lowerSub = subFilter.toLowerCase();
             const subPredicate = filterMapping[lowerSub];
