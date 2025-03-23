@@ -103,17 +103,22 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Internship duration is now based on the 'duration' field (in months)
-  "internship duration": (i, filterValue) => {
-    const duration =
-      typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
-    if (Array.isArray(filterValue)) {
-      return typeof duration === "number" &&
-             duration >= filterValue[0] &&
-             duration <= filterValue[1];
-    }
-    return typeof duration === "number";
-  },
+"internship duration": (i, filterValue) => {
+  // Convert 'duration' to a number if needed
+  let duration = i.duration;
+  if (typeof duration === "string") {
+    duration = parseFloat(duration);
+  }
+  console.log("Internship Duration:", duration, "Filter Range:", filterValue);
+  
+  if (Array.isArray(filterValue)) {
+    return typeof duration === "number" &&
+           duration >= filterValue[0] &&
+           duration <= filterValue[1];
+  }
+  return typeof duration === "number";
+},
+
   "short-term": (i, _) => {
     const duration =
       typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
