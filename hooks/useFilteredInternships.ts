@@ -39,7 +39,7 @@ function fuzzyMatch(searchWord: string, targetText: string): boolean {
   return false;
 }
 
-// Internship type definition, with 'duration' (in months) now.
+// Internship type definition – note that duration now replaces durationDays
 export interface Internship {
   company?: string;
   role?: string;
@@ -47,7 +47,7 @@ export interface Internship {
   skills?: string | string[];
   domain?: string;
   description?: string;
-  duration?: number | string;  // now represents months (1-24)
+  duration?: number | string;  // represents months (1-24)
   stipend?: number;
   paymentType?: string;
   jobType?: string;
@@ -55,7 +55,7 @@ export interface Internship {
     paid?: boolean;
     fee?: number | string;
     companyType?: string;
-    companySize?: number;
+    companySize?: number | string;
     technical?: boolean;
     industrySector?: string;
     experienceLevel?: string;
@@ -74,7 +74,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping with fuzzy matching and internship duration as 'duration' (months)
+// Updated filter mapping
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -103,30 +103,31 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-"internship duration": (i, filterValue) => {
-  // Convert 'duration' to a number if needed
-  let duration = i.duration;
-  if (typeof duration === "string") {
-    duration = parseFloat(duration);
-  }
-  console.log("Internship Duration:", duration, "Filter Range:", filterValue);
-  
-  if (Array.isArray(filterValue)) {
-    return typeof duration === "number" &&
-           duration >= filterValue[0] &&
-           duration <= filterValue[1];
-  }
-  return typeof duration === "number";
-},
-
+  // Internship duration now uses the "duration" field (in months)
+  "internship duration": (i, filterValue) => {
+    let duration = i.duration;
+    if (typeof duration === "string") {
+      duration = parseFloat(duration);
+    }
+    if (Array.isArray(filterValue)) {
+      return typeof duration === "number" &&
+             duration >= filterValue[0] &&
+             duration <= filterValue[1];
+    }
+    return typeof duration === "number";
+  },
   "short-term": (i, _) => {
-    const duration =
-      typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
+    let duration = i.duration;
+    if (typeof duration === "string") {
+      duration = parseFloat(duration);
+    }
     return typeof duration === "number" && duration < 3;
   },
   "long-term": (i, _) => {
-    const duration =
-      typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
+    let duration = i.duration;
+    if (typeof duration === "string") {
+      duration = parseFloat(duration);
+    }
     return typeof duration === "number" && duration >= 3;
   },
   "remote": (i, _) => i.location?.toLowerCase().includes("remote"),
@@ -152,29 +153,29 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     return false;
   },
   "company size: small": (i, _) => {
+    if (typeof i.meta?.companySize === "string") {
+      return fuzzyMatch("small", i.meta.companySize);
+    }
     if (typeof i.meta?.companySize === "number") {
       return i.meta.companySize < 50;
-    }
-    if (typeof i.meta?.companyType === "string") {
-      return fuzzyMatch("small", i.meta.companyType);
     }
     return false;
   },
   "company size: medium": (i, _) => {
+    if (typeof i.meta?.companySize === "string") {
+      return fuzzyMatch("medium", i.meta.companySize);
+    }
     if (typeof i.meta?.companySize === "number") {
       return i.meta.companySize >= 50 && i.meta.companySize < 200;
-    }
-    if (typeof i.meta?.companyType === "string") {
-      return fuzzyMatch("medium", i.meta.companyType);
     }
     return false;
   },
   "company size: large": (i, _) => {
+    if (typeof i.meta?.companySize === "string") {
+      return fuzzyMatch("large", i.meta.companySize);
+    }
     if (typeof i.meta?.companySize === "number") {
       return i.meta.companySize >= 200;
-    }
-    if (typeof i.meta?.companyType === "string") {
-      return fuzzyMatch("large", i.meta.companyType);
     }
     return false;
   },
@@ -203,7 +204,6 @@ export default function useFilteredInternships(
 
   return useMemo(() => {
     return internships.filter((internship) => {
-      // Build a searchable text string from various fields.
       const searchableText = `
         ${internship.company || ""}
         ${internship.role || ""}
@@ -219,14 +219,12 @@ export default function useFilteredInternships(
         ${internship.meta?.companyType || ""}
       `;
 
-      // Apply fuzzy text search for each word.
       for (const word of queryWords) {
         if (!fuzzyMatch(word, searchableText)) {
           return false;
         }
       }
 
-      // Apply each selected filter.
       for (const filterLabel in selectedFilters) {
         const filterValue = selectedFilters[filterLabel];
         const lowerLabel = filterLabel.toLowerCase();
