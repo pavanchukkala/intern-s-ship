@@ -116,7 +116,7 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
             className="fixed inset-0 bg-black bg-opacity-30 z-40"
             onClick={() => setSidebarOpen(false)}
           ></div>
-          {/* Restored fixed-width Sidebar */}
+          {/* Fixed-Width Sidebar (restored to previous UI) */}
           <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 rounded-r-lg shadow-xl z-50 overflow-y-auto p-8">
             {/* Sidebar Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-6">
