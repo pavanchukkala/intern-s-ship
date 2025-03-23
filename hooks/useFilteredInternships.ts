@@ -1,20 +1,6 @@
 import { useMemo } from "react";
 
-// Updated fuzzyMatch: force targetText to be a string.
-function fuzzyMatch(searchWord: string, targetText: any): boolean {
-  const lowerSearch = searchWord.toLowerCase();
-  const lowerText = String(targetText).toLowerCase(); // force string conversion
-  if (lowerText.includes(lowerSearch)) return true;
-  const words = lowerText.split(/\W+/);
-  for (let word of words) {
-    if (!word) continue;
-    const distance = levenshtein(lowerSearch, word);
-    const threshold = Math.floor(lowerSearch.length * 0.3);
-    if (distance <= threshold) return true;
-  }
-  return false;
-}
-
+// Levenshtein Distance for minimal fuzzy matching
 function levenshtein(a: string, b: string): number {
   const matrix: number[][] = [];
   for (let i = 0; i <= b.length; i++) {
@@ -37,6 +23,21 @@ function levenshtein(a: string, b: string): number {
     }
   }
   return matrix[b.length][a.length];
+}
+
+// Updated fuzzyMatch: force targetText to be a string.
+function fuzzyMatch(searchWord: string, targetText: any): boolean {
+  const lowerSearch = searchWord.toLowerCase();
+  const lowerText = String(targetText).toLowerCase(); // force string conversion
+  if (lowerText.includes(lowerSearch)) return true;
+  const words = lowerText.split(/\W+/);
+  for (let word of words) {
+    if (!word) continue;
+    const distance = levenshtein(lowerSearch, word);
+    const threshold = Math.floor(lowerSearch.length * 0.3);
+    if (distance <= threshold) return true;
+  }
+  return false;
 }
 
 // Internship type definition – note that duration now replaces durationDays.
@@ -74,6 +75,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
+// Updated filter mapping with added String() wrappers
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -102,7 +104,7 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Internship duration now uses the "duration" field (in months).
+  // Internship duration now uses the "duration" field (in months)
   "internship duration": (i, filterValue) => {
     let duration = i.duration;
     if (typeof duration === "string") {
@@ -129,14 +131,13 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     }
     return typeof duration === "number" && duration >= 3;
   },
-  "remote": (i, _) => i.location?.toLowerCase().includes("remote"),
+  "remote": (i, _) => String(i.location || "").toLowerCase().includes("remote"),
   "on-site": (i, _) =>
-    i.location &&
-    !i.location.toLowerCase().includes("remote") &&
-    !i.location.toLowerCase().includes("hybrid"),
-  "hybrid": (i, _) => i.location?.toLowerCase().includes("hybrid"),
-  "part-time": (i, _) => i.jobType?.toLowerCase() === "part-time",
-  "full-time": (i, _) => i.jobType?.toLowerCase() === "full-time",
+    !String(i.location || "").toLowerCase().includes("remote") &&
+    !String(i.location || "").toLowerCase().includes("hybrid"),
+  "hybrid": (i, _) => String(i.location || "").toLowerCase().includes("hybrid"),
+  "part-time": (i, _) => String(i.jobType || "").toLowerCase() === "part-time",
+  "full-time": (i, _) => String(i.jobType || "").toLowerCase() === "full-time",
   "technical": (i, _) => i.meta?.technical === true,
   "non-technical": (i, _) => i.meta?.technical === false,
   "company type: startup": (i, _) => {
@@ -178,13 +179,20 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     }
     return false;
   },
-  "industry sector: software": (i, _) => fuzzyMatch("software", i.meta?.industrySector || ""),
-  "industry sector: finance": (i, _) => fuzzyMatch("finance", i.meta?.industrySector || ""),
-  "industry sector: healthcare": (i, _) => fuzzyMatch("healthcare", i.meta?.industrySector || ""),
-  "industry sector: education": (i, _) => fuzzyMatch("education", i.meta?.industrySector || ""),
-  "experience level: entry": (i, _) => fuzzyMatch("entry", i.meta?.experienceLevel || ""),
-  "experience level: mid": (i, _) => fuzzyMatch("mid", i.meta?.experienceLevel || ""),
-  "experience level: senior": (i, _) => fuzzyMatch("senior", i.meta?.experienceLevel || ""),
+  "industry sector: software": (i, _) =>
+    fuzzyMatch("software", i.meta?.industrySector || ""),
+  "industry sector: finance": (i, _) =>
+    fuzzyMatch("finance", i.meta?.industrySector || ""),
+  "industry sector: healthcare": (i, _) =>
+    fuzzyMatch("healthcare", i.meta?.industrySector || ""),
+  "industry sector: education": (i, _) =>
+    fuzzyMatch("education", i.meta?.industrySector || ""),
+  "experience level: entry": (i, _) =>
+    fuzzyMatch("entry", i.meta?.experienceLevel || ""),
+  "experience level: mid": (i, _) =>
+    fuzzyMatch("mid", i.meta?.experienceLevel || ""),
+  "experience level: senior": (i, _) =>
+    fuzzyMatch("senior", i.meta?.experienceLevel || ""),
   "visa sponsored": (i, _) => i.meta?.visaSponsored === true,
   "accommodation provided": (i, _) => i.meta?.accommodationProvided === true,
   "flexible hours": (i, _) => i.meta?.flexibleHours === true,
@@ -221,12 +229,14 @@ export default function useFilteredInternships(
         ${internship.meta?.companyType || ""}
       `;
 
+      // Apply fuzzy text search for each word.
       for (const word of queryWords) {
         if (!fuzzyMatch(word, searchableText)) {
           return false;
         }
       }
 
+      // Apply each selected filter.
       for (const filterLabel in selectedFilters) {
         const filterValue = selectedFilters[filterLabel];
         const lowerLabel = filterLabel.toLowerCase();
