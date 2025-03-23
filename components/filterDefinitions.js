@@ -31,7 +31,7 @@ export const FILTER_CATEGORIES = [
         value: "internship duration",
         type: "range",  // Use slider for duration (months)
         min: 1,
-        max: 12,
+        max: 24,
       },
       { label: "Short-term", value: "short-term" },
       { label: "Long-term", value: "long-term" },
