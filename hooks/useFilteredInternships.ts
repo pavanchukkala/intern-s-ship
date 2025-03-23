@@ -1,6 +1,20 @@
 import { useMemo } from "react";
 
-// Levenshtein Distance for minimal fuzzy matching
+// Updated fuzzyMatch: force targetText to be a string.
+function fuzzyMatch(searchWord: string, targetText: any): boolean {
+  const lowerSearch = searchWord.toLowerCase();
+  const lowerText = String(targetText).toLowerCase(); // force string conversion
+  if (lowerText.includes(lowerSearch)) return true;
+  const words = lowerText.split(/\W+/);
+  for (let word of words) {
+    if (!word) continue;
+    const distance = levenshtein(lowerSearch, word);
+    const threshold = Math.floor(lowerSearch.length * 0.3);
+    if (distance <= threshold) return true;
+  }
+  return false;
+}
+
 function levenshtein(a: string, b: string): number {
   const matrix: number[][] = [];
   for (let i = 0; i <= b.length; i++) {
@@ -25,21 +39,7 @@ function levenshtein(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-function fuzzyMatch(searchWord: string, targetText: string): boolean {
-  const lowerSearch = searchWord.toLowerCase();
-  const lowerText = targetText.toLowerCase();
-  if (lowerText.includes(lowerSearch)) return true;
-  const words = lowerText.split(/\W+/);
-  for (let word of words) {
-    if (!word) continue;
-    const distance = levenshtein(lowerSearch, word);
-    const threshold = Math.floor(lowerSearch.length * 0.3);
-    if (distance <= threshold) return true;
-  }
-  return false;
-}
-
-// Internship type definition – note that duration now replaces durationDays
+// Internship type definition – note that duration now replaces durationDays.
 export interface Internship {
   company?: string;
   role?: string;
@@ -74,7 +74,6 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -103,7 +102,7 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Internship duration now uses the "duration" field (in months)
+  // Internship duration now uses the "duration" field (in months).
   "internship duration": (i, filterValue) => {
     let duration = i.duration;
     if (typeof duration === "string") {
@@ -204,15 +203,18 @@ export default function useFilteredInternships(
 
   return useMemo(() => {
     return internships.filter((internship) => {
+      // Build a searchable text string from various fields.
       const searchableText = `
         ${internship.company || ""}
         ${internship.role || ""}
         ${internship.location || ""}
-        ${typeof internship.skills === "string"
-          ? internship.skills
-          : Array.isArray(internship.skills)
-          ? internship.skills.join(" ")
-          : ""}
+        ${
+          typeof internship.skills === "string"
+            ? internship.skills
+            : Array.isArray(internship.skills)
+            ? internship.skills.join(" ")
+            : ""
+        }
         ${internship.domain || ""}
         ${internship.description || ""}
         ${internship.meta?.industrySector || ""}
