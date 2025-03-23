@@ -75,7 +75,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping with added String() wrappers
+// Updated filter mapping with String() wrappers where needed
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -179,20 +179,13 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     }
     return false;
   },
-  "industry sector: software": (i, _) =>
-    fuzzyMatch("software", i.meta?.industrySector || ""),
-  "industry sector: finance": (i, _) =>
-    fuzzyMatch("finance", i.meta?.industrySector || ""),
-  "industry sector: healthcare": (i, _) =>
-    fuzzyMatch("healthcare", i.meta?.industrySector || ""),
-  "industry sector: education": (i, _) =>
-    fuzzyMatch("education", i.meta?.industrySector || ""),
-  "experience level: entry": (i, _) =>
-    fuzzyMatch("entry", i.meta?.experienceLevel || ""),
-  "experience level: mid": (i, _) =>
-    fuzzyMatch("mid", i.meta?.experienceLevel || ""),
-  "experience level: senior": (i, _) =>
-    fuzzyMatch("senior", i.meta?.experienceLevel || ""),
+  "industry sector: software": (i, _) => fuzzyMatch("software", i.meta?.industrySector || ""),
+  "industry sector: finance": (i, _) => fuzzyMatch("finance", i.meta?.industrySector || ""),
+  "industry sector: healthcare": (i, _) => fuzzyMatch("healthcare", i.meta?.industrySector || ""),
+  "industry sector: education": (i, _) => fuzzyMatch("education", i.meta?.industrySector || ""),
+  "experience level: entry": (i, _) => fuzzyMatch("entry", i.meta?.experienceLevel || ""),
+  "experience level: mid": (i, _) => fuzzyMatch("mid", i.meta?.experienceLevel || ""),
+  "experience level: senior": (i, _) => fuzzyMatch("senior", i.meta?.experienceLevel || ""),
   "visa sponsored": (i, _) => i.meta?.visaSponsored === true,
   "accommodation provided": (i, _) => i.meta?.accommodationProvided === true,
   "flexible hours": (i, _) => i.meta?.flexibleHours === true,
@@ -229,14 +222,12 @@ export default function useFilteredInternships(
         ${internship.meta?.companyType || ""}
       `;
 
-      // Apply fuzzy text search for each word.
       for (const word of queryWords) {
         if (!fuzzyMatch(word, searchableText)) {
           return false;
         }
       }
 
-      // Apply each selected filter.
       for (const filterLabel in selectedFilters) {
         const filterValue = selectedFilters[filterLabel];
         const lowerLabel = filterLabel.toLowerCase();
@@ -247,7 +238,7 @@ export default function useFilteredInternships(
           }
         } else if (Array.isArray(filterValue)) {
           const subFilterPassed = filterValue.some((subFilter) => {
-            const lowerSub = subFilter.toLowerCase();
+            const lowerSub = String(subFilter).toLowerCase();
             const subPredicate = filterMapping[lowerSub];
             return subPredicate ? subPredicate(internship) : false;
           });
