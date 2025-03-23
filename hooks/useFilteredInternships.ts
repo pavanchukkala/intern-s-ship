@@ -39,7 +39,7 @@ function fuzzyMatch(searchWord: string, targetText: string): boolean {
   return false;
 }
 
-// Types
+// Internship type definition
 export interface Internship {
   company?: string;
   role?: string;
@@ -47,19 +47,19 @@ export interface Internship {
   skills?: string | string[];
   domain?: string;
   description?: string;
-  durationText?: string; // e.g., "45 Days"
-  durationDays?: number; // e.g., 45 (Assuming this represents months if using "internship duration" slider)
+  durationText?: string;
+  durationDays?: number;  // this now represents months directly
   stipend?: number;
   paymentType?: string;
   jobType?: string;
   meta?: {
     paid?: boolean;
     fee?: number | string;
-    companyType?: string;       // e.g. "startup", "Medium", etc.
-    companySize?: number;       // numeric size if available
+    companyType?: string;
+    companySize?: number;
     technical?: boolean;
-    industrySector?: string;    // e.g. "software", "finance", etc.
-    experienceLevel?: string;   // e.g. "entry", "mid", "senior"
+    industrySector?: string;
+    experienceLevel?: string;
     visaSponsored?: boolean;
     accommodationProvided?: boolean;
     flexibleHours?: boolean;
@@ -75,8 +75,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping with adjustments for internship duration and company type/size.
-// For fuzzy matching typos, we use fuzzyMatch when comparing strings.
+// Updated filter mapping with fuzzy matching and internship duration as months
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -105,10 +104,12 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // For internship duration, we now compare the numbers directly (assuming they're in months)
+  // Internship duration is in months now; compare directly.
   "internship duration": (i, filterValue) => {
     if (Array.isArray(filterValue)) {
-      return typeof i.durationDays === "number" && i.durationDays >= filterValue[0] && i.durationDays <= filterValue[1];
+      return typeof i.durationDays === "number" &&
+             i.durationDays >= filterValue[0] &&
+             i.durationDays <= filterValue[1];
     }
     return typeof i.durationDays === "number";
   },
@@ -124,7 +125,6 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
   "full-time": (i, _) => i.jobType?.toLowerCase() === "full-time",
   "technical": (i, _) => i.meta?.technical === true,
   "non-technical": (i, _) => i.meta?.technical === false,
-  // For company type filters, we first try companyType then fall back to fuzzy matching.
   "company type: startup": (i, _) => {
     if (typeof i.meta?.companyType === "string") {
       return fuzzyMatch("startup", i.meta.companyType);
@@ -137,7 +137,6 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     }
     return false;
   },
-  // For company size, if numeric is available use it; otherwise, use companyType string.
   "company size: small": (i, _) => {
     if (typeof i.meta?.companySize === "number") {
       return i.meta.companySize < 50;
@@ -165,20 +164,13 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     }
     return false;
   },
-  "industry sector: software": (i, _) =>
-    fuzzyMatch("software", i.meta?.industrySector || ""),
-  "industry sector: finance": (i, _) =>
-    fuzzyMatch("finance", i.meta?.industrySector || ""),
-  "industry sector: healthcare": (i, _) =>
-    fuzzyMatch("healthcare", i.meta?.industrySector || ""),
-  "industry sector: education": (i, _) =>
-    fuzzyMatch("education", i.meta?.industrySector || ""),
-  "experience level: entry": (i, _) =>
-    fuzzyMatch("entry", i.meta?.experienceLevel || ""),
-  "experience level: mid": (i, _) =>
-    fuzzyMatch("mid", i.meta?.experienceLevel || ""),
-  "experience level: senior": (i, _) =>
-    fuzzyMatch("senior", i.meta?.experienceLevel || ""),
+  "industry sector: software": (i, _) => fuzzyMatch("software", i.meta?.industrySector || ""),
+  "industry sector: finance": (i, _) => fuzzyMatch("finance", i.meta?.industrySector || ""),
+  "industry sector: healthcare": (i, _) => fuzzyMatch("healthcare", i.meta?.industrySector || ""),
+  "industry sector: education": (i, _) => fuzzyMatch("education", i.meta?.industrySector || ""),
+  "experience level: entry": (i, _) => fuzzyMatch("entry", i.meta?.experienceLevel || ""),
+  "experience level: mid": (i, _) => fuzzyMatch("mid", i.meta?.experienceLevel || ""),
+  "experience level: senior": (i, _) => fuzzyMatch("senior", i.meta?.experienceLevel || ""),
   "visa sponsored": (i, _) => i.meta?.visaSponsored === true,
   "accommodation provided": (i, _) => i.meta?.accommodationProvided === true,
   "flexible hours": (i, _) => i.meta?.flexibleHours === true,
@@ -230,7 +222,6 @@ export default function useFilteredInternships(
             return false;
           }
         } else if (Array.isArray(filterValue)) {
-          // For sub‑filters, require at least one to match.
           const subFilterPassed = filterValue.some((subFilter) => {
             const lowerSub = subFilter.toLowerCase();
             const subPredicate = filterMapping[lowerSub];
