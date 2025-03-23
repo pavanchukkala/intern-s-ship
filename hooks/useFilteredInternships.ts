@@ -39,7 +39,7 @@ function fuzzyMatch(searchWord: string, targetText: string): boolean {
   return false;
 }
 
-// Internship type definition
+// Internship type definition, with 'duration' (in months) now.
 export interface Internship {
   company?: string;
   role?: string;
@@ -47,8 +47,7 @@ export interface Internship {
   skills?: string | string[];
   domain?: string;
   description?: string;
-  durationText?: string;
-  durationDays?: number;  // this now represents months directly
+  duration?: number | string;  // now represents months (1-24)
   stipend?: number;
   paymentType?: string;
   jobType?: string;
@@ -75,7 +74,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping with fuzzy matching and internship duration as months
+// Updated filter mapping with fuzzy matching and internship duration as 'duration' (months)
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -104,17 +103,27 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Internship duration is in months now; compare directly.
+  // Internship duration is now based on the 'duration' field (in months)
   "internship duration": (i, filterValue) => {
+    const duration =
+      typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
     if (Array.isArray(filterValue)) {
-      return typeof i.durationDays === "number" &&
-             i.durationDays >= filterValue[0] &&
-             i.durationDays <= filterValue[1];
+      return typeof duration === "number" &&
+             duration >= filterValue[0] &&
+             duration <= filterValue[1];
     }
-    return typeof i.durationDays === "number";
+    return typeof duration === "number";
   },
-  "short-term": (i, _) => typeof i.durationDays === "number" && i.durationDays < 3,
-  "long-term": (i, _) => typeof i.durationDays === "number" && i.durationDays >= 3,
+  "short-term": (i, _) => {
+    const duration =
+      typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
+    return typeof duration === "number" && duration < 3;
+  },
+  "long-term": (i, _) => {
+    const duration =
+      typeof i.duration === "string" ? parseFloat(i.duration) : i.duration;
+    return typeof duration === "number" && duration >= 3;
+  },
   "remote": (i, _) => i.location?.toLowerCase().includes("remote"),
   "on-site": (i, _) =>
     i.location &&
