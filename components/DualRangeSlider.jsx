@@ -1,4 +1,3 @@
-// /components/DualRangeSlider.jsx
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 
@@ -6,24 +5,19 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
   const [dragging, setDragging] = useState(null);
   const sliderRef = useRef(null);
 
-  // Convert a value to its relative percentage position
   const getPosition = (value) => ((value - min) / (max - min)) * 100;
 
-  // Initiate dragging for a specific handle
   const handleMouseDown = (handleIndex) => (e) => {
     setDragging(handleIndex);
     e.preventDefault();
   };
 
-  // End dragging
   const handleMouseUp = () => {
     setDragging(null);
   };
 
-  // Update handle positions on mouse move
   const handleMouseMove = (e) => {
-    if (dragging === null) return;
-    if (!sliderRef.current) return;
+    if (dragging === null || !sliderRef.current) return;
     const rect = sliderRef.current.getBoundingClientRect();
     let percent = (e.clientX - rect.left) / rect.width;
     percent = Math.max(0, Math.min(percent, 1));
@@ -51,10 +45,8 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
   return (
     <div
       ref={sliderRef}
-      className="relative h-3 bg-gray-300 rounded-full"
-      style={{ margin: "0 15px" }}
+      className="relative h-3 bg-gray-300 rounded-full mx-4"
     >
-      {/* Active track with a subtle gradient and shadow */}
       <div
         className="absolute h-3 rounded-full"
         style={{
@@ -64,7 +56,6 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
           boxShadow: "0 2px 4px rgba(37, 99, 235, 0.4)",
         }}
       ></div>
-      {/* Left handle with refined styling */}
       <div
         onMouseDown={handleMouseDown(0)}
         className="absolute h-6 w-6 bg-white rounded-full cursor-pointer transition-transform transform hover:scale-110"
@@ -75,7 +66,6 @@ const DualRangeSlider = ({ min, max, values, onChange }) => {
           boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
         }}
       ></div>
-      {/* Right handle with similar refined styling */}
       <div
         onMouseDown={handleMouseDown(1)}
         className="absolute h-6 w-6 bg-white rounded-full cursor-pointer transition-transform transform hover:scale-110"
