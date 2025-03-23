@@ -1,13 +1,9 @@
-// /components/FilterPanel.jsx
 "use client";
 import React, { useState } from "react";
 import { FILTER_CATEGORIES } from "./filterDefinitions";
 import { Filter, XCircle } from "lucide-react";
 import DualRangeSlider from "./DualRangeSlider";
 
-// FilterPanel renders a basic filter bar and a detailed sidebar overlay.
-// It supports checkboxes, parent-child subfilters, and range (slider) filters.
-// For range filters, a checkbox toggles the display of the slider.
 const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState(
@@ -15,7 +11,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
   );
   const [activeRange, setActiveRange] = useState({});
 
-  // Toggle category expansion.
   const toggleCategory = (categoryTitle) => {
     setExpandedCategories((prev) => ({
       ...prev,
@@ -23,7 +18,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }));
   };
 
-  // Handle simple checkbox changes.
   const handleCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -36,7 +30,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }
   };
 
-  // Handle parent filters with sub‑filters.
   const handleParentCheckboxChange = (filter) => (e) => {
     const checked = e.target.checked;
     if (checked) {
@@ -52,7 +45,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     }
   };
 
-  // Handle individual sub‑filter checkbox changes.
   const handleSubCheckboxChange = (parentFilter, subFilter) => (e) => {
     const checked = e.target.checked;
     setSelectedFilters((prev) => {
@@ -76,18 +68,16 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
     });
   };
 
-  // Handle range filter changes via the custom dual slider.
   const handleRangeChange = (filter, values) => {
     setSelectedFilters((prev) => ({ ...prev, [filter.value]: values }));
   };
 
-  // Check if all sub‑filters for a parent are selected.
   const isParentChecked = (filter) => {
     const selectedSubs = selectedFilters[filter.value];
     return selectedSubs && selectedSubs.length === filter.subFilters?.length;
   };
 
-  // Basic filter chips.
+  // Basic filter chips – clicking them now just opens the sidebar.
   const basicFilters = ["Remote", "Full-time", "Part-time", "On-site"];
 
   return (
@@ -126,8 +116,8 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
             className="fixed inset-0 bg-black bg-opacity-30 z-40"
             onClick={() => setSidebarOpen(false)}
           ></div>
-          {/* Sidebar */}
-          <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 rounded-r-lg shadow-xl z-50 overflow-y-auto p-8">
+          {/* Responsive Sidebar */}
+          <div className="fixed top-0 left-0 w-full sm:w-80 h-full bg-white dark:bg-gray-900 rounded-r-lg shadow-xl z-50 overflow-y-auto p-4 sm:p-8">
             {/* Sidebar Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-6">
               <h4 className="text-3xl font-extrabold text-blue-800">
@@ -163,7 +153,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                     className="focus:outline-none"
                     aria-label="Toggle category"
                   >
-                    {/* Triangle icon using an SVG */}
                     <svg
                       className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${
                         expandedCategories[category.title]
@@ -183,7 +172,6 @@ const FilterPanel = ({ selectedFilters, setSelectedFilters, onApplyFilters }) =>
                     {category.filters.map((filter) => (
                       <div key={filter.value} className="pl-2">
                         {filter.type === "range" ? (
-                          // For range filters, show a checkbox to toggle slider display.
                           <div className="flex flex-col">
                             <div className="flex items-center">
                               <input
