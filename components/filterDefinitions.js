@@ -28,7 +28,7 @@ export const FILTER_CATEGORIES = [
     filters: [
       { 
         label: "Internship Duration", 
-        value: "internship duration",
+        value: "duration",
         type: "range",  // Use slider for duration (months)
         min: 1,
         max: 24,
