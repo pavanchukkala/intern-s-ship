@@ -174,7 +174,7 @@ export function ScrollButtons() {
         disabled={atTop}
         whileHover={!atTop ? { scale: 1.1 } : {}}
         whileTap={!atTop ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed top-[100px] right-4 transition-opacity ${
+        className={`${buttonClasses} fixed top-[140px] right-4 transition-opacity ${
           atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
@@ -186,7 +186,7 @@ export function ScrollButtons() {
         disabled={atBottom}
         whileHover={!atBottom ? { scale: 1.1 } : {}}
         whileTap={!atBottom ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed bottom-[60px] right-4 transition-opacity ${
+        className={`${buttonClasses} fixed bottom-[45px] right-4 transition-opacity ${
           atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
