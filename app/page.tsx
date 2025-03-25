@@ -146,43 +146,39 @@ function ScrollButtons() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Check initial scroll position
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    if (!atTop) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    if (!atTop) window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const scrollToBottom = () => {
-    if (!atBottom) {
+    if (!atBottom)
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: "smooth",
       });
-    }
   };
 
   return (
     <>
-      {/* Scroll Up Button - fixed at the top right */}
+      {/* Scroll Up Button - positioned below the nav bar */}
       <button
         onClick={scrollToTop}
         disabled={atTop}
-        className={`fixed top-4 right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
+        className={`fixed top-[80px] right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
           atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
         ↑
       </button>
-      {/* Scroll Down Button - fixed at the bottom right */}
+      {/* Scroll Down Button - positioned above the footer/privacy policy */}
       <button
         onClick={scrollToBottom}
         disabled={atBottom}
-        className={`fixed bottom-4 right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
+        className={`fixed bottom-[80px] right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
           atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
