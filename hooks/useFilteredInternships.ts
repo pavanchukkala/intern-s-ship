@@ -104,8 +104,8 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Internship duration now uses the "duration" field (in months)
-  "internship duration": (i, filterValue) => {
+  // Updated duration mapping key to "duration"
+  "duration": (i, filterValue) => {
     let duration = i.duration;
     if (typeof duration === "string") {
       duration = parseFloat(duration);
