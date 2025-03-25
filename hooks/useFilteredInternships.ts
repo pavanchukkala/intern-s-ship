@@ -75,7 +75,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping with debug logging in the duration predicate.
+// Updated filter mapping with adjusted duration predicate.
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -104,21 +104,21 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Modified duration predicate with debug logging.
+  // Adjusted duration predicate with extra parsing and NaN check.
   "duration": (i, filterValue) => {
     let duration = i.duration;
-    console.log("Evaluating duration filter", { internshipDuration: duration, filterValue });
     if (typeof duration === "string") {
       duration = parseFloat(duration);
     }
-    if (Array.isArray(filterValue)) {
-      const result = typeof duration === "number" &&
-                     duration >= filterValue[0] &&
-                     duration <= filterValue[1];
-      console.log("Duration predicate result", result);
-      return result;
+    if (isNaN(duration)) {
+      console.log("Duration is NaN for", i);
+      return false;
     }
-    return typeof duration === "number";
+    console.log("Filtering duration:", duration, "with range:", filterValue);
+    if (Array.isArray(filterValue)) {
+      return duration >= filterValue[0] && duration <= filterValue[1];
+    }
+    return true;
   },
   "short-term": (i, _) => {
     let duration = i.duration;
