@@ -28,7 +28,7 @@ function levenshtein(a: string, b: string): number {
 // Updated fuzzyMatch: force targetText to be a string.
 function fuzzyMatch(searchWord: string, targetText: any): boolean {
   const lowerSearch = searchWord.toLowerCase();
-  const lowerText = String(targetText).toLowerCase(); // force string conversion
+  const lowerText = String(targetText).toLowerCase();
   if (lowerText.includes(lowerSearch)) return true;
   const words = lowerText.split(/\W+/);
   for (let word of words) {
@@ -75,7 +75,7 @@ type Filters = {
   [key: string]: boolean | string[] | number[];
 };
 
-// Updated filter mapping with String() wrappers where needed
+// Updated filter mapping with debug logging in the duration predicate.
 const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolean> = {
   "paid": (i, filterValue) => {
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
@@ -104,16 +104,19 @@ const filterMapping: Record<string, (i: Internship, filterValue?: any) => boolea
     const fee = typeof i.meta?.fee === "string" ? parseFloat(i.meta.fee) : i.meta?.fee;
     return typeof fee === "number" && fee > 1000;
   },
-  // Updated duration mapping key to "duration"
+  // Modified duration predicate with debug logging.
   "duration": (i, filterValue) => {
     let duration = i.duration;
+    console.log("Evaluating duration filter", { internshipDuration: duration, filterValue });
     if (typeof duration === "string") {
       duration = parseFloat(duration);
     }
     if (Array.isArray(filterValue)) {
-      return typeof duration === "number" &&
-             duration >= filterValue[0] &&
-             duration <= filterValue[1];
+      const result = typeof duration === "number" &&
+                     duration >= filterValue[0] &&
+                     duration <= filterValue[1];
+      console.log("Duration predicate result", result);
+      return result;
     }
     return typeof duration === "number";
   },
