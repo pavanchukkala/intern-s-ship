@@ -131,9 +131,69 @@ function InternshipCard({
   );
 }
 
+function ScrollButtons() {
+  const [atTop, setAtTop] = useState(true);
+  const [atBottom, setAtBottom] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const isAtTop = scrollTop === 0;
+      const isAtBottom =
+        window.innerHeight + scrollTop >= document.documentElement.scrollHeight;
+      setAtTop(isAtTop);
+      setAtBottom(isAtBottom);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Check initial scroll position
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    if (!atTop) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (!atBottom) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  return (
+    <>
+      {/* Scroll Up Button - fixed at the top right */}
+      <button
+        onClick={scrollToTop}
+        disabled={atTop}
+        className={`fixed top-4 right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
+          atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"
+        }`}
+      >
+        ↑
+      </button>
+      {/* Scroll Down Button - fixed at the bottom right */}
+      <button
+        onClick={scrollToBottom}
+        disabled={atBottom}
+        className={`fixed bottom-4 right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
+          atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
+        }`}
+      >
+        ↓
+      </button>
+    </>
+  );
+}
+
 function PageContent() {
   const router = useRouter();
-  // Load the search query from sessionStorage after mount
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(true);
@@ -148,12 +208,10 @@ function PageContent() {
     }
   }, []);
 
-  // Save the search query to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem("searchQuery", searchQuery);
   }, [searchQuery]);
 
-  // Fetch internships from Firestore on mount
   useEffect(() => {
     async function fetchInternships() {
       try {
@@ -198,7 +256,10 @@ function PageContent() {
             <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
               Home
             </a>
-            <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+            <a
+              href="/about"
+              className="hover:text-yellow-400 text-sm sm:text-base"
+            >
               About
             </a>
             <a
@@ -253,7 +314,7 @@ function PageContent() {
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
             onApplyFilters={() => {
-              // Add your filter application logic here if needed
+              // Additional filter logic if needed
             }}
           />
 
@@ -270,6 +331,8 @@ function PageContent() {
           </div>
         </main>
         <Footer />
+        {/* Scroll Buttons */}
+        <ScrollButtons />
       </div>
     </div>
   );
