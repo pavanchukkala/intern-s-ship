@@ -11,6 +11,7 @@ import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 function InternshipCard({
   internship,
@@ -130,7 +131,8 @@ function InternshipCard({
     </div>
   );
 }
-function ScrollButtons() {
+
+export function ScrollButtons() {
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(false);
 
@@ -145,7 +147,6 @@ function ScrollButtons() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Check initial scroll position
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -185,7 +186,7 @@ function ScrollButtons() {
         disabled={atBottom}
         whileHover={!atBottom ? { scale: 1.1 } : {}}
         whileTap={!atBottom ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed bottom-[70px] right-4 transition-opacity ${
+        className={`${buttonClasses} fixed bottom-[60px] right-4 transition-opacity ${
           atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
@@ -195,7 +196,6 @@ function ScrollButtons() {
   );
 }
 
-export default ScrollButtons;
 function PageContent() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
