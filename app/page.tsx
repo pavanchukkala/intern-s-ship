@@ -130,7 +130,6 @@ function InternshipCard({
     </div>
   );
 }
-
 function ScrollButtons() {
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(false);
@@ -146,6 +145,7 @@ function ScrollButtons() {
     };
 
     window.addEventListener("scroll", handleScroll);
+    // Check initial scroll position
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -162,32 +162,40 @@ function ScrollButtons() {
       });
   };
 
+  const buttonClasses =
+    "flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white";
+
   return (
     <>
       {/* Scroll Up Button - positioned below the nav bar */}
-      <button
+      <motion.button
         onClick={scrollToTop}
         disabled={atTop}
-        className={`fixed top-[80px] right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
+        whileHover={!atTop ? { scale: 1.1 } : {}}
+        whileTap={!atTop ? { scale: 0.95 } : {}}
+        className={`${buttonClasses} fixed top-[100px] right-4 transition-opacity ${
           atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
-        ↑
-      </button>
+        <ChevronUp size={24} />
+      </motion.button>
       {/* Scroll Down Button - positioned above the footer/privacy policy */}
-      <button
+      <motion.button
         onClick={scrollToBottom}
         disabled={atBottom}
-        className={`fixed bottom-[80px] right-4 p-3 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-opacity ${
+        whileHover={!atBottom ? { scale: 1.1 } : {}}
+        whileTap={!atBottom ? { scale: 0.95 } : {}}
+        className={`${buttonClasses} fixed bottom-[70px] right-4 transition-opacity ${
           atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
       >
-        ↓
-      </button>
+        <ChevronDown size={24} />
+      </motion.button>
     </>
   );
 }
 
+export default ScrollButtons;
 function PageContent() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
