@@ -35,34 +35,47 @@ export default function ScrollButtons() {
       });
   };
 
-  const buttonClasses =
-    "flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white transition-opacity";
+  // For mobile: smaller size and different positioning; for desktop: larger size and positioned higher
+  const upButtonClasses = `
+    flex items-center justify-center
+    w-8 h-8 md:w-12 md:h-12
+    rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
+    transition-opacity fixed right-4
+    top-[100px] md:top-[150px]
+    ${atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"}
+  `;
+
+  const downButtonClasses = `
+    flex items-center justify-center
+    w-8 h-8 md:w-12 md:h-12
+    rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
+    transition-opacity fixed right-4
+    bottom-[20px] md:bottom-[40px]
+    ${atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"}
+  `;
 
   return (
-    // Hide scroll buttons on small screens (e.g., mobile) using responsive classes
-    <div className="hidden md:block">
+    <>
       <motion.button
         onClick={scrollToTop}
         disabled={atTop}
         whileHover={!atTop ? { scale: 1.1 } : {}}
         whileTap={!atTop ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed top-[150px] right-4 ${
-          atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"
-        }`}
+        className={upButtonClasses}
       >
-        <ChevronUp size={24} />
+        <ChevronUp size={20} className="md:hidden" />
+        <ChevronUp size={24} className="hidden md:block" />
       </motion.button>
       <motion.button
         onClick={scrollToBottom}
         disabled={atBottom}
         whileHover={!atBottom ? { scale: 1.1 } : {}}
         whileTap={!atBottom ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed bottom-[40px] right-4 ${
-          atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
-        }`}
+        className={downButtonClasses}
       >
-        <ChevronDown size={24} />
+        <ChevronDown size={20} className="md:hidden" />
+        <ChevronDown size={24} className="hidden md:block" />
       </motion.button>
-    </div>
+    </>
   );
 }
