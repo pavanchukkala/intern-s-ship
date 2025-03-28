@@ -42,7 +42,7 @@ export default function ScrollButtons() {
     w-8 h-8 md:w-12 md:h-12
     rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
     transition-opacity fixed right-4
-    top-[120px] md:top-[150px]
+    top-[140px] md:top-[150px]
     ${atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"}
   `;
 
