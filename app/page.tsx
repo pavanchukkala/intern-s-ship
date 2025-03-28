@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
+
+import { Suspense, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { Globe, Sun, Moon } from "lucide-react";
@@ -11,7 +12,7 @@ import FilterPanel from "@/components/FilterPanel";
 import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import ScrollButtons from "@/components/ScrollButtons";
 
 function InternshipCard({
   internship,
@@ -129,70 +130,6 @@ function InternshipCard({
         </motion.div>
       </div>
     </div>
-  );
-}
-
-export function ScrollButtons() {
-  const [atTop, setAtTop] = useState(true);
-  const [atBottom, setAtBottom] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const isAtTop = scrollTop === 0;
-      const isAtBottom =
-        window.innerHeight + scrollTop >= document.documentElement.scrollHeight;
-      setAtTop(isAtTop);
-      setAtBottom(isAtBottom);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    if (!atTop) window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const scrollToBottom = () => {
-    if (!atBottom)
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: "smooth",
-      });
-  };
-
-  const buttonClasses =
-    "flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white";
-
-  return (
-    <>
-      {/* Scroll Up Button - positioned below the nav bar */}
-      <motion.button
-        onClick={scrollToTop}
-        disabled={atTop}
-        whileHover={!atTop ? { scale: 1.1 } : {}}
-        whileTap={!atTop ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed top-[150px] right-4 transition-opacity ${
-          atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"
-        }`}
-      >
-        <ChevronUp size={24} />
-      </motion.button>
-      {/* Scroll Down Button - positioned above the footer/privacy policy */}
-      <motion.button
-        onClick={scrollToBottom}
-        disabled={atBottom}
-        whileHover={!atBottom ? { scale: 1.1 } : {}}
-        whileTap={!atBottom ? { scale: 0.95 } : {}}
-        className={`${buttonClasses} fixed bottom-[40px] right-4 transition-opacity ${
-          atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"
-        }`}
-      >
-        <ChevronDown size={24} />
-      </motion.button>
-    </>
   );
 }
 
@@ -317,9 +254,6 @@ function PageContent() {
             onClose={() => setShowFilters(false)}
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
-            onApplyFilters={() => {
-              // Additional filter logic if needed
-            }}
           />
 
           {/* Internship Listings */}
@@ -335,8 +269,6 @@ function PageContent() {
           </div>
         </main>
         <Footer />
-        {/* Scroll Buttons */}
-        <ScrollButtons />
       </div>
     </div>
   );
@@ -346,6 +278,7 @@ export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <PageContent />
+      <ScrollButtons />
     </Suspense>
   );
 }
