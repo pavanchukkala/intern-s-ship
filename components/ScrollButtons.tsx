@@ -35,13 +35,14 @@ export default function ScrollButtons() {
       });
   };
 
-  // Adjusted positions: Up button below nav (80px from top), down button raised (60px from bottom)
+  // Mobile view: up button below nav (80px) & down button a bit up (60px)
+  // Laptop view remains the same as before: up button at 150px and down button at 40px
   const upButtonClasses = `
     flex items-center justify-center
     w-8 h-8 md:w-12 md:h-12
     rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
     transition-opacity fixed right-4
-    top-[80px]
+    top-[80px] md:top-[150px]
     ${atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"}
   `;
 
@@ -50,7 +51,7 @@ export default function ScrollButtons() {
     w-8 h-8 md:w-12 md:h-12
     rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
     transition-opacity fixed right-4
-    bottom-[60px]
+    bottom-[60px] md:bottom-[40px]
     ${atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"}
   `;
 
