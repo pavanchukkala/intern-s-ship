@@ -39,7 +39,8 @@ export default function ScrollButtons() {
     "flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white transition-opacity";
 
   return (
-    <>
+    // Hide scroll buttons on small screens (e.g., mobile) using responsive classes
+    <div className="hidden md:block">
       <motion.button
         onClick={scrollToTop}
         disabled={atTop}
@@ -62,6 +63,6 @@ export default function ScrollButtons() {
       >
         <ChevronDown size={24} />
       </motion.button>
-    </>
+    </div>
   );
 }
