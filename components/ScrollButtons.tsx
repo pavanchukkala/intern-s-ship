@@ -35,13 +35,13 @@ export default function ScrollButtons() {
       });
   };
 
-  // For mobile: smaller size and different positioning; for desktop: larger size and positioned higher
+  // Adjusted positions: Up button below nav (80px from top), down button raised (60px from bottom)
   const upButtonClasses = `
     flex items-center justify-center
     w-8 h-8 md:w-12 md:h-12
     rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
     transition-opacity fixed right-4
-    top-[100px] md:top-[150px]
+    top-[80px]
     ${atTop ? "opacity-50 cursor-not-allowed" : "opacity-100"}
   `;
 
@@ -50,7 +50,7 @@ export default function ScrollButtons() {
     w-8 h-8 md:w-12 md:h-12
     rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white
     transition-opacity fixed right-4
-    bottom-[20px] md:bottom-[40px]
+    bottom-[60px]
     ${atBottom ? "opacity-50 cursor-not-allowed" : "opacity-100"}
   `;
 
