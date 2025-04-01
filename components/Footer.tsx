@@ -7,7 +7,7 @@ export default function Footer() {
     <>
       <footer className="bg-gray-200 dark:bg-gray-700 text-center py-6 relative">
         <p className="text-sm">
-          © {currentYear} Internsship. All rights reserved.
+          © {currentYear} KEGTH. All rights reserved.
         </p>
         {/* Disclaimer always inline below the copyright */}
         <div className="mt-2">
