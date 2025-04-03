@@ -23,7 +23,7 @@ export default function NavBar() {
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center space-x-3 mb-4 sm:mb-0">
         <img
-          src="/icon.png" // Change this path based on your actual icon location
+          src="public/BasicAssets/founder.jpg" // Change this path based on your actual icon location
           alt="Internship Icon"
           className="w-10 h-10" // Adjust size as needed
         />
