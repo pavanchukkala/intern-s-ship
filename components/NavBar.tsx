@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import Image from "next/image";
 export default function NavBar() {
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
@@ -22,11 +22,13 @@ export default function NavBar() {
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-        <img
-          src="public/BasicAssets/founder.jpg" // Change this path based on your actual icon location
-          alt="Internship Icon"
-          className="w-10 h-10" // Adjust size as needed
-        />
+       <Image
+  src="/BasicAssets/founder.jpg"
+  alt="Internship Icon"
+  width={40} // Set explicit width
+  height={40} // Set explicit height
+  className="rounded-full"
+/>
         <div className="flex flex-col items-center text-center">
           <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
           <p className="text-lg sm:text-xl font-extrabold">TO</p>
