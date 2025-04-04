@@ -49,7 +49,7 @@ export default function PrivacyPolicy() {
                 <strong>Effective Date:</strong> 21-03-2025
               </p>
               <p>
-                <strong>Introduction:</strong> At [Your Company Name], we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit and interact with our platform.
+                <strong>Introduction:</strong> At Kegth, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit and interact with our platform.
               </p>
               <p>
                 <strong>Information We Collect:</strong>
@@ -107,7 +107,7 @@ export default function PrivacyPolicy() {
                 <strong>Contact Us:</strong>
                 <br />
                 If you have any questions or concerns regarding this Privacy Policy, please contact us at: 
-                <br /> <em>[Your Contact Information]</em>
+                <br /> <em>contact page access by clicking on the "contact" available at top right side of the page</em>
               </p>
             </section>
             <div className="mt-10 text-center">
