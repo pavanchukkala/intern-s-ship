@@ -26,7 +26,6 @@ export default function TermsAndConditions() {
             <a href="/" className="hover:text-yellow-400 text-sm sm:text-base">Home</a>
             <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">About</a>
             <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">Contact</a>
-            <a href="/legaldocs/terms-and-conditions" className="hover:text-yellow-400 text-sm sm:text-base">Terms &amp; Conditions</a>
             <Button
               variant="outline"
               onClick={() => setDarkMode(!darkMode)}
@@ -85,7 +84,7 @@ export default function TermsAndConditions() {
               <p>
                 <strong>Contact Information:</strong>
                 <br />
-                If you have any questions or concerns about these Terms and Conditions, please contact us at: <em>[Contact Information]</em>
+                If you have any questions or concerns about these Terms and Conditions, please contact us at: <em>our contact page on the top right</em>
               </p>
             </section>
             <div className="mt-10 text-center">
