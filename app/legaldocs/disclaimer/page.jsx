@@ -86,7 +86,7 @@ export default function Disclaimer() {
               <p>
                 <strong>Governing Law & Jurisdiction:</strong>
                 <br />
-                This Disclaimer shall be governed by and construed in accordance with the laws of [Your Jurisdiction]. Any disputes arising from this Disclaimer or your use of the Platform shall be subject to the exclusive jurisdiction of the courts in [Your Jurisdiction].
+                his Disclaimer shall be governed by and construed in accordance with the laws of India. Any disputes arising from this Disclaimer or your use of the Platform shall be subject to the exclusive jurisdiction of the courts in Tirupati, Andhra Pradesh, India.
               </p>
             </section>
             <div className="mt-10 text-center">
