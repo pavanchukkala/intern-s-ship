@@ -50,7 +50,7 @@ export default function TermsAndConditions() {
                 <strong>Effective Date:</strong> 21-3-2025
               </p>
               <p>
-                <strong>Introduction:</strong> Welcome to [company Name]. By accessing and using our platform, you agree to these Terms and Conditions. Please read them carefully.
+                <strong>Introduction:</strong> Welcome to Kegth. By accessing and using our platform, you agree to these Terms and Conditions. Please read them carefully.
               </p>
               <p>
                 <strong>User Responsibilities:</strong>
