@@ -26,8 +26,8 @@ export default function NavBar() {
   src="/BasicAssets/Klogo.jpg"
   alt="Internship Icon"
   width={85}
-  height={30}
-  className="rounded-full"
+  height={40}
+  className="rounded-full object-cover"
 />
 
 
