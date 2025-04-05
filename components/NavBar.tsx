@@ -23,7 +23,7 @@ export default function NavBar() {
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center space-x-3 mb-4 sm:mb-0">
        <Image
-  src="/BasicAssets/founder.jpg"
+  src="public/BasicAssets/Klogo.jpg"
   alt="Internship Icon"
   width={40} // Set explicit width
   height={40} // Set explicit height
