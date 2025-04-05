@@ -25,8 +25,8 @@ export default function NavBar() {
        <Image
 src="/BasicAssets/Klogo.jpg"
   alt="Internship Icon"
-  width={85} // Set explicit width
-  height={75} // Set explicit height
+  width={95} // Set explicit width
+  height={65} // Set explicit height
   className="rounded-full"
 />
         <div className="flex flex-col items-center text-center">
