@@ -13,6 +13,7 @@ import { db } from "@/lib/firebase-cardload";
 import useFilteredInternships from "@/hooks/useFilteredInternships";
 import { recommendInternships } from "@/lib/recommendation";
 import ScrollButtons from "@/components/ScrollButtons";
+import Image from "next/image";
 
 function InternshipCard({
   internship,
