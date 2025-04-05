@@ -22,16 +22,14 @@ export default function NavBar() {
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-<div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md bg-gradient-to-r from-blue-500 to-indigo-600 p-1">
-  <div className="bg-white rounded-full flex items-center justify-center w-full h-full">
-    <Image
-      src="/BasicAssets/Klogo.jpg"
-      alt="Internship Icon"
-      width={70}
-      height={30}
-      className="object-contain"
-    />
-  </div>
+<div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md ring-4 ring-indigo-500">
+  <Image
+    src="/BasicAssets/Klogo.jpg"
+    alt="Internship Icon"
+    width={70}
+    height={30}
+    className="object-contain"
+  />
 </div>
 
 
