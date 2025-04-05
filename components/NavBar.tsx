@@ -27,7 +27,7 @@ export default function NavBar() {
   alt="Internship Icon"
   width={85}
   height={40}
-  className="rounded-xl object-cover"
+  className="rounded-lg object-cover"
 />
 
 
