@@ -22,13 +22,14 @@ export default function NavBar() {
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-       <Image
-src="/BasicAssets/Klogo.jpg"
+<Image
+  src="/BasicAssets/Klogo.jpg"
   alt="Internship Icon"
-  width={115} // Set explicit width
-  height={50} // Set explicit height
-  className="rounded-full"
+  width={40} // Keep base width
+  height={40} // Keep base height
+  className="rounded-full w-12 h-12 sm:w-16 sm:h-16"
 />
+
         <div className="flex flex-col items-center text-center">
           <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
           <p className="text-lg sm:text-xl font-extrabold">TO</p>
