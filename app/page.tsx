@@ -185,13 +185,13 @@ function PageContent() {
   <div className="flex items-center space-x-3 mb-4 sm:mb-0">
     {/* New Logo Badge */}
     <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full p-1 shadow-lg">
-      <Image
-        src="/BasicAssets/Klogo.jpg"
-        alt="Internship Icon"
-        width={60}
-        height={40}
-        className="object-contain rounded"
-      />
+       <Image
+  src="/BasicAssets/Klogo.jpg"
+  alt="Internship Icon"
+  width={79} // Set explicit width
+  height={35} // Set explicit height
+  className="rounded-full"
+/>
     </div>
     <div className="flex flex-col items-center text-center">
       <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
