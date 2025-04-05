@@ -30,7 +30,7 @@ src="/BasicAssets/Klogo.jpg"
   className="rounded-full"
 />
         <div className="flex flex-col items-center text-center">
-          <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS⛵SHIP</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
           <p className="text-lg sm:text-xl font-extrabold">TO</p>
           <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
         </div>
