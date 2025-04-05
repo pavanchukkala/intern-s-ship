@@ -181,54 +181,46 @@ function PageContent() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
         {/* Navbar */}
         <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
-          <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-             <Image
-  src="/BasicAssets/Klogo.jpg"
-  alt="Internship Icon"
-  width={79} // Set explicit width
-  height={40} // Set explicit height
-  className="rounded-full"
-/>
-
-            <div className="flex flex-col items-center text-center">
-              <h1 className="text-2xl sm:text-3xl font-extrabold">
-                INTERNS SHIP
-              </h1>
-              <p className="text-lg sm:text-xl font-extrabold">TO</p>
-              <p className="text-2xl sm:text-3xl font-extrabold">
-                Internship
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-            <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
-              Home
-            </a>
-            <a
-              href="/about"
-              className="hover:text-yellow-400 text-sm sm:text-base"
-            >
-              About
-            </a>
-            <a
-              href="/contact"
-              className="hover:text-yellow-400 text-sm sm:text-base"
-            >
-              Contact
-            </a>
-            <Button
-              variant="outline"
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2"
-            >
-              {darkMode ? (
-                <Sun size={24} className="text-yellow-400" />
-              ) : (
-                <Moon size={24} className="text-gray-200" />
-              )}
-            </Button>
-          </div>
-        </nav>
+  <div className="flex items-center space-x-3 mb-4 sm:mb-0">
+    {/* New Logo Badge */}
+    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full p-1 shadow-lg">
+      <Image
+        src="/BasicAssets/Klogo.jpg"
+        alt="Internship Icon"
+        width={60}
+        height={40}
+        className="object-contain rounded"
+      />
+    </div>
+    <div className="flex flex-col items-center text-center">
+      <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
+      <p className="text-lg sm:text-xl font-extrabold">TO</p>
+      <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
+    </div>
+  </div>
+  <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+    <a href="#" className="hover:text-yellow-400 text-sm sm:text-base">
+      Home
+    </a>
+    <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
+      About
+    </a>
+    <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
+      Contact
+    </a>
+    <Button
+      variant="outline"
+      onClick={() => setDarkMode(!darkMode)}
+      className="p-2"
+    >
+      {darkMode ? (
+        <Sun size={24} className="text-yellow-400" />
+      ) : (
+        <Moon size={24} className="text-gray-200" />
+      )}
+    </Button>
+  </div>
+</nav>
 
         {/* Main Content */}
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1">
