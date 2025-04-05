@@ -25,10 +25,11 @@ export default function NavBar() {
 <Image
   src="/BasicAssets/Klogo.jpg"
   alt="Internship Icon"
-  width={40} // Keep base width
-  height={40} // Keep base height
-  className="rounded-full w-12 h-12 sm:w-16 sm:h-16"
+  width={70}
+  height={30}
+  className="rounded-full"
 />
+
 
         <div className="flex flex-col items-center text-center">
           <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
