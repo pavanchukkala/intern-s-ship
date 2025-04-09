@@ -4,50 +4,35 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'kegth | The Ultimate Internship & Career Growth Platform',
   description:
-    'Find top internships in tech (AI, ML, full-stack, cybersecurity, data science), medical fields (pulmonology, cardiology, biotech), and business (finance, marketing, HR). Keght connects students and professionals with industry-leading companies for career growth.',
-
+    'Find top internships in tech (AI, ML, full-stack, cybersecurity, data science), medical fields (pulmonology, cardiology, biotech), and business (finance, marketing, HR). Kegth connects students and professionals with industry-leading companies for career growth.',
   keywords: [
-    // Primary Brand Keywords
+    // Your full keywords list
     'kegth', 'internsship', 'intern-s-ship', 'internship platform', 'best internship site',
-    
-    // General Internship & Career Keywords
-    'internships', 'paid internships', 'free internships', 'remote internships', 'online internships', 
+    'internships', 'paid internships', 'free internships', 'remote internships', 'online internships',
     'summer internships', 'part-time internships', 'full-time internships', 'internship portal',
-    
-    // Tech Internships
     'software internships', 'AI internship', 'ML internship', 'full-stack internship', 'frontend internship',
     'backend internship', 'cybersecurity internship', 'blockchain internship', 'cloud computing internship',
     'devops internship', 'big data internship', 'quantum computing internship',
-
-    // Medical Internships
     'medical internships', 'pulmonology internship', 'cardiology internship', 'biotech internship',
     'pharmacy internship', 'clinical research internship', 'nursing internship', 'healthcare internship',
-    
-    // Business & Other Fields
     'business internships', 'finance internship', 'marketing internship', 'HR internship', 'law internship',
     'data science internship', 'analytics internship', 'UI/UX internship',
-
-    // Educational & Certification Keywords
     'internship certificate', 'internship experience', 'internship training', 'internship for students',
     'internship with stipend', 'internship opportunities in India', 'internship abroad',
-
-    // Location-Based Keywords (Optional)
     'internship in USA', 'internship in UK', 'internship in Germany', 'internship in India', 'internship near me'
   ],
-
   alternates: {
     canonical: 'https://www.kegth.com',
   },
-
   openGraph: {
-    title: 'keght | Find Top Internships & Career Opportunities',
+    title: 'kegth | Find Top Internships & Career Opportunities',
     description:
-      'Keght is the leading internship platform offering opportunities in AI, ML, full-stack development, healthcare, business, and more.',
+      'Kegth is the leading internship platform offering opportunities in AI, ML, full-stack development, healthcare, business, and more.',
     url: 'https://www.kegth.com',
-    siteName: 'keght',
+    siteName: 'kegth',
     images: [
       {
-        url: 'https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg',
+        url: 'https://www.kegth.com/favicon-32x32.png',
         width: 800,
         height: 600,
       },
@@ -55,25 +40,22 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
-
   twitter: {
     card: 'summary_large_image',
     site: '@yourTwitterHandle',
-    title: 'keght | Best Internship Platform for Career Growth',
+    title: 'kegth | Best Internship Platform for Career Growth',
     description:
-      'Find paid and free internships in tech, medical, and business fields. Keght connects students and professionals with top companies.',
+      'Find paid and free internships in tech, medical, and business fields. Kegth connects students and professionals with top companies.',
     images: [
-      'https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg',
+      'https://www.kegth.com/favicon-32x32.png',
     ],
   },
-
   robots: {
     index: true,
     follow: true,
   },
-
   icons: {
-    icon: 'https://raw.githubusercontent.com/pavanchukkala/intern-s-ship/main/BasicAssets/logo.jpg',
+    icon: 'https://www.kegth.com/favicon.ico',
   },
 }
 
@@ -84,6 +66,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Meta tags */}
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="description" content="Find internships in tech, medical, and business fields." />
+
+        {/* Favicon and manifest */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* Optional: MS Application support */}
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
+      </head>
       <body>{children}</body>
     </html>
   )
