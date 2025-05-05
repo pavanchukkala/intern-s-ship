@@ -1,0 +1,30 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build & upload Play Store version"
+  lane :play do
+    gradle(task: "clean assemblePlayRelease")
+    supply(
+      aab: "app/build/outputs/bundle/playRelease/app-play-release.aab"
+    )
+  end
+
+  desc "Build & prepare F-Droid version"
+  lane :fdroid do
+    gradle(task: "clean assembleFdroidRelease")
+    sh("# Insert script or commands to push the APK to your F-Droid repo")
+  end
+
+  desc "Build & upload Amazon Appstore version"
+  lane :amazon do
+    gradle(task: "clean assembleAmazonRelease")
+    sh("# Use Amazon Appstore CLI or API to upload app-amz-release.apk")
+  end
+
+  desc "Build & deploy all flavors"
+  lane :all do
+    play
+    fdroid
+    amazon
+  end
+end
