@@ -1,0 +1,45 @@
+android {
+    compileSdkVersion 33
+    defaultConfig {
+        applicationId "com.pavanchukkala.internsship"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    flavorDimensions "store"
+    productFlavors {
+        play {
+            dimension "store"
+            applicationIdSuffix ".play"
+            versionNameSuffix "-play"
+            buildConfigField "boolean", "ADS_ENABLED", "true"
+        }
+        fdroid {
+            dimension "store"
+            applicationIdSuffix ".fdroid"
+            versionNameSuffix "-fdroid"
+            buildConfigField "boolean", "ADS_ENABLED", "false"
+        }
+        amazon {
+            dimension "store"
+            applicationIdSuffix ".amz"
+            versionNameSuffix "-amz"
+            buildConfigField "boolean", "ADS_ENABLED", "true"
+        }
+        huawei {
+            dimension "store"
+            applicationIdSuffix ".hw"
+            versionNameSuffix "-hw"
+            buildConfigField "boolean", "ADS_ENABLED", "false"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
