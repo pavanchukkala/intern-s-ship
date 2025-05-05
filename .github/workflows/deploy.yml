@@ -1,0 +1,24 @@
+name: Deploy All Stores
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Install Fastlane
+        run: gem install fastlane
+      - name: Build & Deploy
+        working-directory: android
+        env:
+          GOOGLE_PLAY_JSON: ${{ secrets.GOOGLE_PLAY_JSON }}
+          FDROID_REPO_KEY: ${{ secrets.FDROID_REPO_KEY }}
+          AMZ_API_KEY: ${{ secrets.AMZ_API_KEY }}
+        run: fastlane all
