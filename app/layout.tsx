@@ -79,7 +79,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="manifest" href="/site.webmanifest" />
-        
+        <meta name="google-adsense-account" content="ca-pub-9656827469317907">
         {/* Optional: MS Application support */}
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
