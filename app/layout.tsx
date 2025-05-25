@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   description:
     'Find top internships in tech (AI, ML, full-stack, cybersecurity, data science), medical fields (pulmonology, cardiology, biotech), and business (finance, marketing, HR). Kegth connects students and professionals with industry-leading companies for career growth.',
   keywords: [
-    // Your full keywords list
     'kegth', 'internsship', 'intern-s-ship', 'internship platform', 'best internship site',
     'internships', 'paid internships', 'free internships', 'remote internships', 'online internships',
     'summer internships', 'part-time internships', 'full-time internships', 'internship portal',
@@ -79,12 +78,13 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="manifest" href="/site.webmanifest" />
-        
+
         {/* Optional: MS Application support */}
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
-      
-<meta name="google-adsense-account" content="ca-pub-9656827469317907">
+
+        {/* ✅ Google AdSense Meta Tag */}
+        <meta name="google-adsense-account" content="ca-pub-9656827469317907" />
       </head>
       <body>{children}</body>
     </html>
