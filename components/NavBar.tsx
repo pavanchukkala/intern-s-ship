@@ -1,19 +1,19 @@
-// components/NavBar.tsx
+"use client";
+// components/NavBar.tsx (client component)
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 /**
- * NavBar.tsx
- * Clean, responsive navigation bar with Blog link added for AdSense readiness.
+ * NavBar.tsx (client)
  *
- * Usage: replace the existing components/NavBar.tsx with this file.
- * It uses Tailwind classes (project already has Tailwind configured).
+ * - "use client" must be the first non-comment line for Client Components in Next.js App Router.
+ * - Uses Tailwind classes to match your project's styling.
  */
 
 export default function NavBar(): JSX.Element {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname?.() || "/";
+  const pathname = typeof usePathname === "function" ? usePathname() : "/";
 
   const navItems: { title: string; href: string }[] = [
     { title: "Home", href: "/" },
@@ -23,8 +23,9 @@ export default function NavBar(): JSX.Element {
   ];
 
   const isActive = (href: string) => {
+    if (!pathname) return false;
     if (href === "/") return pathname === "/";
-    return pathname?.startsWith(href);
+    return pathname.startsWith(href);
   };
 
   return (
@@ -54,7 +55,6 @@ export default function NavBar(): JSX.Element {
               </Link>
             ))}
 
-            {/* Optional auth / register button */}
             <Link href="/register">
               <a className="ml-4 inline-block rounded-md border border-sky-700 px-3 py-1 text-sm font-semibold text-sky-700 hover:bg-sky-50">
                 Register
@@ -62,7 +62,7 @@ export default function NavBar(): JSX.Element {
             </Link>
           </nav>
 
-          {/* Mobile menu button */}
+          {/* Mobile toggle */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setOpen((s) => !s)}
@@ -81,7 +81,7 @@ export default function NavBar(): JSX.Element {
         </div>
       </div>
 
-      {/* Mobile menu panel */}
+      {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-white border-t">
           <div className="px-4 pt-3 pb-4 space-y-2">
