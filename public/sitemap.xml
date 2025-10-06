@@ -1,50 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
+  <!-- ============================= -->
+  <!-- KEGTH.COM SITEMAP (AdSense Ready) -->
+  <!-- Generated: 2025-10-06 -->
+  <!-- ============================= -->
+
+  <!-- Home -->
   <url>
     <loc>https://www.kegth.com/</loc>
-    <lastmod>2025-04-05</lastmod>
+    <lastmod>2025-10-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
+  <!-- Core Pages -->
   <url>
     <loc>https://www.kegth.com/about</loc>
-    <lastmod>2025-04-05</lastmod>
+    <lastmod>2025-10-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.kegth.com/contact</loc>
-    <lastmod>2025-04-05</lastmod>
+    <lastmod>2025-10-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.kegth.com/legaldocs/disclaimer</loc>
-    <lastmod>2025-04-05</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://www.kegth.com/register</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
+    <loc>https://www.kegth.com/talk-to-expert</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Internship Pages -->
+  <url>
+    <loc>https://www.kegth.com/internship</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kegth.com/internship-apply</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Legal Pages -->
+  <url>
     <loc>https://www.kegth.com/legaldocs/privacy-policy</loc>
-    <lastmod>2025-04-05</lastmod>
+    <lastmod>2025-10-06</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://www.kegth.com/legaldocs/terms-and-conditions</loc>
-    <lastmod>2025-04-05</lastmod>
+    <lastmod>2025-10-06</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kegth.com/legaldocs/disclaimer</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Blog Index -->
+  <url>
+    <loc>https://www.kegth.com/blog</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Blog Posts (extend as you add more) -->
+  <url>
+    <loc>https://www.kegth.com/blog/boost-your-internship-visibility</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kegth.com/blog/how-to-build-a-great-internship-profile</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kegth.com/blog/top-5-ways-to-land-your-first-internship</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kegth.com/blog/how-kegth-helps-students-connect-with-opportunities</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Static assets for AdSense crawler clarity -->
+  <url>
+    <loc>https://www.kegth.com/ads.txt</loc>
+    <lastmod>2025-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
 
 </urlset>
