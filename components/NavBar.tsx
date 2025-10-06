@@ -1,66 +1,125 @@
-"use client";
-import { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-export default function NavBar() {
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return document.documentElement.classList.contains("dark");
-    }
-    return false;
-  });
+// components/NavBar.tsx
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
+/**
+ * NavBar.tsx
+ * Clean, responsive navigation bar with Blog link added for AdSense readiness.
+ *
+ * Usage: replace the existing components/NavBar.tsx with this file.
+ * It uses Tailwind classes (project already has Tailwind configured).
+ */
+
+export default function NavBar(): JSX.Element {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname?.() || "/";
+
+  const navItems: { title: string; href: string }[] = [
+    { title: "Home", href: "/" },
+    { title: "Blog", href: "/blog" },
+    { title: "About", href: "/about" },
+    { title: "Contact", href: "/contact" },
+  ];
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname?.startsWith(href);
+  };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
-      <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-    <Image
-  src="/BasicAssets/Klogo.jpg"
-  alt="Internship Icon"
-  width={79} // Set explicit width
-  height={35} // Set explicit height
-  className="rounded-full"
-/>
+    <header className="bg-white shadow-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <a className="flex items-center space-x-2">
+                <img src="/BasicAssets/logo.jpg" alt="kegth" className="h-8 w-8 rounded-sm object-cover" />
+                <span className="font-semibold text-lg">kegth</span>
+              </a>
+            </Link>
+          </div>
 
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                <a
+                  className={`text-sm font-medium ${
+                    isActive(item.href) ? "text-sky-700" : "text-gray-700 hover:text-sky-700"
+                  }`}
+                >
+                  {item.title}
+                </a>
+              </Link>
+            ))}
 
+            {/* Optional auth / register button */}
+            <Link href="/register">
+              <a className="ml-4 inline-block rounded-md border border-sky-700 px-3 py-1 text-sm font-semibold text-sky-700 hover:bg-sky-50">
+                Register
+              </a>
+            </Link>
+          </nav>
 
-
-        <div className="flex flex-col items-center text-center">
-          <h1 className="text-2xl sm:text-3xl font-extrabold">INTERNS SHIP</h1>
-          <p className="text-lg sm:text-xl font-extrabold">TO</p>
-          <p className="text-2xl sm:text-3xl font-extrabold">Internship</p>
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setOpen((s) => !s)}
+              aria-label="Toggle menu"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {open ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex flex-wrap items-center gap-3 sm:gap-6">
-        <a href="/" className="hover:text-yellow-400 text-sm sm:text-base">
-          Home
-        </a>
-        <a href="/about" className="hover:text-yellow-400 text-sm sm:text-base">
-          About
-        </a>
-        <a href="/contact" className="hover:text-yellow-400 text-sm sm:text-base">
-          Contact
-        </a>
-        <Button
-          variant="outline"
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2"
-        >
-          {darkMode ? (
-            <Sun size={24} className="text-yellow-400" />
-          ) : (
-            <Moon size={24} className="text-gray-200" />
-          )}
-        </Button>
-      </div>
-    </nav>
+
+      {/* Mobile menu panel */}
+      {open && (
+        <div className="md:hidden bg-white border-t">
+          <div className="px-4 pt-3 pb-4 space-y-2">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                <a
+                  onClick={() => setOpen(false)}
+                  className={`block px-2 py-2 rounded-md text-base font-medium ${
+                    isActive(item.href) ? "text-sky-700" : "text-gray-700 hover:text-sky-700"
+                  }`}
+                >
+                  {item.title}
+                </a>
+              </Link>
+            ))}
+
+            <Link href="/legaldocs/privacy-policy">
+              <a onClick={() => setOpen(false)} className="block px-2 py-2 rounded-md text-sm text-gray-600 hover:text-sky-700">
+                Privacy
+              </a>
+            </Link>
+            <Link href="/legaldocs/terms-and-conditions">
+              <a onClick={() => setOpen(false)} className="block px-2 py-2 rounded-md text-sm text-gray-600 hover:text-sky-700">
+                Terms
+              </a>
+            </Link>
+
+            <Link href="/register">
+              <a
+                onClick={() => setOpen(false)}
+                className="mt-2 inline-block w-full text-center rounded-md border border-sky-700 px-3 py-2 text-sm font-semibold text-sky-700 bg-white hover:bg-sky-50"
+              >
+                Register
+              </a>
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }
