@@ -8,164 +8,150 @@ import Link from "next/link";
 type Post = { title: string; date: string; description: string; content: string };
 
 const POSTS: Record<string, Post> = {
-  "how-to-prepare-for-internships": {
-    title: "How to prepare for internships (step-by-step)",
-    date: "2025-10-01",
-    description:
-      "A practical, step-by-step guide to find, apply for, and succeed at internships — portfolios, resumes, interviews and follow-ups.",
-    content: `
-<h2>Why preparation matters</h2>
-<p>Internships are experience accelerators. A well-prepared intern gets better projects, stronger references and higher chance of conversion to full-time. Preparation reduces rejection friction and helps you learn faster on the job.</p>
-
-<h2>Step 1 — Define learning goals</h2>
-<p>Start by picking one or two focused skills you want to learn (e.g., React fundamentals, data analysis with Python, product research). Clear goals guide project choices and interview prep.</p>
-
-<h2>Step 2 — Build 1–2 portfolio projects</h2>
-<p>Create small, finishable projects that demonstrate the chosen skills. Use GitHub for code and a simple deploy (Netlify/Vercel) for a live demo. Use README to explain design choices and learning outcomes.</p>
-
-<h2>Step 3 — Tailor your resume</h2>
-<p>For each role, highlight 2–3 achievements that match the job description. Use strong action verbs and metrics when possible (e.g., \"reduced page load by 30%\" or \"implemented feature used by 200 users\"). Keep resume to one page if you're a student.</p>
-
-<h2>Step 4 — Application strategy</h2>
-<p>Apply widely but thoughtfully. Use a short, customized cover note that connects your project or coursework to the internship's needs. Track applications in a spreadsheet and follow up politely after 7–10 days.</p>
-
-<h2>Step 5 — Interview preparation</h2>
-<p>Practice common questions and mock interviews. For technical roles, practice coding problems on platforms like LeetCode or HackerRank and rehearse explaining your projects end-to-end.</p>
-
-<h2>Step 6 — Follow-up and learning</h2>
-<p>After each interview, send a short thank you email and note what you learned from the interview. Keep iterating on your resume and projects based on feedback and rejections.</p>
-
-<p><strong>Final tip:</strong> Consistent, focused action beats random applications. Build, apply, improve — repeat.</p>
-`,
-  },
-
-  "top-paid-internships-2025": {
-    title: "Top paid internships in 2025 for students",
-    date: "2025-10-01",
-    description:
-      "Curated list of high-paying internships in 2025 with stipend ranges, tips to apply and what employers expect.",
-    content: `
-<h2>Why target paid internships</h2>
-<p>Paid internships reduce financial stress and often come with structured mentorship. Companies that pay interns usually treat the role as meaningful work, so targeting these can accelerate learning and provide strong references.</p>
-
-<h2>Where to look</h2>
-<p>Large companies, well-funded startups, and specialized internships hubs are primary sources. Use the careers page, LinkedIn, AngelList, and university placement portals to find listings.</p>
-
-<h2>Sample categories and expectations</h2>
-<ul>
-  <li><strong>BigTech:</strong> rigorous hiring process, competitive stipends, often remote or hybrid.</li>
-  <li><strong>FinTech / Quant:</strong> high stipends, strong emphasis on algorithms and data skills.</li>
-  <li><strong>Startups:</strong> variable stipends, high-impact projects and cross-functional exposure.</li>
-</ul>
-
-<h2>How to increase your chances</h2>
-<p>Match your resume to role keywords, build a relevant small project, and network with employees to get referrals. For competitive roles, early application (before deadlines) matters.</p>
-
-<p><strong>Conclusion:</strong> Paid internships are accessible with targeted applications and the right portfolio. Focus on roles where your skills show immediate impact.</p>
-`,
-  },
-
-  "resume-guide-for-students": {
-    title: "Resume guide for students: land your first internship",
-    date: "2025-10-01",
-    description: "One-page resume templates and practical dos/don'ts for students applying to internships.",
-    content: `
-<h2>Keep the resume simple</h2>
-<p>Your resume should be scannable. Use a clear headline, education, projects, skills, and relevant experience. For students, projects can be treated like experience.</p>
-
-<h2>Headline and summary</h2>
-<p>One-line headline (e.g., \"Computer Science student — front-end focused, React & TypeScript\") and a 1–2 line summary of what you build and why you're applying.</p>
-
-<h2>Project bullets</h2>
-<p>For each project, add 2 bullets: what you built, and the impact. Include links to GitHub or deployed demo.</p>
-
-<h2>Skills section</h2>
-<p>List skills in categories (Languages, Tools, Frameworks). Avoid long generic lists — keep only relevant items.</p>
-
-<h2>Extras and formatting</h2>
-<p>Keep fonts standard, 10–12pt, single-column layout. PDF is the preferred format for applications. Proofread carefully.</p>
-
-<p><strong>Final note:</strong> Your resume should invite an interviewer to ask about one strong project — make that project easy to understand quickly.</p>
-`,
-  },
-
-  "ace-internship-interviews": {
-    title: "Ace internship interviews: 10 practical techniques",
-    date: "2025-10-02",
-    description: "Tactical interview techniques and preparation routines to help you stand out in internship interviews.",
-    content: `
-<h2>1 — Prepare a one-minute pitch</h2>
-<p>Have a concise pitch describing who you are, what you built, and what you want to learn. Keep it specific and relevant to the role.</p>
-
-<h2>2 — Know your projects</h2>
-<p>Be ready to explain trade-offs, architecture choices, and what you would do differently. Interviewers probe for depth, not just surface facts.</p>
-
-<h2>3 — Practice whiteboard problems</h2>
-<p>For technical roles, practice by writing code on paper or in a shared editor. Explain your thought process aloud.</p>
-
-<h2>4 — Clarify the problem first</h2>
-<p>Ask clarifying questions before jumping to a solution. This shows critical thinking and saves time.</p>
-
-<h2>5 — Use structured answers for behavioural</h2>
-<p>Use STAR (Situation, Task, Action, Result) to answer behavioural questions concisely.</p>
-
-<h2>6 — Mock interviews</h2>
-<p>Do mock interviews with peers or mentors and request honest feedback. Iterate quickly on weak areas.</p>
-
-<h2>7 — Ask smart questions</h2>
-<p>At the end, ask questions about the team’s day-to-day, mentorship, or what success looks like for interns.</p>
-
-<h2>8 — Follow up</h2>
-<p>Send a short thank-you email that references one part of the interview to remind them of your fit.</p>
-
-<p><strong>Closing:</strong> Use preparation to reduce anxiety and to make your answers clear and focused.</p>
-`,
-  },
-
-  "build-internship-portfolio-github": {
-    title: "Build a simple internship portfolio with GitHub (step-by-step)",
+  "how-kegth-helps-students-land-internships": {
+    title: "How Intern-s-ship helps students land internships faster",
     date: "2025-10-02",
     description:
-      "Create a focused GitHub portfolio project that demonstrates the skills recruiters care about, with deploy and README best practices.",
+      "How our platform matches students with the right roles, improves application quality, and shortens time-to-offer.",
     content: `
-<h2>Pick a single useful project idea</h2>
-<p>Choose an idea small enough to finish in 1–2 weeks but complex enough to show design decisions (e.g., a mini job board, expense tracker, or dashboard).</p>
+<h2>Overview</h2>
+<p>Intern-s-hip (kegth) is built around one simple idea: remove friction between talent and opportunity. Instead of scrolling scattered listings, students get curated matches, application templates, and feedback loops that meaningfully improve their chances.</p>
 
-<h2>Repository structure</h2>
-<p>Keep a clean repo with README, LICENSE, contribution notes, and small sections: setup, run, tests, and demo link.</p>
+<h2>Smart matching, not blind applying</h2>
+<p>Our matching engine weights role requirements, project experience, and student intent. Instead of applying to every posting, focus on high-quality matches where you meet 60–80% of requirements — we'll surface those first. This saves time and increases conversion rates.</p>
 
-<h2>Write a strong README</h2>
-<p>Start with a one-sentence summary, then features, screenshots, quick start, and tech stack. Mention what you learned.</p>
+<h2>Application templates tuned to roles</h2>
+<p>For each internship listing we provide a role-specific template: a short pitch, top 3 skills, and a one-line impact statement. Recruiters read a lot of applications — a concise, targeted message increases the odds of being shortlisted.</p>
 
-<h2>Deploy a live demo</h2>
-<p>Use Vercel or Netlify for quick deployment. A working demo is often the single most persuasive piece for an internship application.</p>
+<h2>Structured practice & interview cues</h2>
+<p>Once you apply, Intern-s-hip surfaces suggested practice resources and likely interview topics (e.g., React fundamentals for frontend roles, SQL patterns for data roles). Practicing these focused topics yields better interview performance than unfocused study.</p>
 
-<h2>Highlight results</h2>
-<p>Include measurable outcomes if possible (e.g., page speed, number of users in test, or test coverage).</p>
+<h2>Feedback and iteration</h2>
+<p>When an application is rejected, we encourage structured feedback: anonymous recruiter signals (if provided) and automated tips to improve resumes and project READMEs. Iterating using real signals is the fastest way to improve application outcomes.</p>
 
-<p><strong>Final advice:</strong> A focused, well-documented project beats many unfinished experiments. Ship one great demo.</p>
+<h2>Final note</h2>
+<p>In short: quality over quantity. Intern-s-hip reduces wasted effort, surfaces the right roles, and helps students present evidence of impact — that's how we accelerate internships into offers.</p>
 `,
   },
 
-  "networking-messages-for-internships": {
-    title: "Networking for internships: messages that actually work",
+  "student-portfolio-playbook": {
+    title: "The student portfolio playbook: show impact, not effort",
     date: "2025-10-02",
     description:
-      "Exact LinkedIn and email message templates, timing, and follow-up strategy to connect with recruiters and engineers.",
+      "What to include in a portfolio so hiring teams on Intern-s-hip immediately understand impact and fit.",
     content: `
-<h2>Start with a short connection message</h2>
-<p>When sending a connection request on LinkedIn, use 1–2 lines: who you are and why you’d like to connect (e.g., \"CS student interested in product analytics — I admire your work at X\").</p>
+<h2>Why portfolios matter</h2>
+<p>A portfolio is the fastest way to show you can ship. Recruiters judge by results — a deployed demo, a clear README, and a small metric or observation communicate competence much faster than a long resume bullet.</p>
 
-<h2>Follow-up message template</h2>
-<p>After connecting, send a 3-line message: 1) quick intro, 2) one specific question about their team/project, 3) ask for a 10-minute chat if appropriate.</p>
+<h2>Choose project topics that map to roles</h2>
+<p>Pick 1–2 projects that align with the internships you want: a mini-dashboard for data roles, a single-page interactive app for frontend roles, or a product spec + prototype for product design internships. Focus matters.</p>
 
-<h2>Email template for recruiters</h2>
-<p>Subject: \"Internship candidate — [Your Name] — [Role]\"\n<br>Body: short one-paragraph pitch linking to your GitHub/portfolio and 1–2 lines about why you fit. Close by proposing next steps or asking for a referral.</p>
+<h2>README: the one-minute sell</h2>
+<p>Your README should answer: what it does, why you built it, tech used, and one measurable outcome or test. Include a 30-second screenshot, a live link, and clear setup instructions. The goal: a recruiter should understand the project in under a minute.</p>
 
-<h2>Timing and persistence</h2>
-<p>Wait 5–7 days before a gentle follow-up. If no response after two polite follow-ups, move on — but keep the contact for future updates.</p>
+<h2>Use issues/commits to show process</h2>
+<p>Small teams and projects love to see process. A few meaningful commits, a short issue describing a problem you solved, or a tiny test-suite gives evidence you think like an engineer — not just a copy-paster.</p>
 
-<p><strong>Key idea:</strong> Be concise, ask one clear question, and always add value (share a relevant project or insight).</p>
+<h2>Deploy a small demo</h2>
+<p>Deploy to Vercel/Netlify and link it. A live demo removes friction for reviewers and increases interview invites.</p>
+
+<h2>Conclusion</h2>
+<p>Don’t glorify effort — demonstrate outcomes. Choose high-signal projects, document them well, and make them easy to evaluate during a short review.</p>
+`,
+  },
+
+  "zero-to-offer-interview-prep": {
+    title: "Zero-to-offer: preparing for internship interviews on Intern-s-hip",
+    date: "2025-10-03",
+    description:
+      "A practical, week-by-week interview plan tuned for the internships you’ll find on Intern-s-hip.",
+    content: `
+<h2>Start with role mapping (Day 1)</h2>
+<p>List 5 roles you want. For each, write the 3 most important skills required. This simple mapping converts your study time into role-relevant practice.</p>
+
+<h2>Week 1 — fundamentals & short projects</h2>
+<p>Build or refine a tiny project that covers the primary skill (e.g., a small React app). This gives a talking point and shows you can ship.</p>
+
+<h2>Week 2 — common interview patterns</h2>
+<p>Practice 20 common technical questions related to your role. For product roles, practice product critiques; for data roles, rewrite a short SQL problem and optimize it.</p>
+
+<h2>Week 3 — mock interviews & feedback</h2>
+<p>Schedule 3 mock interviews using peers or mentors. Time-box answers, request feedback on communication clarity, and iterate quickly.</p>
+
+<h2>Day before — logistics & mindset</h2>
+<p>Read the job posting once more, pick 2 project bullets to highlight, and prepare 3 questions to ask the interviewer. Sleep well — clarity beats cramming.</p>
+
+<h2>Post-interview — follow-up</h2>
+<p>Send a short thank-you message referencing one specific conversation topic. If you received feedback, implement and record it for the next application.</p>
+`,
+  },
+
+  "networking-on-kegth-messages-that-work": {
+    title: "How to network on Intern-s-hip: messages that open doors",
+    date: "2025-10-03",
+    description:
+      "Concrete connection and follow-up templates to reach recruiters and engineers through Intern-s-hip and LinkedIn.",
+    content: `
+<h2>Connection request (30–40 words)</h2>
+<p>\"Hi [Name], I'm a CS student focused on frontend engineering. I enjoyed your recent article on component design — can I connect to learn about internships at [Company]?\" Short and specific wins.</p>
+
+<h2>After connect — the 3-line ask</h2>
+<p>\"Thanks for connecting, [Name]. Quick question — would you recommend applying via the company portal or a referral for internships? I built X (link) and am applying to [role]. Any tip would be appreciated.\"</p>
+
+<h2>If they offer help</h2>
+<p>Share one short highlight and a link: \"Thanks — I’ll apply. Quick context: I built [project], which improved X by Y. Link: [URL]. Appreciate any referral.\"</p>
+
+<h2>Timing & persistence</h2>
+<p>Wait 5–7 days for a reply. If none, send a short, value-add follow-up: share a one-sentence update or small improvement to your project. If still no reply after two tries, archive and move on.</p>
+
+<h2>Use Intern-s-hip features</h2>
+<p>Use the platform’s messaging and mentorship options to request 10-minute chats. Keep these short, respectful of time, and prepared with two focused questions.</p>
+`,
+  },
+
+  "convert-internships-into-offers": {
+    title: "Convert internships into career offers: tactical guide for interns",
+    date: "2025-10-04",
+    description:
+      "A milestone-based blueprint to create measurable impact during internships so conversions to full-time become natural.",
+    content: `
+<h2>First 2 weeks — onboarding and small wins</h2>
+<p>Understand team goals, set a 30-day goal with your manager, and ship one small but visible improvement (a bug fix, a doc, a test). Early wins build trust.</p>
+
+<h2>30–60 days — measurable feature work</h2>
+<p>Take ownership of a defined piece of work that has a measurable outcome (e.g., reduced load time, increased test coverage, or added an analytics event). Share progress updates frequently.</p>
+
+<h2>60–90 days — visibility and feedback</h2>
+<p>Request mid-internship feedback and iterate. Present a short demo of your work to the team; ask for actionable next steps on how to transition to a longer-term role.</p>
+
+<h2>End of internship — the close</h2>
+<p>Prepare a one-page summary: what you shipped, what you learned, and proposed next steps where you can add long-term value. Share this with your manager before final conversations.</p>
+
+<h2>Manager relationship</h2>
+<p>Ask directly about conversion criteria early. Many managers appreciate a proactive intern who tracks progress and ties outcomes to business metrics.</p>
+`,
+  },
+
+  "how-companies-post-internships-on-kegth": {
+    title: "Company-side guide: posting internships that attract quality candidates",
+    date: "2025-10-04",
+    description:
+      "How hiring managers can write clear internships on Intern-s-hip to attract qualified applicants and reduce noise.",
+    content: `
+<h2>Write clear outcomes, not long lists of skills</h2>
+<p>Describe what the intern will deliver in 3–5 bullet points. Outcome-oriented descriptions attract candidates who want to make impact and self-select for fit.</p>
+
+<h2>Provide mentor & learning signals</h2>
+<p>Mention mentor availability, expected weekly time with manager, and what technical growth the intern will experience. Students prioritize mentorship and clarity.</p>
+
+<h2>Specify must-have vs nice-to-have</h2>
+<p>Separate required skills from preferred skills. This reduces false negatives and increases applied candidates that match baseline expectations.</p>
+
+<h2>Include a short sample task</h2>
+<p>Optional: a small take-home or coding guideline helps evaluate candidates and signals that your hiring process values practical skills.</p>
+
+<h2>Conclusion</h2>
+<p>Write with empathy: assume many applicants are early in their careers. Clear listings with mentorship cues generate better shortlists and fewer low-signal applications.</p>
 `,
   },
 };
