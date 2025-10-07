@@ -2,10 +2,10 @@
 export default function Head() {
   return (
     <>
-      <title>kegth Blog — internships & career guides</title>
-      <meta name="description" content="kegth blog: internship tips, resume guides and career resources for students." />
-      <meta property="og:title" content="kegth Blog" />
-      <meta property="og:description" content="Guides and resources to help students get internships and build careers." />
+      <title>Intern-s-hip Insights — kegth Blog</title>
+      <meta name="description" content="Intern-s-hip (kegth) blog: actionable guides, portfolio playbooks, interview routines and company-side tips for internships." />
+      <meta property="og:title" content="Intern-s-hip Insights — kegth Blog" />
+      <meta property="og:description" content="Actionable guides for students and recruiters built around internships and career growth." />
     </>
   );
 }
