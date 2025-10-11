@@ -85,7 +85,7 @@ export default function TermsAndConditions() {
               <p>
                 <strong>Contact Information:</strong>
                 <br />
-                If you have any questions or concerns about these Terms and Conditions, please contact us at: hello@kegth.com
+                If you have any questions or concerns about these Terms and Conditions, please contact us at: kegthgroup@gmail.com
               </p>
             </section>
             <div className="mt-10 text-center">
