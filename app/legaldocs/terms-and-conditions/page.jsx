@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -74,7 +75,7 @@ export default function TermsAndConditions() {
               <p>
                 <strong>Governing Law:</strong>
                 <br />
-                These terms are governed by and construed in accordance with the laws of [Your Jurisdiction]. Any disputes relating to these terms shall be subject to the exclusive jurisdiction of the courts in [Your Jurisdiction].
+                These terms are governed by and construed in accordance with the laws of India. Any disputes relating to these terms shall be subject to the exclusive jurisdiction of the courts in Tirupati, Andhra Pradesh, India.
               </p>
               <p>
                 <strong>Changes to Terms and Conditions:</strong>
@@ -84,7 +85,7 @@ export default function TermsAndConditions() {
               <p>
                 <strong>Contact Information:</strong>
                 <br />
-                If you have any questions or concerns about these Terms and Conditions, please contact us at: <em>our contact page on the top right</em>
+                If you have any questions or concerns about these Terms and Conditions, please contact us at: hello@kegth.com
               </p>
             </section>
             <div className="mt-10 text-center">
