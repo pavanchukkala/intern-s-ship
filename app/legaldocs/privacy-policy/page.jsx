@@ -96,7 +96,7 @@ export default function PrivacyPolicy() {
               <p>
                 <strong>Your Rights:</strong>
                 <br />
-                Depending on your location, you may have rights over your personal data, including access, correction, deletion, or restriction of its processing. For any requests or inquiries about your data, please contact us at [Your Contact Email].
+                Depending on your location, you may have rights over your personal data, including access, correction, deletion, or restriction of its processing. For any requests or inquiries about your data, please contact us at hello@kegth.com.
               </p>
               <p>
                 <strong>Changes to This Privacy Policy:</strong>
