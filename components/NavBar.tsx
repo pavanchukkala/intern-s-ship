@@ -1,3 +1,4 @@
+ 
 "use client";
 // components/NavBar.tsx (client component)
 import React, { useState } from "react";
@@ -20,6 +21,7 @@ export default function NavBar(): JSX.Element {
     { title: "Blog", href: "/blog" },
     { title: "About", href: "/about" },
     { title: "Contact", href: "/contact" },
+    { title: "Disclaimer", href: "/disclaimer" },
   ];
 
   const isActive = (href: string) => {
@@ -106,6 +108,11 @@ export default function NavBar(): JSX.Element {
             <Link href="/legaldocs/terms-and-conditions">
               <a onClick={() => setOpen(false)} className="block px-2 py-2 rounded-md text-sm text-gray-600 hover:text-sky-700">
                 Terms
+              </a>
+            </Link>
+            <Link href="/disclaimer">
+              <a onClick={() => setOpen(false)} className="block px-2 py-2 rounded-md text-sm text-gray-600 hover:text-sky-700">
+                Disclaimer
               </a>
             </Link>
 
