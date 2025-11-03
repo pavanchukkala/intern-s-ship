@@ -1,8 +1,18 @@
+
+# See https://www.robotstxt.org/robotstxt.html for documentation.
+
+# Allow all crawlers access to the site.
 User-agent: *
 Allow: /
-Disallow: /api/*
 
-User-agent: Googlebot
+# Disallow paths that do not provide public content value or are for internal use.
+Disallow: /api/
+Disallow: /register/
+Disallow: /internship-apply/
+
+# Allow Google's Ads crawler to scan all pages for ad serving.
+User-agent: AdsBot-Google
 Allow: /
 
+# Point all crawlers to the sitemap for efficient content discovery.
 Sitemap: https://kegth.com/sitemap.xml

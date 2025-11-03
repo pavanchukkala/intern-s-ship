@@ -1,78 +1,77 @@
+
 import React from "react";
 import Link from "next/link";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const sections = {
+    company: [
+      { title: "About Us", href: "/about" },
+      { title: "Blog", href: "/blog" },
+      { title: "Contact Us", href: "/contact" },
+    ],
+    legal: [
+      { title: "Privacy Policy", href: "/legaldocs/privacy-policy" },
+      { title: "Terms & Conditions", href: "/legaldocs/terms-and-conditions" },
+      { title: "Disclaimer", href: "/disclaimer" },
+    ],
+  };
+
   return (
-    <>
-      <footer className="bg-gray-200 dark:bg-gray-700 text-center py-6 relative">
-        <p className="text-sm">
-          © {currentYear} Kegth. All rights reserved.
-        </p>
+    <footer className="bg-gray-100 dark:bg-gray-800 border-t">
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="col-span-1 md:col-span-3 lg:col-span-1">
+            <Link href="/" className="flex items-center space-x-2">
+              <img src="/BasicAssets/logo.jpg" alt="kegth" className="h-10 w-10 rounded-md object-cover" />
+              <span className="font-bold text-xl text-gray-800 dark:text-white">kegth</span>
+            </Link>
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 max-w-sm">
+              The ultimate platform for students and professionals to find top internships and accelerate their career growth.
+            </p>
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              <a href="mailto:kegthgroup@gmail.com" className="hover:text-sky-700 dark:hover:text-sky-500">
+                kegthgroup@gmail.com
+              </a>
+            </p>
+          </div>
 
-        {/* Disclaimer below the copyright */}
-        <div className="mt-2">
-          <Link
-            href="/legaldocs/disclaimer"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
-          >
-            • Disclaimer
-          </Link>
-        </div>
+          {/* Links Sections */}
+          <div className="col-span-1 md:col-start-1 md:col-span-1 lg:col-start-auto">
+            <h3 className="font-semibold text-gray-800 dark:text-white">Quick Links</h3>
+            <ul className="mt-4 space-y-2">
+              {sections.company.map((item) => (
+                <li key={item.title}>
+                  <Link href={item.href} className="text-sm text-gray-600 dark:text-gray-400 hover:text-sky-700 dark:hover:text-sky-500">
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Mobile view: Privacy & Terms inline */}
-        <div className="mt-4 flex justify-center space-x-4 md:hidden">
-          <Link
-            href="/legaldocs/privacy-policy"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
-          >
-            • Privacy Policy
-          </Link>
-          <Link
-            href="/legaldocs/terms-and-conditions"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
-          >
-            • Terms &amp; Conditions
-          </Link>
-        </div>
-      </footer>
-
-      {/* Desktop view: fixed links on sides */}
-      <div className="hidden md:block">
-        <div className="fixed bottom-4 left-4">
-          <Link
-            href="/legaldocs/terms-and-conditions"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
-          >
-            Terms &amp; Conditions
-          </Link>
-        </div>
-        <div className="fixed bottom-4 right-4">
-          <Link
-            href="/legaldocs/privacy-policy"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
-          >
-            Privacy Policy
-          </Link>
-        </div>
-      </div>
-
-      {/* Bottom credit section */}
-      <div className="mt-6 border-t pt-4 text-sm text-gray-500">
-        <div className="flex flex-col md:flex-row md:justify-between">
-          <div>© {currentYear} Kegth. All rights reserved.</div>
-          <div className="mt-2 md:mt-0">
-            Built with ❤️ —{" "}
-            <a
-              className="text-sky-700 hover:underline"
-              href="mailto:kegthgroup@gmail.com"
-            >
-              kegthgroup@gmail.com
-            </a>
+          <div className="col-span-1">
+            <h3 className="font-semibold text-gray-800 dark:text-white">Legal</h3>
+            <ul className="mt-4 space-y-2">
+              {sections.legal.map((item) => (
+                <li key={item.title}>
+                  <Link href={item.href} className="text-sm text-gray-600 dark:text-gray-400 hover:text-sky-700 dark:hover:text-sky-500">
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
+
+        <hr className="my-8 border-gray-200 dark:border-gray-700" />
+
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>&copy; {currentYear} kegth. All rights reserved.</p>
+        </div>
       </div>
-    </>
+    </footer>
   );
 }
