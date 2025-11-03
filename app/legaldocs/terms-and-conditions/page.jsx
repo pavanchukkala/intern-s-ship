@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -50,42 +49,37 @@ export default function TermsAndConditions() {
                 <strong>Effective Date:</strong> 21-3-2025
               </p>
               <p>
-                <strong>Introduction:</strong> Welcome to Kegth. By accessing and using our platform, you agree to these Terms and Conditions. Please read them carefully.
+                Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the https://kegth.com website (the "Service") operated by Kegth ("us", "we", or "our"). Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.
               </p>
               <p>
-                <strong>User Responsibilities:</strong>
+                <strong>Accounts</strong>
                 <br />
-                It is the user's sole responsibility to secure an internship and complete it successfully. Any rejections, issues, or malpractice (including misrepresentations or misconduct) are entirely the user's responsibility. Our platform will not be held liable for any such occurrences.
+                When you create an account with us, you must provide us with information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.
               </p>
               <p>
-                <strong>Acceptable Guidelines:</strong>
+                <strong>Intellectual Property</strong>
                 <br />
-                In the process of applying for internships—particularly paid internships—if you are asked to make payments outside of our official platform charges, it is your responsibility to immediately report such activities via our "Contact Us" page. We do not endorse or facilitate any off-platform transactions.
+                The Service and its original content, features and functionality are and will remain the exclusive property of Kegth and its licensors. The Service is protected by copyright, trademark, and other laws of both the India and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Kegth.
               </p>
               <p>
-                <strong>Intellectual Property:</strong>
+                <strong>Links To Other Web Sites</strong>
                 <br />
-                All content, design, and underlying code on this platform are the exclusive property of Chukkala Pavan Kumar. I developed this platform single-handedly, and any modifications, maintenance, or enhancements will be managed by my designated team. Unauthorized use, reproduction, or distribution of any content is prohibited.
+                Our Service may contain links to third-party web sites or services that are not owned or controlled by Kegth. Kegth has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third-party web sites or services. You further acknowledge and agree that Kegth shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.
               </p>
               <p>
-                <strong>Disclaimer:</strong>
+                <strong>Governing Law</strong>
                 <br />
-                Our platform is provided "as is" and "as available" without any warranties. We do not guarantee that your experience or the outcomes of internships will meet your expectations. We are not responsible for any indirect, incidental, or consequential damages arising from your use of our platform.
+                These Terms shall be governed and construed in accordance with the laws of India, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service.
               </p>
               <p>
-                <strong>Governing Law:</strong>
+                <strong>Changes</strong>
                 <br />
-                These terms are governed by and construed in accordance with the laws of India. Any disputes relating to these terms shall be subject to the exclusive jurisdiction of the courts in Tirupati, Andhra Pradesh, India.
+                We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.
               </p>
               <p>
-                <strong>Changes to Terms and Conditions:</strong>
+                <strong>Contact Us</strong>
                 <br />
-                We reserve the right to modify these Terms and Conditions at any time. Changes will be posted on this page with an updated effective date. Your continued use of the platform constitutes your acceptance of any changes.
-              </p>
-              <p>
-                <strong>Contact Information:</strong>
-                <br />
-                If you have any questions or concerns about these Terms and Conditions, please contact us at: kegthgroup@gmail.com
+                If you have any questions about these Terms, please contact us at kegthgroup@gmail.com.
               </p>
             </section>
             <div className="mt-10 text-center">

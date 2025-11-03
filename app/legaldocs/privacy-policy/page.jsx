@@ -49,65 +49,53 @@ export default function PrivacyPolicy() {
                 <strong>Effective Date:</strong> 21-03-2025
               </p>
               <p>
-                <strong>Introduction:</strong> At Kegth, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit and interact with our platform.
+                This Privacy Policy describes how Kegth ("we", "us", or "our") collects, uses, and discloses your information when you use our website (the "Service").
               </p>
               <p>
-                <strong>Information We Collect:</strong>
+                <strong>Information Collection and Use</strong>
                 <br />
-                <em>Personal Information:</em> When you interact with our platform, we may collect your name, Gmail address, and contact number, only when provided for specific purposes.
-                <br />
-                <em>Usage Data:</em> We also gather data about your interactions, such as your IP address, browser type, and pages visited, to help improve our services.
+                We collect several different types of information for various purposes to provide and improve our Service to you.
               </p>
               <p>
-                <strong>Our Unique Approach:</strong>
+                <strong>Personal Data</strong>
                 <br />
-                We are proud to offer a platform that does not require any login or signup. This means:
+                While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you ("Personal Data"). Personally, identifiable information may include, but is not limited to:
                 <ul className="list-disc list-inside">
-                  <li>You can access and use our services without creating an account.</li>
-                  <li>We do not track or monitor personal usage, ensuring your privacy is maintained.</li>
-                  <li>Our platform is a secure, controlled, and open source environment where your experience is frictionless and private.</li>
+                  <li>Email address</li>
+                  <li>First name and last name</li>
+                  <li>Phone number</li>
+                  <li>Address, State, Province, ZIP/Postal code, City</li>
+                  <li>Cookies and Usage Data</li>
                 </ul>
               </p>
               <p>
-                <strong>How We Use Your Information:</strong>
+                <strong>Usage Data</strong>
                 <br />
-                We use the information you provide to:
+                We may also collect information on how the Service is accessed and used ("Usage Data"). This Usage Data may include information such as your computer's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.
+              </p>
+              <p>
+                <strong>Use of Data</strong>
+                <br />
+                Kegth uses the collected data for various purposes:
                 <ul className="list-disc list-inside">
-                  <li>Contact you regarding issues or inquiries you may have.</li>
-                  <li>Facilitate your connection with companies and internship opportunities based on your profile.</li>
-                  <li>Enhance and personalize your user experience on our platform.</li>
+                  <li>To provide and maintain the Service</li>
+                  <li>To notify you about changes to our Service</li>
+                  <li>To allow you to participate in interactive features of our Service when you choose to do so</li>
+                  <li>To provide customer care and support</li>
+                  <li>To provide analysis or valuable information so that we can improve the Service</li>
+                  <li>To monitor the usage of the Service</li>
+                  <li>To detect, prevent and address technical issues</li>
                 </ul>
               </p>
               <p>
-                <strong>Data Sharing & Third Parties:</strong>
+                <strong>Changes to This Privacy Policy</strong>
                 <br />
-                We may share your information with trusted third-party service providers solely to match you with relevant opportunities. We do not sell or rent your personal data. However, once data is shared, we cannot guarantee its security, and we are not liable for any breaches on their end.
+                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. We will let you know via email and/or a prominent notice on our Service, prior to the change becoming effective and update the "effective date" at the top of this Privacy Policy. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
               </p>
               <p>
-                <strong>Data Retention:</strong>
+                <strong>Contact Us</strong>
                 <br />
-                We retain your information only as long as necessary to provide our services or as required by law. Once no longer needed, your data is securely deleted.
-              </p>
-              <p>
-                <strong>Data Security:</strong>
-                <br />
-                We implement robust security measures to protect your data. However, no method of electronic storage or transmission is completely secure.
-              </p>
-              <p>
-                <strong>Your Rights:</strong>
-                <br />
-                Depending on your location, you may have rights over your personal data, including access, correction, deletion, or restriction of its processing. For any requests or inquiries about your data, please contact us at hello@kegth.com.
-              </p>
-              <p>
-                <strong>Changes to This Privacy Policy:</strong>
-                <br />
-                We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. Please review this page regularly for any updates.
-              </p>
-              <p>
-                <strong>Contact Us:</strong>
-                <br />
-                If you have any questions or concerns regarding this Privacy Policy, please contact us at: 
-                <br /> <em>contact page access by clicking on the "contact" available at top right side of the page</em>
+                If you have any questions about this Privacy Policy, please contact us by email: kegthgroup@gmail.com
               </p>
             </section>
             <div className="mt-10 text-center">
